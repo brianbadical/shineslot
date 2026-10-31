@@ -306,6 +306,7 @@ async function viewSettings() {
     <label for="intro">Message at the top of your form</label><textarea id="intro" name="intro" placeholder="${esc(tradeOf(s.trade).intro)}">${esc(s.intro)}</textarea>
     <button class="btn block" type="submit">Save</button>
   </form>
+  ${cloud ? alertsCard(s) : ''}
   ${cloud ? `<div class="card"><p class="meta">Your link name: <b>${esc((await store.business()).slug)}</b></p><button class="btn ghost small" id="out">Sign out</button></div>` : ''}
   ${store.mode === 'demo' ? `<h2>Demo tools</h2><div class="card"><p class="meta">Fill the app with a few made-up requests to try it out, or start over.</p>
     <div class="btns"><button class="btn ghost small" id="seed">Add sample requests</button><button class="btn danger small" id="wipe">Clear everything</button></div></div>` : ''}`;
@@ -319,6 +320,7 @@ async function viewSettings() {
     for (const r of sampleRequests(new Date(), (await store.getSettings()).trade)) await store.putRequest(r);
     toast('Sample requests added'); location.hash = 'inbox';
   });
+  bindAlerts(s);
   $('#out')?.addEventListener('click', async () => { await store.signOut(); render(); });
   let armed = false;
   $('#wipe')?.addEventListener('click', async e => {
@@ -326,6 +328,49 @@ async function viewSettings() {
     await store.reset(); toast('Cleared'); render();
   });
 }
+
+// ---------- phone alerts (ntfy) ----------
+// Each business gets a long random topic name; the database sends an alert there for every new request.
+function newTopic() {
+  const a = new Uint8Array(12); crypto.getRandomValues(a);
+  return 'shineslot-' + Array.from(a, b => b.toString(16).padStart(2, '0')).join('');
+}
+
+function alertsCard(s) {
+  if (!s.ntfyTopic) return `<h2>Phone alerts</h2><div class="card"><p class="meta">Get a buzz on your phone for every new request. Free, through the ntfy app. Alerts show the car and the job only.</p>
+    <button class="btn small" id="alerts-on">Turn on phone alerts</button></div>`;
+  return `<h2>Phone alerts</h2><div class="card">
+    <p class="meta"><b>1.</b> Install the free <b>ntfy</b> app (App Store or Google Play).<br>
+    <b>2.</b> In ntfy tap <b>+</b>, then paste this name and tap Subscribe:</p>
+    <div class="linkbox"><input readonly value="${esc(s.ntfyTopic)}" aria-label="Alert name"><button class="btn small" id="alerts-copy">Copy</button></div>
+    <p class="meta">Keep this name private: anyone with it can see your alerts.</p>
+    <div class="btns"><button class="btn ghost small" id="alerts-test">Send a test alert</button><button class="btn danger small" id="alerts-off">Turn off</button></div></div>`;
+}
+
+function bindAlerts(s) {
+  $('#alerts-on')?.addEventListener('click', async () => { await store.saveSettings({ ntfyTopic: newTopic() }); toast('Alerts on. Now set up the app.'); render(); });
+  $('#alerts-copy')?.addEventListener('click', () => copy(s.ntfyTopic));
+  $('#alerts-off')?.addEventListener('click', async () => { await store.saveSettings({ ntfyTopic: '' }); toast('Alerts off'); render(); });
+  $('#alerts-test')?.addEventListener('click', async () => {
+    try {
+      const r = await fetch('https://ntfy.sh/', { method: 'POST', body: JSON.stringify({ topic: s.ntfyTopic, title: 'ShineSlot test', message: 'Alerts are working.', tags: ['car'] }) });
+      toast(r.ok ? 'Test sent. Check your phone.' : 'The alert service did not answer. Try again.');
+    } catch { toast('Could not reach the alert service.'); }
+  });
+}
+
+// Keep Requests and Calendar fresh while open, without wiping a price you're typing.
+let lastSig = '';
+async function refreshIfChanged() {
+  const tab = currentTab();
+  if (document.hidden || !['inbox', 'today'].includes(tab)) return;
+  if (cloud && !(await store.session())) return;
+  const sig = (await store.listRequests()).map(r => r.id + r.status).join();
+  if (lastSig && sig !== lastSig && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) render();
+  lastSig = sig;
+}
+setInterval(() => refreshIfChanged().catch(() => {}), 20000);
+document.addEventListener('visibilitychange', () => { if (!document.hidden) { lastSig = ''; render(); } });
 
 // ---------- owner sign-in and first setup (online version only) ----------
 async function viewLogin() {

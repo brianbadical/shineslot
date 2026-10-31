@@ -102,3 +102,35 @@ end $$;
 
 revoke all on function public.get_business(text), public.submit_request(text, jsonb), public.get_quote(text), public.accept_quote(text) from public;
 grant execute on function public.get_business(text), public.submit_request(text, jsonb), public.get_quote(text), public.accept_quote(text) to anon, authenticated;
+
+-- ---------- Phone alerts (added 2026-10-31) ----------
+-- When a request comes in, send a short alert through ntfy.sh (free phone app, no account) to the
+-- owner's private topic, saved in businesses.settings.ntfyTopic. The alert names only the car and
+-- the job, never the customer's name, phone, email or address. A failed alert never blocks a request.
+create extension if not exists pg_net;
+
+create or replace function public.notify_new_request()
+returns trigger language plpgsql security definer set search_path = public as $$
+declare topic text; jobs text;
+begin
+  select settings->>'ntfyTopic' into topic from businesses where id = new.business_id;
+  if topic is null or topic !~ '^[A-Za-z0-9_-]{16,64}$' then return new; end if;
+  select string_agg(x, ', ') into jobs from jsonb_array_elements_text(coalesce(new.data->'services', '[]'::jsonb)) as x;
+  perform net.http_post(
+    url := 'https://ntfy.sh/',
+    body := jsonb_build_object(
+      'topic', topic,
+      'title', 'New ShineSlot request',
+      'message', left(coalesce(nullif(new.data->>'vehicle', ''), 'A car') || coalesce(' · ' || jobs, ''), 200),
+      'click', 'https://brianbadical.github.io/shineslot/#inbox',
+      'tags', jsonb_build_array('car')),
+    headers := '{"Content-Type": "application/json"}'::jsonb);
+  return new;
+exception when others then
+  return new;
+end $$;
+
+drop trigger if exists requests_notify on public.requests;
+create trigger requests_notify after insert on public.requests
+  for each row execute function public.notify_new_request();
+revoke all on function public.notify_new_request() from public, anon, authenticated;

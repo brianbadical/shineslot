@@ -1,7 +1,5 @@
 # ShineSlot (working name)
 
-Live: https://brianbadical.github.io/shineslot/ (owner side) · source of truth: `apps/shineslot` in Badical-HQ.
-
 A small phone app for one-person car businesses. Customers send a quote request (car, what they need, photos, when they're free). The owner sends back a price and a time, the customer taps to book, and the job shows up on an easy week calendar.
 
 One shared core with a "trade" setting:
