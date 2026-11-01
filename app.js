@@ -1,11 +1,11 @@
 import {
   TRADES, tradeOf, MAX_PHOTOS, STATUS_LABEL, makeRequest, validateRequest, applyQuote, applyAccept,
   applyDone, applyDecline, inboxOrder, WEEKDAYS, WEEKDAY_NAMES, hoursOf, validateBlock, blocksOn, isOpenDay, openDays, clashes, prettyTime, prettyDay, detailLines, parseSizes, sizesText, sizePrice, servicesOf, parseChoices, validatePay, payLinks, applyPaid, applyUnpaid, earnings, PAY_METHODS, jobsForDay, dayTotal, weekOf, shiftDay, money, prettyWhen, localDay, mapsLink,
-} from './logic.js?v=202611010324';
-import { LocalStore, newId } from './store.js?v=202611010324';
-import { CloudStore, slugify } from './cloud.js?v=202611010324';
-import { SUPABASE_URL, SUPABASE_KEY } from './config.js?v=202611010324';
-import { sampleRequests } from './sample.js?v=202611010324';
+} from './logic.js?v=202611010326';
+import { LocalStore, newId } from './store.js?v=202611010326';
+import { CloudStore, slugify } from './cloud.js?v=202611010326';
+import { SUPABASE_URL, SUPABASE_KEY } from './config.js?v=202611010326';
+import { sampleRequests } from './sample.js?v=202611010326';
 
 // Falls back to memory (lost on reload) if the browser blocks storage.
 function safeStorage() {
@@ -252,15 +252,35 @@ async function viewInbox() {
   await shell(false);
   const reqs = inboxOrder((await store.listRequests()).filter(r => r.status !== 'done' && r.status !== 'declined'));
   if (!reqs.length) {
-    app.innerHTML = `<h1>Requests</h1>${await phoneCallButton()}<div class="card empty">No open requests yet.<br><br><a class="btn" href="#share">Share your link</a></div>`;
+    app.innerHTML = `<h1>Requests</h1>${startCard(await store.getSettings())}${await phoneCallButton()}<div class="card empty">No open requests yet.<br><br><a class="btn" href="#share">Share your link</a></div>`;
     return;
   }
   const settings = await store.getSettings();
   const t = tradeOf(settings.trade);
-  app.innerHTML = `<h1>Requests</h1>${await phoneCallButton()}` + reqs.map(r => card(r, t)).join('');
+  app.innerHTML = `<h1>Requests</h1>${startCard(settings)}${await phoneCallButton()}` + reqs.map(r => card(r, t)).join('');
   const all = await store.listRequests();
   bindCards(settings, all);
 }
+
+// Three steps for new owners. Disappears once all are done, or when they tap "Hide".
+function startCard(s) {
+  if (s.startHidden) return '';
+  const steps = [
+    [!!s.hours, 'Set your working hours', '#settings', 3],
+    [!!((s.sizes || []).length || s.pkg?.name || (s.services || []).length), 'Add your services and prices', '#settings', 1],
+    [!!s.shared, 'Send your link to a customer', '#share', -1],
+  ];
+  if (steps.every(x => x[0])) return '';
+  return `<div class="card start"><b>Get started</b>${steps.map(([done, label, href, sec], i) =>
+    `<a class="step${done ? ' done' : ''}" href="${href}" data-sec="${sec}"><span class="num">${done ? '✓' : i + 1}</span>${label}</a>`).join('')}
+    <button class="btn ghost small" data-hide-start>Hide this</button></div>`;
+}
+
+document.addEventListener('click', async e => {
+  const step = e.target.closest('.step[data-sec]');
+  if (step && +step.dataset.sec >= 0) lastOpenSec = +step.dataset.sec;
+  if (e.target.closest('[data-hide-start]')) { await store.saveSettings({ startHidden: true }); render(); }
+});
 
 // When a customer calls, the owner fills in the same request form for them.
 async function phoneCallButton() {
@@ -449,9 +469,14 @@ async function viewShare() {
   app.innerHTML = `<h1>Your booking link</h1>
   <p class="lead">Text this to customers, or put it in your Instagram or Facebook bio. They describe what they need, and it shows up in Requests.</p>
   <div class="card"><div class="linkbox"><input readonly value="${esc(link)}" aria-label="Your booking link"><button class="btn small" id="cp">Copy</button></div>
-  <div class="btns"><a class="btn ghost small" href="#${cloud ? 'book-' + esc(biz.slug) : 'request'}">Open the form</a></div></div>
+  ${navigator.share ? '<button class="btn block" id="sh">📤 Send my link</button>' : ''}
+  <div class="btns"><a class="btn ghost small" href="#${cloud ? 'book-' + esc(biz.slug) : 'request'}">See what customers see</a></div></div>
   ${store.mode === 'demo' ? `<p class="meta">Demo note: right now requests only show up on this same device. The shared version comes next.</p>` : ''}`;
-  $('#cp').onclick = () => copy(link);
+  const shared = () => store.getSettings().then(st => st.shared ? null : store.saveSettings({ shared: true })).catch(() => {});
+  $('#cp').onclick = () => { copy(link); shared(); };
+  $('#sh')?.addEventListener('click', async () => {
+    try { await navigator.share({ title: biz.settings?.business || 'Book with me', text: 'Send me your request here:', url: link }); shared(); } catch {}
+  });
 }
 
 // ---------- detailer: settings ----------
@@ -469,7 +494,7 @@ async function viewSettings() {
     <label for="business">Business name</label><input id="business" name="business" value="${esc(s.business)}" placeholder="${esc(tradeOf(s.trade).defaultBusiness)}">
     <label for="owner">Your first name</label><input id="owner" name="owner" value="${esc(s.owner)}">
     <label for="area">Area you cover</label><input id="area" name="area" value="${esc(s.area)}" placeholder="For example Orlando and Oviedo">
-    <label for="shopAddress">Shop address (shown to customers once booked; for garages)</label><input id="shopAddress" name="shopAddress" value="${esc(s.shopAddress || '')}">
+    ${tradeOf(s.trade).atShop ? `<label for="shopAddress">Shop address (customers see it once booked)</label><input id="shopAddress" name="shopAddress" value="${esc(s.shopAddress || '')}">` : `<input type="hidden" name="shopAddress" value="${esc(s.shopAddress || '')}">`}
     <label for="intro">Message at the top of your form</label><textarea id="intro" name="intro" placeholder="${esc(tradeOf(s.trade).intro)}">${esc(s.intro)}</textarea>
     <button class="btn block" type="submit">Save</button>
   </form></details>
@@ -509,7 +534,7 @@ async function viewSettings() {
     <div class="errors" data-err></div>
     <button class="btn block" type="submit">Save hours</button>
   </form></details>
-  ${cloud ? `<details class="sec">${sec('🔔', 'Phone alerts', s.ntfyTopic ? 'On' : 'Off (optional)')}${alertsCard(s)}</details>` : ''}
+  ${cloud && s.ntfyTopic ? `<details class="sec">${sec('🔔', 'Phone alerts', 'On')}${alertsCard(s)}</details>` : ''}
   ${cloud ? await businessesCard() : ''}
   ${store.mode === 'demo' ? `<h2>Demo tools</h2><div class="card"><p class="meta">Fill the app with a few made-up requests to try it out, or start over.</p>
     <div class="btns"><button class="btn ghost small" id="seed">Add sample requests</button><button class="btn danger small" id="wipe">Clear everything</button></div></div>` : ''}`;

@@ -1,5 +1,5 @@
 // Made-up requests for trying the app. Names, phones and addresses are fake.
-import { makeRequest, applyQuote, applyAccept, localDay } from './logic.js?v=202611010324';
+import { makeRequest, applyQuote, applyAccept, localDay } from './logic.js?v=202611010326';
 
 export function sampleRequests(now, trade = 'detailing') {
   const iso = now.toISOString();

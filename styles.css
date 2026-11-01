@@ -115,3 +115,19 @@ details.sec>.card{border-radius:0 0 14px 14px;margin-top:0}
 .sec-i{font-size:1.4rem}
 .sec-t{font-weight:700;font-size:1.05rem;display:flex;flex-direction:column}
 .sec-t small{font-weight:400;color:var(--muted);font-size:.85rem}
+/* Easier to read and tap on a phone */
+body{font-size:17px}
+.btn{min-height:48px}
+.btn.small{min-height:42px;padding:9px 14px;font-size:.95rem}
+.meta{font-size:.93rem}
+.tabs a{font-size:.82rem;padding:4px 0}
+.tabs a span{font-size:1.5rem}
+input,textarea,select{font-size:1rem;min-height:46px}
+.chip span{padding:10px 15px;font-size:.95rem}
+.start{border-color:var(--brand);box-shadow:0 0 0 1px var(--brand)}
+.start>b{display:block;font-size:1.1rem;margin-bottom:6px}
+.step{display:flex;align-items:center;gap:12px;padding:12px 4px;border-bottom:1px solid var(--line);color:var(--ink);text-decoration:none;font-weight:600}
+.step .num{width:32px;height:32px;border-radius:50%;background:var(--brand);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;flex:none}
+.step.done{color:var(--muted);text-decoration:line-through}
+.step.done .num{background:#cfe9e5;color:var(--brand-dark)}
+.start .btn{margin-top:10px}
