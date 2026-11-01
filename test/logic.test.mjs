@@ -331,3 +331,10 @@ test('Find a pro: ZIPs, prices, ranking, not picky', () => {
   assert.equal(pickPro(pros, opts).slug, 'best');
   assert.equal(pickPro(pros, { ...opts, zip: '10001' }), null);
 });
+
+test('bakery: pickup orders need no address', () => {
+  const o = { name: 'A', phone: '555-123-4567', vehicle: 'Birthday cake', services: ['Custom cake'] };
+  assert.deepEqual(validateRequest(o, 'bakery'), []);
+  assert.match(validateRequest(o, 'cleaning').join(' '), /Add the address/);
+  assert.equal(TRADES.bakery.noRepeat, true);
+});

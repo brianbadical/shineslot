@@ -273,6 +273,25 @@ Object.assign(TRADES, {
     noteHint: 'For example: 2 movers, about 3 hours',
     samples: [['1 bedroom apartment', 'Load a truck', 'Third floor, no elevator'], ['Couch to a new house', 'Single big item', ''], ['3 bedroom house', 'Full move with truck', 'Moving on the 30th']],
   }),
+  bakery: starter({
+    name: 'Baker / desserts', defaultBusiness: 'Your Bakery', tagline: 'Custom cakes and desserts', worker: 'the baker',
+    itemLabel: 'What would you like?', itemHint: 'For example 2-tier birthday cake for 30 people', itemAsk: 'what you would like',
+    services: ['Custom cake', 'Cupcakes', 'Cookies', 'Cake pops', 'Pies', 'Brownies or bars', 'Dessert table', 'Wedding cake'],
+    servicesLabel: 'What are you ordering?', sizesLabel: 'Order size', timesLabel: 'When do you need it? (pick any)',
+    addressLabel: 'Delivery address (leave blank to pick up)', addressOptional: true, noRepeat: true,
+    photosLabel: 'Inspiration photos', notesHint: 'Colors, theme, writing on the cake...',
+    intro: 'Tell me what you would like and when you need it. I will send you a price.',
+    noteHint: 'For example: 2-tier, serves 30, pickup Saturday 2 PM',
+    questions: [
+      { section: 'About your order' },
+      { key: 'occasion', label: 'What is it for?', type: 'choice', options: ['Birthday', 'Wedding', 'Baby shower', 'Graduation', 'Holiday', 'Party or event', 'Just because'] },
+      { key: 'people', label: 'How many people?', hint: 'For example 30' },
+      { key: 'flavor', label: 'Flavor', hint: 'For example vanilla with strawberry filling' },
+      { key: 'writing', label: 'Writing on it', hint: 'For example Happy 5th Birthday Mia' },
+      { key: 'allergies', label: 'Allergies', type: 'multi', options: ['Nuts', 'Dairy', 'Gluten', 'Eggs', 'None'] },
+    ],
+    samples: [['Birthday cake for 20', 'Custom cake', 'Chocolate, purple and gold'], ['2 dozen cupcakes', 'Cupcakes', 'Baby shower, blue and white'], ['3 dozen sugar cookies', 'Cookies', 'Christmas shapes, pickup']],
+  }),
 });
 
 export const tradeOf = key => (key && typeof key === 'object') ? key : (TRADES[key] || TRADES.detailing);
@@ -337,7 +356,7 @@ export function validateRequest(input, trade = 'detailing') {
   if (phone && phone.replace(/\D/g, '').length < 7) errors.push('That phone number looks too short.');
   if (!clean(input.vehicle) && !t.composeItem) errors.push(t.itemError); // 'vehicle' holds the car, or the home for cleaning
   if (!Array.isArray(input.services) || input.services.length === 0) errors.push('Pick at least one thing you want done.');
-  if (!t.atShop && !clean(input.address)) errors.push(t.addressError || 'Add the address or area where the car will be.');
+  if (!t.atShop && !t.addressOptional && !clean(input.address)) errors.push(t.addressError || 'Add the address or area where the car will be.');
   if ((input.photos || []).length > MAX_PHOTOS) errors.push(`Up to ${MAX_PHOTOS} photos.`);
   return errors;
 }

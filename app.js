@@ -1,12 +1,12 @@
 import {
   TRADES, tradeOf, MAX_PHOTOS, STATUS_LABEL, makeRequest, validateRequest, applyQuote, applyAccept,
   applyDone, applyDecline, inboxOrder, WEEKDAYS, WEEKDAY_NAMES, hoursOf, validateBlock, blocksOn, isOpenDay, openDays, clashes, prettyTime, prettyDay, detailLines, parseSizes, sizesText, sizePrice, servicesOf, parseChoices, tradeFor, parseQuestions, validatePay, payLinks, applyPaid, applyUnpaid, earnings, PAY_METHODS, splitBookLink, RATING_GOOD, RATING_BAD, canRate, validateRating, ratingSummary, starsText, REPEAT_CHOICES, repeatLabel, dueForRebook, againFields, parseZips, startingPrice, rankPros, pickPro, jobsForDay, dayTotal, weekOf, shiftDay, money, prettyWhen, localDay, mapsLink,
-} from './logic.js?v=202611010414';
-import { LocalStore, newId } from './store.js?v=202611010414';
-import { CloudStore, slugify } from './cloud.js?v=202611010414';
-import { SUPABASE_URL, SUPABASE_KEY } from './config.js?v=202611010414';
-import { sampleRequests } from './sample.js?v=202611010414';
-import qrcode from './qr.js?v=202611010414';
+} from './logic.js?v=202611010416';
+import { LocalStore, newId } from './store.js?v=202611010416';
+import { CloudStore, slugify } from './cloud.js?v=202611010416';
+import { SUPABASE_URL, SUPABASE_KEY } from './config.js?v=202611010416';
+import { sampleRequests } from './sample.js?v=202611010416';
+import qrcode from './qr.js?v=202611010416';
 
 // Falls back to memory (lost on reload) if the browser blocks storage.
 function safeStorage() {
@@ -96,9 +96,9 @@ async function viewRequest(slug, ref = '') {
     <div class="chips">${servicesOf(s).map(x => `<label class="chip"><input type="checkbox" name="services" value="${esc(x)}"><span>${esc(x)}</span></label>`).join('')}</div>
     <label>${esc(t.photosLabel)} (optional, up to ${MAX_PHOTOS})</label>
     <div class="photos" id="ph"></div>
-    ${(t.questions || []).some(q => q.key === 'often') ? '' : `<label>How often?</label><div class="chips">${REPEAT_CHOICES.map(([v, l], i) =>
+    ${t.noRepeat || (t.questions || []).some(q => q.key === 'often') ? '' : `<label>How often?</label><div class="chips">${REPEAT_CHOICES.map(([v, l], i) =>
       `<label class="chip"><input type="radio" name="repeat" value="${v}"${i ? '' : ' checked'}><span>${l}</span></label>`).join('')}</div>`}
-    <label>When are you free? (pick any)</label>
+    <label>${esc(t.timesLabel || 'When are you free? (pick any)')}</label>
     ${(() => { const days = openDays(s, localDay(), 14); return days.length
       ? `<div class="chips">${days.map(d => `<label class="chip"><input type="checkbox" name="times" value="${esc(prettyDay(d))}"><span>${esc(prettyDay(d))}</span></label>`).join('')}</div>`
       : `<p class="meta">No open days in the next two weeks. Send your request anyway and we'll find a time.</p>`; })()}
@@ -304,7 +304,7 @@ async function viewQuote(token) {
       ${r.quote.note ? `<p>${esc(r.quote.note)}</p>` : ''}
       <button class="btn block" id="accept">Accept and book</button>
       <p class="meta" style="text-align:center">${s.pay && s.pay.on ? 'After you book you can pay here, or' : 'Pay'} ${esc(s.owner || tradeOf(s.trade).worker)} on the day. Need a different time? Reply to their message.</p></div>`;
-  else if (r.status === 'accepted' || r.status === 'done') body = `<div class="done-note"><div class="big">✅</div><h1>${r.status === 'done' ? 'All done. Thanks!' : "You're booked"}</h1><p class="lead">${esc(prettyWhen(r.quote.when))} · ${money(r.quote.price)}<br>${tradeOf(s.trade).atShop ? (s.shopAddress ? 'Bring it to ' + esc(s.shopAddress) : '') : esc(r.address)}</p></div>
+  else if (r.status === 'accepted' || r.status === 'done') body = `<div class="done-note"><div class="big">✅</div><h1>${r.status === 'done' ? 'All done. Thanks!' : "You're booked"}</h1><p class="lead">${esc(prettyWhen(r.quote.when))} · ${money(r.quote.price)}<br>${tradeOf(s.trade).atShop ? (s.shopAddress ? 'Bring it to ' + esc(s.shopAddress) : '') : tradeOf(s.trade).addressOptional && !r.address ? 'Pickup' + (s.shopAddress ? ' at ' + esc(s.shopAddress) : '') : esc(r.address)}</p></div>
     ${r.paid ? receiptHtml(r, s) : payHtml(s, r.quote.price)}
     ${rateHtml(r, s)}
     ${r.status === 'done' || canRate({ ...r, rating: null }, nowWhen()) ? `<button class="btn block" id="again">🔁 Book again</button>` : ''}`;
@@ -714,7 +714,7 @@ async function viewSettings() {
     <label for="business">Business name</label><input id="business" name="business" value="${esc(s.business)}" placeholder="${esc(tradeOf(s.trade).defaultBusiness)}">
     <label for="owner">Your first name</label><input id="owner" name="owner" value="${esc(s.owner)}">
     <label for="area">Area you cover</label><input id="area" name="area" value="${esc(s.area)}" placeholder="For example Orlando and Oviedo">
-    ${tradeOf(s.trade).atShop ? `<label for="shopAddress">Shop address (customers see it once booked)</label><input id="shopAddress" name="shopAddress" value="${esc(s.shopAddress || '')}">` : `<input type="hidden" name="shopAddress" value="${esc(s.shopAddress || '')}">`}
+    ${tradeOf(s.trade).atShop || tradeOf(s.trade).addressOptional ? `<label for="shopAddress">${tradeOf(s.trade).atShop ? 'Shop' : 'Pickup'} address (customers see it once booked)</label><input id="shopAddress" name="shopAddress" value="${esc(s.shopAddress || '')}">` : `<input type="hidden" name="shopAddress" value="${esc(s.shopAddress || '')}">`}
     <label for="intro">Message at the top of your form</label><textarea id="intro" name="intro" placeholder="${esc(tradeOf(s.trade).intro)}">${esc(s.intro)}</textarea>
     <button class="btn block" type="submit">Save</button>
   </form></details>
