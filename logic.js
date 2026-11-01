@@ -181,6 +181,99 @@ export function detailLines(details, trade = 'detailing') {
     .filter(q => q.key && details[q.key] != null && details[q.key] !== '')
     .map(q => [q.label.replace(/ \(.*\)$/, ''), Array.isArray(details[q.key]) ? details[q.key].join(', ') : String(details[q.key])]);
 }
+// Starter templates for more home and outdoor service jobs. Owners can change the choices
+// and add prices in Settings. Each one only sets wording; the app works the same.
+function starter(t) {
+  return {
+    notesLabel: 'Anything else?', photosLabel: 'Photos (they help with the price)', atShop: false,
+    addressLabel: 'Address', addressError: 'Add the address.', sizesLabel: 'Job size',
+    servicesLabel: 'What do you need?', itemError: `Tell us ${t.itemAsk}.`,
+    intro: 'Tell me what you need. I will send you a price and a time.', ...t,
+  };
+}
+Object.assign(TRADES, {
+  pressure: starter({
+    name: 'Pressure washing', defaultBusiness: 'Your Pressure Washing', tagline: 'Pressure washing', worker: 'your washer',
+    itemLabel: 'What needs washing?', itemHint: 'For example 2-story house and driveway', itemAsk: 'what needs washing',
+    services: ['House siding', 'Driveway', 'Patio or porch', 'Deck or fence', 'Roof (soft wash)', 'Gutters', 'Sidewalk', 'Business or storefront'],
+    sizesLabel: 'Job size', notesHint: 'Mold or stains, water spigot location, pets in the yard...',
+    noteHint: 'For example: house and driveway, about 3 hours',
+    samples: [['1-story house', 'House siding', 'Green stuff on the north side'], ['Driveway and walkway', 'Driveway', ''], ['Back deck', 'Deck or fence', 'Wood deck, about 12 by 16']],
+  }),
+  lawn: starter({
+    name: 'Lawn care', defaultBusiness: 'Your Lawn Care', tagline: 'Lawn care and yard work', worker: 'your lawn pro',
+    itemLabel: 'Tell us about the yard', itemHint: 'For example front and back, about a quarter acre', itemAsk: 'about the yard',
+    services: ['Mowing', 'Edging and trimming', 'Leaf cleanup', 'Hedges and bushes', 'Mulch', 'Weeding', 'Sod or seed', 'Yard cleanup'],
+    sizesLabel: 'Yard size', notesHint: 'Gate code, dogs, how often (weekly, every 2 weeks, one time)...',
+    noteHint: 'For example: mow, edge and blow, every 2 weeks',
+    samples: [['Small front and back yard', 'Mowing', 'Every 2 weeks if possible'], ['Corner lot, about half an acre', 'Leaf cleanup', ''], ['Townhouse front strip', 'Hedges and bushes', '']],
+  }),
+  handyman: starter({
+    name: 'Handyman', defaultBusiness: 'Your Handyman', tagline: 'Handyman and small repairs', worker: 'your handyman',
+    itemLabel: 'What needs doing?', itemHint: 'For example hang 3 shelves and fix a leaky faucet', itemAsk: 'what needs doing',
+    services: ['Small repairs', 'Drywall patch', 'Mount TV or shelves', 'Furniture assembly', 'Doors and locks', 'Faucet or toilet', 'Light fixture', 'Painting touch-up'],
+    notesHint: 'Do you have the parts? Which room? Best time to reach you...',
+    noteHint: 'For example: 2 hours plus parts',
+    samples: [['Mount a 65 inch TV', 'Mount TV or shelves', 'Wall is drywall, I have the mount'], ['Hole in bedroom wall', 'Drywall patch', 'About fist size'], ['Kitchen faucet drips', 'Faucet or toilet', '']],
+  }),
+  junk: starter({
+    name: 'Junk removal', defaultBusiness: 'Your Junk Removal', tagline: 'Junk removal and hauling', worker: 'your hauler',
+    itemLabel: 'What needs to go?', itemHint: 'For example old couch, mattress and some boxes', itemAsk: 'what needs to go',
+    services: ['Furniture', 'Mattress', 'Appliances', 'Yard waste', 'Garage or attic cleanout', 'Construction debris', 'Hot tub or shed', 'Whole house cleanout'],
+    sizesLabel: 'Load size', notesHint: 'Stairs? Is it inside or at the curb? Heavy items...',
+    noteHint: 'For example: about a half truck load',
+    samples: [['Old couch and recliner', 'Furniture', 'Second floor, narrow stairs'], ['Garage full of boxes', 'Garage or attic cleanout', ''], ['Broken fridge', 'Appliances', 'At the curb']],
+  }),
+  grooming: starter({
+    name: 'Pet grooming', defaultBusiness: 'Your Pet Grooming', tagline: 'Mobile pet grooming', worker: 'your groomer',
+    itemLabel: 'Your pet', itemHint: 'For example Max, 40 lb Golden Retriever', itemAsk: 'about your pet (name, breed, size)',
+    services: ['Bath and brush', 'Full groom (haircut)', 'Nail trim', 'De-shedding', 'Teeth brushing', 'Ear cleaning', 'Flea bath', 'Puppy first groom'],
+    sizesLabel: 'Pet size', addressLabel: 'Where should we come?', notesHint: 'Matting, nervous with dryers, bites, health issues...',
+    photosLabel: 'Photos of your pet', noteHint: 'For example: full groom, about 90 minutes',
+    samples: [['Bella, 15 lb Shih Tzu', 'Full groom (haircut)', 'A little matted behind the ears'], ['Duke, 80 lb Lab', 'De-shedding', ''], ['Two cats', 'Nail trim', 'They hide, sorry']],
+  }),
+  painting: starter({
+    name: 'Painting', defaultBusiness: 'Your Painting', tagline: 'Interior and exterior painting', worker: 'your painter',
+    itemLabel: 'What are we painting?', itemHint: 'For example 2 bedrooms and a hallway', itemAsk: 'what we are painting',
+    services: ['Interior walls', 'Ceilings', 'Trim and doors', 'Cabinets', 'Exterior', 'Deck or fence stain', 'Drywall repair', 'Color help'],
+    sizesLabel: 'Job size', notesHint: 'Do you have the paint? Colors, furniture to move, high ceilings...',
+    photosLabel: 'Photos of the rooms', noteHint: 'For example: 2 coats, paint included, 2 days',
+    samples: [['Living room, 12 by 18', 'Interior walls', 'Going from dark red to white'], ['Kitchen cabinets, 20 doors', 'Cabinets', ''], ['Front of the house', 'Exterior', 'Peeling near the garage']],
+  }),
+  pool: starter({
+    name: 'Pool service', defaultBusiness: 'Your Pool Service', tagline: 'Pool cleaning and care', worker: 'your pool tech',
+    itemLabel: 'Tell us about the pool', itemHint: 'For example in-ground, about 15,000 gallons, with spa', itemAsk: 'about the pool',
+    services: ['Weekly cleaning', 'One-time cleanup', 'Green pool rescue', 'Chemicals and testing', 'Filter cleaning', 'Opening or closing', 'Pump or equipment check', 'Tile cleaning'],
+    sizesLabel: 'Pool size', notesHint: 'Gate code, dogs, screen enclosure, salt or chlorine...',
+    photosLabel: 'Photos of the pool', noteHint: 'For example: weekly, chemicals included',
+    samples: [['In-ground, screened', 'Weekly cleaning', 'Salt system'], ['Above ground, 24 ft', 'Green pool rescue', 'Been sitting a month'], ['Pool and spa', 'Filter cleaning', '']],
+  }),
+  carpet: starter({
+    name: 'Carpet cleaning', defaultBusiness: 'Your Carpet Cleaning', tagline: 'Carpet and upholstery cleaning', worker: 'your cleaner',
+    itemLabel: 'What needs cleaning?', itemHint: 'For example 3 bedrooms and a sectional couch', itemAsk: 'what needs cleaning',
+    services: ['Carpet (rooms)', 'Stairs', 'Couch or sectional', 'Chairs', 'Area rugs', 'Mattress', 'Pet stains and odor', 'Tile and grout'],
+    sizesLabel: 'Job size', notesHint: 'Pets, stains, how many rooms, furniture to move...',
+    noteHint: 'For example: 3 rooms plus stairs, dry in 4 to 6 hours',
+    samples: [['3 bedrooms and hallway', 'Carpet (rooms)', 'Dog accidents in one room'], ['Sectional couch', 'Couch or sectional', 'Light gray fabric'], ['Stairs, 14 steps', 'Stairs', '']],
+  }),
+  windows: starter({
+    name: 'Window cleaning', defaultBusiness: 'Your Window Cleaning', tagline: 'Window cleaning', worker: 'your window cleaner',
+    itemLabel: 'Tell us about the windows', itemHint: 'For example 2-story house, about 20 windows', itemAsk: 'about the windows',
+    services: ['Outside only', 'Inside and outside', 'Screens', 'Tracks and sills', 'Hard water stains', 'Skylights', 'Storefront', 'Gutters'],
+    sizesLabel: 'Job size', notesHint: 'Hard-to-reach windows, ladders needed, pets...',
+    noteHint: 'For example: inside and out with screens',
+    samples: [['1-story ranch, 14 windows', 'Inside and outside', ''], ['Storefront, 4 big panes', 'Storefront', 'Every 2 weeks'], ['2-story, 22 windows', 'Outside only', 'Some are high in the back']],
+  }),
+  moving: starter({
+    name: 'Moving help', defaultBusiness: 'Your Moving Help', tagline: 'Moving and hauling help', worker: 'your movers',
+    itemLabel: 'What are we moving?', itemHint: 'For example 2 bedroom apartment, second floor', itemAsk: 'what we are moving',
+    services: ['Load a truck', 'Unload a truck', 'Full move with truck', 'Single big item', 'Rearrange furniture', 'Packing help', 'Storage unit', 'Piano or safe'],
+    sizesLabel: 'Move size', addressLabel: 'Moving from (and to, if you know)', notesHint: 'Stairs or elevator, heavy items, moving date...',
+    noteHint: 'For example: 2 movers, about 3 hours',
+    samples: [['1 bedroom apartment', 'Load a truck', 'Third floor, no elevator'], ['Couch to a new house', 'Single big item', ''], ['3 bedroom house', 'Full move with truck', 'Moving on the 30th']],
+  }),
+});
+
 export const tradeOf = key => TRADES[key] || TRADES.detailing;
 export const SERVICES = TRADES.detailing.services;
 export const TIMES = ['Weekday mornings', 'Weekday afternoons', 'Weekday evenings', 'Saturday', 'Sunday'];
@@ -207,7 +300,7 @@ export function validateRequest(input, trade = 'detailing') {
   if (phone && phone.replace(/\D/g, '').length < 7) errors.push('That phone number looks too short.');
   if (!clean(input.vehicle) && !t.composeItem) errors.push(t.itemError); // 'vehicle' holds the car, or the home for cleaning
   if (!Array.isArray(input.services) || input.services.length === 0) errors.push('Pick at least one thing you want done.');
-  if (!t.atShop && !clean(input.address)) errors.push(trade === 'cleaning' ? 'Add the address.' : 'Add the address or area where the car will be.');
+  if (!t.atShop && !clean(input.address)) errors.push(t.addressError || (trade === 'cleaning' ? 'Add the address.' : 'Add the address or area where the car will be.'));
   if ((input.photos || []).length > MAX_PHOTOS) errors.push(`Up to ${MAX_PHOTOS} photos.`);
   return errors;
 }

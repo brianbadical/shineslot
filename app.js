@@ -1,11 +1,11 @@
 import {
   TRADES, tradeOf, MAX_PHOTOS, STATUS_LABEL, makeRequest, validateRequest, applyQuote, applyAccept,
   applyDone, applyDecline, inboxOrder, WEEKDAYS, WEEKDAY_NAMES, hoursOf, validateBlock, blocksOn, isOpenDay, openDays, clashes, prettyTime, prettyDay, detailLines, parseSizes, sizesText, sizePrice, servicesOf, parseChoices, validatePay, payLinks, applyPaid, applyUnpaid, earnings, PAY_METHODS, jobsForDay, dayTotal, weekOf, shiftDay, money, prettyWhen, localDay, mapsLink,
-} from './logic.js?v=202611010326';
-import { LocalStore, newId } from './store.js?v=202611010326';
-import { CloudStore, slugify } from './cloud.js?v=202611010326';
-import { SUPABASE_URL, SUPABASE_KEY } from './config.js?v=202611010326';
-import { sampleRequests } from './sample.js?v=202611010326';
+} from './logic.js?v=202611010329';
+import { LocalStore, newId } from './store.js?v=202611010329';
+import { CloudStore, slugify } from './cloud.js?v=202611010329';
+import { SUPABASE_URL, SUPABASE_KEY } from './config.js?v=202611010329';
+import { sampleRequests } from './sample.js?v=202611010329';
 
 // Falls back to memory (lost on reload) if the browser blocks storage.
 function safeStorage() {
@@ -296,7 +296,7 @@ function card(r, t) {
     <div class="req-head"><div><b>${esc(r.name)}</b><div class="meta">${esc(r.vehicle)}</div></div><span class="status ${r.status}">${STATUS_LABEL[r.status]}</span></div>
     <div class="meta">${contact}</div>
     ${r.address ? `<div class="meta">📍 ${esc(r.address)}</div>` : ''}
-    <div class="tags">${r.size ? `<span>🚗 ${esc(r.size)}</span>` : ''}${r.services.map(x => `<span>${esc(x)}</span>`).join('')}${r.times.map(x => `<span>🕑 ${esc(x)}</span>`).join('')}</div>
+    <div class="tags">${r.size ? `<span>📏 ${esc(r.size)}</span>` : ''}${r.services.map(x => `<span>${esc(x)}</span>`).join('')}${r.times.map(x => `<span>🕑 ${esc(x)}</span>`).join('')}</div>
     ${r.notes ? `<p class="meta">“${esc(r.notes)}”</p>` : ''}
     ${detailsHtml(r, t)}
     ${ownerNoteHtml(r)}

@@ -218,3 +218,14 @@ test('owners can set their own tick-box choices', async () => {
   assert.deepEqual(parseChoices(' Interior \n\nInterior\nExterior').choices, ['Interior', 'Exterior']);
   assert.equal(parseChoices('').errors.length, 1);
 });
+
+test('every starter template works end to end', () => {
+  for (const [key, t] of Object.entries(TRADES)) {
+    for (const f of ['name', 'defaultBusiness', 'tagline', 'worker', 'itemLabel', 'itemHint', 'servicesLabel', 'notesLabel', 'notesHint', 'photosLabel', 'intro', 'noteHint']) assert.ok(t[f], `${key} is missing ${f}`);
+    assert.ok(t.services.length >= 5, key);
+    const rows = sampleRequests(new Date('2026-11-01T15:00:00'), key);
+    assert.equal(rows.length, 3, key);
+  }
+  assert.ok(Object.keys(TRADES).length >= 14);
+  assert.match(validateRequest({ name: 'A', phone: '555-123-4567', vehicle: 'x', services: ['Mowing'] }, 'lawn').join(' '), /Add the address/);
+});
