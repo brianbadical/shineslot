@@ -307,3 +307,27 @@ test('repeat customers: how often, and who is due to rebook', () => {
   assert.equal(dueForRebook([job('b', '2026-10-01T09:00', { repeat: undefined })], '2026-11-01').length, 0);
   assert.deepEqual(againFields({ name: 'Ann', phone: '1', notes: 'x', photos: [], services: ['A'], email: '' }), { name: 'Ann', phone: '1', services: ['A'] });
 });
+
+import { parseZips, startingPrice, zipGap, rankPros, pickPro } from '../logic.js';
+
+test('Find a pro: ZIPs, prices, ranking, not picky', () => {
+  assert.deepEqual(parseZips('33602, 33606 33602 abc 1234'), ['33602', '33606']);
+  assert.equal(startingPrice({ sizes: [{ price: 170 }, { price: 120 }] }), 120);
+  assert.equal(startingPrice({}), null);
+  assert.equal(zipGap({ zips: ['33602'] }, '33602'), 0);
+  assert.equal(zipGap({ zips: ['33602'] }, '33610'), 8);
+  assert.equal(zipGap({ zips: [] }, '33610'), 500);
+  const open = { mon: ['09:00', '17:00'], tue: ['09:00', '17:00'], wed: ['09:00', '17:00'], thu: ['09:00', '17:00'], fri: ['09:00', '17:00'], sat: ['09:00', '17:00'], sun: ['09:00', '17:00'] };
+  const closed = { mon: null, tue: null, wed: null, thu: null, fri: null, sat: null, sun: null };
+  const pros = [
+    { slug: 'far', trade: 'cleaning', zips: ['90210'], hours: open, stars: 5, ratings: 9 },
+    { slug: 'ok', trade: 'cleaning', zips: ['33606'], hours: open, stars: 4.2, ratings: 5 },
+    { slug: 'best', trade: 'cleaning', zips: ['33602'], hours: open, stars: 4.9, ratings: 12 },
+    { slug: 'shut', trade: 'cleaning', zips: ['33602'], hours: closed, stars: 5, ratings: 20 },
+    { slug: 'car', trade: 'detailing', zips: ['33602'], hours: open },
+  ];
+  const opts = { trade: 'cleaning', zip: '33602', today: '2026-11-02' };
+  assert.deepEqual(rankPros(pros, opts).map(p => p.slug), ['best', 'ok', 'shut', 'far']);
+  assert.equal(pickPro(pros, opts).slug, 'best');
+  assert.equal(pickPro(pros, { ...opts, zip: '10001' }), null);
+});

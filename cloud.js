@@ -1,7 +1,7 @@
 // Shared online store on Supabase. Same methods as LocalStore, plus owner sign-in.
 // Owners read and change only their own data (database rules in supabase/schema.sql).
 // Customers never sign in: they use the get_business / submit_request / get_quote / accept_quote functions.
-import { DEFAULT_SETTINGS } from './store.js?v=202611010359';
+import { DEFAULT_SETTINGS } from './store.js?v=202611010414';
 
 const PICK = 'shineslot:business';
 const SDK = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
@@ -116,6 +116,11 @@ export class CloudStore {
   async acceptQuote(token) {
     const c = await this.client();
     fail((await c.rpc('accept_quote', { p_token: token })).error);
+  }
+  async listPros() {
+    const c = await this.client();
+    const { data, error } = await c.rpc('list_pros'); fail(error);
+    return (data || []).map(p => ({ ...DEFAULT_SETTINGS, ...Object.fromEntries(Object.entries(p).filter(([, v]) => v != null)) }));
   }
   async rateJob(token, rating) {
     const c = await this.client();

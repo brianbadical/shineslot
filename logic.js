@@ -677,3 +677,32 @@ export function againFields(r) {
   const keep = ['name', 'phone', 'email', 'vehicle', 'address', 'services', 'details', 'repeat', 'ref'];
   return Object.fromEntries(keep.filter(k => r && r[k] != null && r[k] !== '').map(k => [k, r[k]]));
 }
+
+// ---------- Find a pro ----------
+// ZIP codes an owner serves, from free text ("32801, 32803 32804").
+export function parseZips(text) {
+  return [...new Set(String(text || '').match(/\b\d{5}\b/g) || [])].slice(0, 30);
+}
+export function startingPrice(p) {
+  const prices = (p.sizes || []).map(z => Number(z.price)).filter(n => n > 0);
+  return prices.length ? Math.min(...prices) : null;
+}
+// Rough distance by ZIP code (no maps, no cost): 0 when they serve that ZIP, else how far apart the numbers are.
+export function zipGap(p, zip) {
+  const zips = p.zips || [];
+  if (!/^\d{5}$/.test(String(zip || '')) || !zips.length) return 500;
+  if (zips.includes(zip)) return 0;
+  return Math.min(...zips.map(z => Math.abs(Number(z) - Number(zip))));
+}
+// Every listed pro for that service, with how close they are, their next open day and stars. Best first.
+export function rankPros(pros, { trade, zip, today }) {
+  return pros.filter(p => !trade || p.trade === trade).map(p => ({
+    ...p, gap: zipGap(p, zip), next: openDays(p, today, 14)[0] || null,
+    score: Number(p.ratings) > 0 ? Number(p.stars) : 4,
+  })).sort((a, b) => (a.gap > 20) - (b.gap > 20) || (!a.next) - (!b.next) || b.score - a.score || a.gap - b.gap || String(a.next).localeCompare(String(b.next)));
+}
+// "I'm not picky": the best pro who is close and open in the next week.
+export function pickPro(pros, opts) {
+  const week = shiftDay(opts.today, 7);
+  return rankPros(pros, opts).find(p => p.gap <= 20 && p.next && p.next <= week) || null;
+}

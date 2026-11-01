@@ -150,3 +150,7 @@ input,textarea,select{font-size:1rem;min-height:46px}
 .welcome{background:var(--brand-soft);border-radius:10px;padding:10px 12px;margin:0 0 6px;font-weight:600}
 .rebook{border-color:var(--brand)}
 .rebook>b{display:block;font-size:1.05rem}
+.chips.big .chip span{padding:11px 16px;font-size:1rem}
+.pro b{font-size:1.1rem}
+.pro .btn{margin-top:10px}
+.pro.best{border-color:var(--brand);box-shadow:0 0 0 1px var(--brand)}

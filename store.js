@@ -54,6 +54,14 @@ export class LocalStore {
     if (!found) throw new Error('This request was not found.');
     await this.putRequest(applyAccept(found.request, { now: new Date().toISOString() }));
   }
+  // Demo: the only business is this device's, listed if the owner turned it on.
+  async listPros() {
+    const s = await this.getSettings();
+    if (!s.listed) return [];
+    const rated = this._read().requests.filter(r => r.rating);
+    const stars = rated.length ? Math.round(rated.reduce((t, r) => t + r.rating.stars, 0) / rated.length * 10) / 10 : null;
+    return [{ ...s, slug: 'demo', stars, ratings: rated.length }];
+  }
   async rateJob(token, rating) {
     const found = await this.getQuote(token);
     if (!found || found.request.rating) throw new Error('This job was already rated.');

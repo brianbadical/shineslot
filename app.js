@@ -1,12 +1,12 @@
 import {
   TRADES, tradeOf, MAX_PHOTOS, STATUS_LABEL, makeRequest, validateRequest, applyQuote, applyAccept,
-  applyDone, applyDecline, inboxOrder, WEEKDAYS, WEEKDAY_NAMES, hoursOf, validateBlock, blocksOn, isOpenDay, openDays, clashes, prettyTime, prettyDay, detailLines, parseSizes, sizesText, sizePrice, servicesOf, parseChoices, tradeFor, parseQuestions, validatePay, payLinks, applyPaid, applyUnpaid, earnings, PAY_METHODS, splitBookLink, RATING_GOOD, RATING_BAD, canRate, validateRating, ratingSummary, starsText, REPEAT_CHOICES, repeatLabel, dueForRebook, againFields, jobsForDay, dayTotal, weekOf, shiftDay, money, prettyWhen, localDay, mapsLink,
-} from './logic.js?v=202611010359';
-import { LocalStore, newId } from './store.js?v=202611010359';
-import { CloudStore, slugify } from './cloud.js?v=202611010359';
-import { SUPABASE_URL, SUPABASE_KEY } from './config.js?v=202611010359';
-import { sampleRequests } from './sample.js?v=202611010359';
-import qrcode from './qr.js?v=202611010359';
+  applyDone, applyDecline, inboxOrder, WEEKDAYS, WEEKDAY_NAMES, hoursOf, validateBlock, blocksOn, isOpenDay, openDays, clashes, prettyTime, prettyDay, detailLines, parseSizes, sizesText, sizePrice, servicesOf, parseChoices, tradeFor, parseQuestions, validatePay, payLinks, applyPaid, applyUnpaid, earnings, PAY_METHODS, splitBookLink, RATING_GOOD, RATING_BAD, canRate, validateRating, ratingSummary, starsText, REPEAT_CHOICES, repeatLabel, dueForRebook, againFields, parseZips, startingPrice, rankPros, pickPro, jobsForDay, dayTotal, weekOf, shiftDay, money, prettyWhen, localDay, mapsLink,
+} from './logic.js?v=202611010414';
+import { LocalStore, newId } from './store.js?v=202611010414';
+import { CloudStore, slugify } from './cloud.js?v=202611010414';
+import { SUPABASE_URL, SUPABASE_KEY } from './config.js?v=202611010414';
+import { sampleRequests } from './sample.js?v=202611010414';
+import qrcode from './qr.js?v=202611010414';
 
 // Falls back to memory (lost on reload) if the browser blocks storage.
 function safeStorage() {
@@ -238,6 +238,56 @@ function shrink(file, max = 900) {
   });
 }
 
+// ---------- customer: Find a pro ----------
+const ZIPKEY = 'shineslot:zip';
+async function viewFind() {
+  await shell(true, { business: 'Find a local pro', area: 'Book in 1 minute' });
+  const pros = await store.listPros();
+  const trades = [...new Set(pros.map(p => p.trade))].filter(k => TRADES[k]);
+  if (!trades.length) { app.innerHTML = `<div class="card empty">No pros listed yet. Check back soon.</div>`; return; }
+  let zip = ''; try { zip = localStorage.getItem(ZIPKEY) || ''; } catch {}
+  app.innerHTML = `<h1>What do you need done?</h1>
+  <form id="fd" class="card" novalidate>
+    <div class="chips big">${trades.map((k, i) => `<label class="chip"><input type="radio" name="trade" value="${k}"${trades.length === 1 && !i ? ' checked' : ''}><span>${esc(TRADES[k].name)}</span></label>`).join('')}</div>
+    <label for="zip">Your ZIP code</label><input id="zip" name="zip" inputmode="numeric" maxlength="5" autocomplete="postal-code" value="${esc(zip)}" placeholder="For example 33602">
+    <div class="errors" data-err></div>
+    <button class="btn block" type="submit" name="how" value="pick">🎯 I'm not picky. Find me someone</button>
+    <button class="btn ghost block" type="submit" name="how" value="look" style="margin-top:10px">👀 Let me look around</button>
+  </form>
+  <div id="res"></div>`;
+  const f = $('#fd');
+  f.addEventListener('submit', e => {
+    e.preventDefault();
+    const d = new FormData(f), trade = d.get('trade'), z = String(d.get('zip') || '').trim(), how = e.submitter?.value || 'pick';
+    const err = [!trade && 'Pick what you need done.', !/^\d{5}$/.test(z) && 'Enter your 5-digit ZIP code.'].filter(Boolean);
+    f.querySelector('[data-err]').textContent = err.join(' ');
+    if (err.length) return;
+    try { localStorage.setItem(ZIPKEY, z); } catch {}
+    const opts = { trade, zip: z, today: localDay() };
+    if (how === 'pick') showPick(pickPro(pros, opts), pros, opts); else showList(rankPros(pros, opts));
+    $('#res').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+}
+function proCard(p, big) {
+  const price = startingPrice(p);
+  const facts = [Number(p.ratings) > 0 ? `<span class="stars-show">★</span> ${esc(p.stars)} (${esc(p.ratings)})` : 'New on ShineSlot',
+    p.next ? 'Next open ' + esc(prettyDay(p.next)) : 'No open days soon', price ? 'From ' + money(price) : ''].filter(Boolean);
+  const href = cloud ? `#book-${p.slug}~Find a pro` : '#request';
+  return `<div class="card pro${big ? ' best' : ''}"><b>${esc(p.business || TRADES[p.trade].defaultBusiness)}</b>
+    <div class="meta">${esc(p.area || TRADES[p.trade].tagline)}${p.gap > 20 ? ' · may be outside your area' : ''}</div>
+    <div class="meta">${facts.join(' · ')}</div>
+    <a class="btn${big ? ' block' : ' small'}" href="${esc(href)}">Book with ${esc(p.owner || p.business || 'them')}</a></div>`;
+}
+function showPick(p, pros, opts) {
+  $('#res').innerHTML = p
+    ? `<h2>We found someone</h2>${proCard(p, true)}<button class="btn ghost small" id="others">Show me others</button>`
+    : `<div class="card empty">Nobody close by is open this week. <button class="btn ghost small" id="others">See everyone</button></div>`;
+  $('#others').onclick = () => showList(rankPros(pros, opts));
+}
+function showList(list) {
+  $('#res').innerHTML = list.length ? `<h2>${list.length} pro${list.length === 1 ? '' : 's'}</h2>` + list.map(p => proCard(p, false)).join('') : `<div class="card empty">No pros for that yet.</div>`;
+}
+
 // ---------- customer: quote page ----------
 async function viewQuote(token) {
   const found = await store.getQuote(token);
@@ -275,16 +325,19 @@ async function viewQuote(token) {
 // Two taps: stars, then a few quick choices. Shown once the job time has passed.
 function rateHtml(r, s) {
   const who = esc(s.owner || s.business || tradeOf(s.trade).worker);
-  if (r.rating) return `<div class="card rate"><h2 style="margin-top:0">Thanks for your rating</h2><div class="stars-show">${starsText(r.rating.stars)}</div></div>`;
+  if (r.rating) return `<div class="card rate"><h2 style="margin-top:0">Thanks for your rating</h2><div class="stars-show">${starsText(r.rating.stars)}</div>
+    ${googleOk(s.googleReview) ? `<p class="meta">Got a minute? A Google review helps ${who} a lot.</p><a class="btn ghost block" href="${esc(s.googleReview)}" target="_blank" rel="noopener">Review on Google</a>` : ''}</div>`;
   if (!canRate(r, nowWhen())) return '';
   const chips = (list, cls) => `<div class="chips ${cls}" hidden>${list.map(x => `<label class="chip"><input type="checkbox" name="tags" value="${esc(x)}"><span>${esc(x)}</span></label>`).join('')}</div>`;
-  return `<form class="card rate" id="rate" novalidate><h2 style="margin-top:0">How did it go?</h2><p class="meta">Your rating goes to ${who} only.</p>
+  return `<form class="card rate" id="rate" novalidate><h2 style="margin-top:0">How did it go?</h2><p class="meta">Only ${who} sees your comments. Your stars count toward their average.</p>
     <div class="stars" role="radiogroup" aria-label="Stars">${[1, 2, 3, 4, 5].map(n => `<label><input type="radio" name="stars" value="${n}" aria-label="${n} star${n > 1 ? 's' : ''}"><span>★</span></label>`).join('')}</div>
     <p class="meta good-q" hidden>What went well?</p>${chips(RATING_GOOD, 'good')}
     <p class="meta bad-q" hidden>What went wrong?</p>${chips(RATING_BAD, 'bad')}
     <div data-more hidden><label for="rc">Anything else? (optional)</label><textarea id="rc" name="comment" maxlength="500"></textarea>
     <div class="errors" data-err></div><button class="btn block" type="submit">Send rating</button></div></form>`;
 }
+// Only real Google review links (Business Profile share links).
+function googleOk(u) { return /^https:\/\/(g\.page|maps\.app\.goo\.gl|g\.co|search\.google\.com|www\.google\.com|maps\.google\.com)\//.test(String(u || '')); }
 function nowWhen() { const d = new Date(); return localDay(d) + 'T' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0'); }
 function bindRate(token) {
   const f = $('#rate'); if (!f) return;
@@ -375,7 +428,7 @@ function extraQuestionsHtml(s) {
 function startCard(s) {
   if (s.startHidden) return '';
   const steps = [
-    [!!s.hours, 'Set your working hours', '#settings', 3],
+    [!!s.hours, 'Set your working hours', '#settings', 4],
     [!!((s.sizes || []).length || s.pkg?.name || (s.services || []).length), 'Add your services and prices', '#settings', 1],
     [!!s.shared, 'Send your link to a customer', '#share', -1],
   ];
@@ -600,7 +653,7 @@ async function viewShare() {
   <div class="card"><p class="meta">A ready-made picture with your name and a QR code. Post it, put it in your story, or print it for your truck or a flyer. People scan it with their camera to book.</p>
     <canvas id="postpic" width="1080" height="1350" class="postpic" aria-label="Picture to post"></canvas>
     <div class="btns">${navigator.canShare ? '<button class="btn" id="sharepic">📤 Share picture</button>' : ''}<button class="btn ghost" id="savepic">⬇️ Save picture</button><button class="btn ghost" id="cpcap">Copy caption</button></div>
-    <p class="meta">Tip: on Instagram, also put your link in your bio. On Facebook, add a "Book now" button to your page with this link.</p></div>
+    <p class="meta">Tip: on Instagram, also put your link in your bio. On Facebook, add a "Book now" button to your page with this link. On Google, open your Business Profile, tap Booking, then Add link, and paste it.</p></div>
   ${store.mode === 'demo' ? `<p class="meta">Demo note: right now requests only show up on this same device. The shared version comes next.</p>` : ''}`;
   const shared = () => store.getSettings().then(st => st.shared ? null : store.saveSettings({ shared: true })).catch(() => {});
   $('#cp').onclick = () => { copy(link); shared(); };
@@ -694,6 +747,17 @@ async function viewSettings() {
     <div class="errors" data-err></div>
     <button class="btn block" type="submit">Save payment settings</button>
   </form></details>
+  ${cloud || store.mode === 'demo' ? `<details class="sec">${sec('🔎', 'Find a pro and Google', s.listed ? 'Listed' : 'Off')}
+  <form id="lst" class="card" novalidate>
+    <label class="chip"><input type="checkbox" name="listed"${s.listed ? ' checked' : ''}><span>List me on the Find a pro page</span></label>
+    <p class="meta">New customers near you can find and book you there. They see your business name, area, starting prices, open days and average stars. Never your phone or address.</p>
+    <label for="googleReview">Your Google review link (optional)</label><input id="googleReview" name="googleReview" inputmode="url" value="${esc(s.googleReview || '')}" placeholder="https://g.page/r/...">
+    <p class="meta">Everyone who rates you gets a "Review on Google" button. Find the link in your Google Business Profile under "Ask for reviews".</p>
+    <label for="zips">ZIP codes you work in</label><input id="zips" name="zips" inputmode="numeric" value="${esc((s.zips || []).join(', '))}" placeholder="For example 33602, 33606, 33609">
+    <div class="errors" data-err></div>
+    <button class="btn block" type="submit">Save listing</button>
+    <p class="meta"><a href="#find">See the Find a pro page</a></p>
+  </form></details>` : ''}
   <details class="sec">${sec('🕘', 'Working hours', `Open ${openDays} day${openDays === 1 ? '' : 's'} a week`)}
   <form id="hrs" class="card">
     <p class="meta">Customers only see open days. To take a single day or a few hours off, open that day in the Calendar.</p>
@@ -719,6 +783,14 @@ async function viewSettings() {
     toast('Sample requests added'); location.hash = 'inbox';
   });
   bindAlerts(s);
+  $('#lst')?.addEventListener('submit', async e => {
+    e.preventDefault();
+    const f = new FormData(e.target), zips = parseZips(f.get('zips')), listed = !!f.get('listed'), googleReview = String(f.get('googleReview') || '').trim();
+    if (googleReview && !googleOk(googleReview)) { e.target.querySelector('[data-err]').textContent = 'That doesn\'t look like a Google review link. It starts with https://g.page/ or https://search.google.com/'; return; }
+    if (listed && !zips.length) { e.target.querySelector('[data-err]').textContent = 'Add at least one 5-digit ZIP code so nearby customers find you.'; return; }
+    await store.saveSettings({ listed, zips, googleReview });
+    toast(listed ? 'You are listed' : 'Saved'); render();
+  });
   $('#hrs').addEventListener('submit', async e => {
     e.preventDefault();
     const f = new FormData(e.target), hours = {};
@@ -882,6 +954,7 @@ async function render() {
     if (h === 'request' && !cloud) await viewRequest('demo');
     else if (h.startsWith('book-')) { const b = splitBookLink(h.slice(5)); await viewRequest(b.slug, b.ref); }
     else if (h.startsWith('q-')) await viewQuote(h.slice(2));
+    else if (h === 'find') await viewFind();
     else if (cloud && !(await store.session())) await viewLogin();
     else if (cloud && !(await store.business())) await viewSetup();
     else if (h === 'new') await viewSetup(true);

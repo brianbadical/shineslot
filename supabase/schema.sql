@@ -63,6 +63,7 @@ returns jsonb language sql stable security definer set search_path = public as $
     'trade', settings->>'trade', 'business', settings->>'business', 'owner', settings->>'owner',
     'area', settings->>'area', 'intro', settings->>'intro', 'shopAddress', settings->>'shopAddress',
     'hours', settings->'hours', 'sizes', settings->'sizes', 'pkg', settings->'pkg', 'services', settings->'services', 'questions', settings->'questions',
+    'googleReview', settings->>'googleReview',
     -- pay buttons only when the owner turned them on
     'pay', case when (settings->'pay'->>'on') = 'true' then settings->'pay' end,
     -- blocked times without the owner's private notes
@@ -128,6 +129,18 @@ begin
   where token = p_token and rating is null and status in ('accepted', 'done');
   if not found then raise exception 'This job can''t be rated (already rated, or not booked yet).'; end if;
 end $$;
+
+-- "Find a pro" page (added 2026-11-01): businesses whose owner turned on "List me on Find a pro",
+-- with their public profile, the ZIP codes they serve, and their average stars. No customer data.
+create or replace function public.list_pros()
+returns jsonb language sql stable security definer set search_path = public as $$
+  select coalesce(jsonb_agg(public.get_business(b.slug) || jsonb_build_object('zips', coalesce(b.settings->'zips', '[]'::jsonb), 'stars', r.avg, 'ratings', coalesce(r.n, 0))), '[]'::jsonb)
+  from businesses b
+  left join lateral (select round(avg((q.rating->>'stars')::numeric), 1) as avg, count(*) as n from requests q where q.business_id = b.id and q.rating is not null) r on true
+  where (b.settings->>'listed') = 'true';
+$$;
+revoke all on function public.list_pros() from public;
+grant execute on function public.list_pros() to anon, authenticated;
 
 revoke all on function public.get_business(text), public.submit_request(text, jsonb), public.get_quote(text), public.accept_quote(text), public.rate_job(text, jsonb) from public;
 grant execute on function public.get_business(text), public.submit_request(text, jsonb), public.get_quote(text), public.accept_quote(text), public.rate_job(text, jsonb) to anon, authenticated;
