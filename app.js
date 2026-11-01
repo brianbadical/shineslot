@@ -49,6 +49,8 @@ async function shell(customer, settings) {
       : `Demo: everything is saved on this device only. <button data-go="request">See the customer form</button>`;
   } else demo.hidden = true;
   if (customer) return;
+  if (cloud && (await store.businesses()).length > 1)
+    $('#top .sub').innerHTML = `ShineSlot · <a href="#settings">switch business</a>`;
   const reqs = await store.listRequests();
   const fresh = reqs.filter(r => r.status === 'new').length;
   document.querySelectorAll('.tabs a').forEach(a => {
@@ -82,7 +84,8 @@ async function viewRequest(slug) {
     ${(s.sizes || []).length ? `<label>${esc(t.sizesLabel || 'Size')}</label><div class="chips sizes">${s.sizes.map((z, i) =>
       `<label class="chip"><input type="radio" name="size" value="${i}"><span>${esc(z.label)} <b>${esc(sizePrice(z))}</b></span></label>`).join('')}</div>
       <p class="meta">Starting prices. Your final price depends on the job.</p>` : ''}
-    ${t.questions ? questionsHtml(t, 0) : `<label for="vehicle">${esc(t.itemLabel)}</label><input id="vehicle" name="vehicle" placeholder="${esc(t.itemHint)}">`}
+    ${t.composeItem ? '' : `<label for="vehicle">${esc(t.itemLabel)}</label><input id="vehicle" name="vehicle" placeholder="${esc(t.itemHint)}">`}
+    ${t.questions ? questionsHtml(t, 0) : ''}
     <label>${esc(t.servicesLabel)}</label>
     <div class="chips">${t.services.map(x => `<label class="chip"><input type="checkbox" name="services" value="${esc(x)}"><span>${esc(x)}</span></label>`).join('')}</div>
     <label>${esc(t.photosLabel)} (optional, up to ${MAX_PHOTOS})</label>
@@ -442,7 +445,7 @@ async function viewSettings() {
     <button class="btn block" type="submit">Save hours</button>
   </form>
   ${cloud ? alertsCard(s) : ''}
-  ${cloud ? `<div class="card"><p class="meta">Your link name: <b>${esc((await store.business()).slug)}</b></p><button class="btn ghost small" id="out">Sign out</button></div>` : ''}
+  ${cloud ? await businessesCard() : ''}
   ${store.mode === 'demo' ? `<h2>Demo tools</h2><div class="card"><p class="meta">Fill the app with a few made-up requests to try it out, or start over.</p>
     <div class="btns"><button class="btn ghost small" id="seed">Add sample requests</button><button class="btn danger small" id="wipe">Clear everything</button></div></div>` : ''}`;
   $('#st').addEventListener('submit', async e => {
@@ -482,6 +485,22 @@ async function viewSettings() {
     await store.reset(); toast('Cleared'); render();
   });
 }
+
+// One login can run more than one business (for example detailing and window tint).
+async function businessesCard() {
+  const all = await store.businesses(), cur = await store.business();
+  return `<h2>Your businesses</h2><div class="card">
+    ${all.map(b => `<div class="block-row"><div><b>${esc(b.settings.business || b.slug)}</b><div class="meta">${esc(tradeOf(b.settings.trade).name)} · #book-${esc(b.slug)}</div></div>
+      ${b.id === cur.id ? '<span class="status accepted">Open now</span>' : `<button class="btn ghost small" data-switch="${esc(b.id)}">Switch</button>`}</div>`).join('')}
+    <div class="btns"><a class="btn ghost small" href="#new">+ Add another business</a><button class="btn ghost small" id="out">Sign out</button></div></div>`;
+}
+
+document.addEventListener('click', async e => {
+  const sw = e.target.closest('[data-switch]');
+  if (!sw) return;
+  store.selectBusiness(sw.dataset.switch);
+  toast('Switched'); location.hash = 'inbox'; render();
+});
 
 // ---------- phone alerts (ntfy) ----------
 // Each business gets a long random topic name; the database sends an alert there for every new request.
@@ -553,10 +572,11 @@ async function viewLogin() {
   });
 }
 
-async function viewSetup() {
-  await shell(true, { business: 'ShineSlot', area: 'Set up your business' });
-  app.innerHTML = `<h1>Set up your business</h1>
-  <p class="lead">This takes a minute. You can change everything later except the link name.</p>
+async function viewSetup(another = false) {
+  await shell(true, { business: 'ShineSlot', area: another ? 'Add another business' : 'Set up your business' });
+  app.innerHTML = `<h1>${another ? 'Add another business' : 'Set up your business'}</h1>
+  <p class="lead">${another ? 'It gets its own link, requests and calendar. Switch between them in Settings.' : 'This takes a minute. You can change everything later except the link name.'}</p>
+  ${another ? '<p><a href="#settings">← Back</a></p>' : ''}
   <form id="su" class="card" novalidate>
     <label for="trade">Type of work</label><select id="trade" name="trade">${Object.entries(TRADES).map(([k, v]) => `<option value="${k}">${esc(v.name)}</option>`).join('')}</select>
     <label for="business">Business name</label><input id="business" name="business">
@@ -593,6 +613,7 @@ async function render() {
     else if (h.startsWith('q-')) await viewQuote(h.slice(2));
     else if (cloud && !(await store.session())) await viewLogin();
     else if (cloud && !(await store.business())) await viewSetup();
+    else if (h === 'new') await viewSetup(true);
     else if (h === 'today') await viewToday();
     else if (h === 'share') await viewShare();
     else if (h === 'settings') await viewSettings();

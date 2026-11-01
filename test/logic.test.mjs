@@ -176,3 +176,14 @@ test('sizes with starting prices', async () => {
   assert.equal(r.size, 'Small SUV · $140');
   assert.equal(r.sizePrice, 140);
 });
+
+test('window tint trade: free-text item plus optional questions', async () => {
+  const { cleanDetails } = await import('../logic.js');
+  assert.equal(TRADES.tint.name, 'Window tint');
+  const req = { name: 'Tia', phone: '555-123-4567', vehicle: '2021 Civic', services: ['Full car (sides and back)'], address: '9 Oak' };
+  assert.deepEqual(validateRequest(req, 'tint'), []);
+  assert.match(validateRequest({ ...req, vehicle: '' }, 'tint').join(' '), /tinting/);
+  const r = makeRequest({ ...req, details: { shade: '20%', goal: ['Heat', 'Nope'] } }, { id: 't', now, trade: 'tint' });
+  assert.deepEqual(r.details, { shade: '20%', goal: ['Heat'] });
+  assert.deepEqual(cleanDetails({ shade: '15%' }, 'tint'), {});
+});

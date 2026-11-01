@@ -12,7 +12,7 @@ create extension if not exists pgcrypto;
 
 create table if not exists public.businesses (
   id uuid primary key default gen_random_uuid(),
-  owner uuid not null unique references auth.users(id) on delete cascade,
+  owner uuid not null references auth.users(id) on delete cascade,
   slug text not null unique check (slug ~ '^[a-z0-9][a-z0-9-]{2,40}$'),
   settings jsonb not null default '{}'::jsonb,
   created_at timestamptz not null default now()
@@ -31,6 +31,9 @@ create table if not exists public.requests (
 );
 -- Owner's private notes on a request (never shown to the customer; get_quote does not return it).
 alter table public.requests add column if not exists owner_note text check (char_length(owner_note) <= 2000);
+-- One login can own more than one business (added 2026-11-01).
+alter table public.businesses drop constraint if exists businesses_owner_key;
+create index if not exists businesses_owner_idx on public.businesses(owner);
 create index if not exists requests_business_idx on public.requests(business_id, created_at desc);
 
 alter table public.businesses enable row level security;

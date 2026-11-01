@@ -3,6 +3,7 @@
 // Customers never sign in: they use the get_business / submit_request / get_quote / accept_quote functions.
 import { DEFAULT_SETTINGS } from './store.js';
 
+const PICK = 'shineslot:business';
 const SDK = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 
 function fail(error) { if (error) throw new Error(error.message || 'Something went wrong. Please try again.'); }
@@ -32,28 +33,38 @@ export class CloudStore {
 
   // ----- owner sign-in -----
   async session() { const c = await this.client(); const { data } = await c.auth.getSession(); return data.session; }
-  async signIn(email, password) { const c = await this.client(); fail((await c.auth.signInWithPassword({ email, password })).error); this._biz = undefined; }
+  async signIn(email, password) { const c = await this.client(); fail((await c.auth.signInWithPassword({ email, password })).error); this._biz = this._all = undefined; }
   async signUp(email, password) {
     const c = await this.client();
     const { data, error } = await c.auth.signUp({ email, password, options: { emailRedirectTo: location.origin + location.pathname } }); fail(error);
     return { needsConfirm: !data.session };
   }
-  async signOut() { const c = await this.client(); await c.auth.signOut(); this._biz = undefined; }
+  async signOut() { const c = await this.client(); await c.auth.signOut(); this._biz = this._all = undefined; }
 
-  async business() {
-    if (this._biz !== undefined) return this._biz;
+  // All businesses this login owns, oldest first.
+  async businesses() {
+    if (this._all) return this._all;
     const c = await this.client();
-    const { data, error } = await c.from('businesses').select('id, slug, settings').maybeSingle(); fail(error);
-    this._biz = data;
+    const { data, error } = await c.from('businesses').select('id, slug, settings').order('created_at'); fail(error);
+    this._all = data;
     return data;
   }
+  // The business open right now (remembered on this device).
+  async business() {
+    if (this._biz !== undefined) return this._biz;
+    const all = await this.businesses();
+    let want = null; try { want = localStorage.getItem(PICK); } catch {}
+    this._biz = all.find(b => b.id === want) || all[0] || null;
+    return this._biz;
+  }
+  selectBusiness(id) { try { localStorage.setItem(PICK, id); } catch {} this._biz = undefined; }
   async createBusiness(slug, settings) {
     const c = await this.client();
     const { data: { user } } = await c.auth.getUser();
     const { data, error } = await c.from('businesses').insert({ owner: user.id, slug, settings }).select('id, slug, settings').single();
     if (error && /duplicate|unique/i.test(error.message)) throw new Error('That link name is taken. Try another.');
     fail(error);
-    this._biz = data;
+    this._all = undefined; this.selectBusiness(data.id);
     return data;
   }
 
@@ -67,7 +78,8 @@ export class CloudStore {
   }
   async listRequests() {
     const c = await this.client();
-    const { data, error } = await c.from('requests').select('*').order('created_at', { ascending: false }).limit(500); fail(error);
+    const b = await this.business();
+    const { data, error } = await c.from('requests').select('*').eq('business_id', b.id).order('created_at', { ascending: false }).limit(500); fail(error);
     return data.map(fromRow);
   }
   async getRequest(id) {
