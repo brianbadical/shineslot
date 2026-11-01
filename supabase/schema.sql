@@ -63,6 +63,8 @@ returns jsonb language sql stable security definer set search_path = public as $
     'trade', settings->>'trade', 'business', settings->>'business', 'owner', settings->>'owner',
     'area', settings->>'area', 'intro', settings->>'intro', 'shopAddress', settings->>'shopAddress',
     'hours', settings->'hours', 'sizes', settings->'sizes', 'pkg', settings->'pkg',
+    -- pay buttons only when the owner turned them on
+    'pay', case when (settings->'pay'->>'on') = 'true' then settings->'pay' end,
     -- blocked times without the owner's private notes
     'blocks', (select coalesce(jsonb_agg(b - 'note'), '[]'::jsonb) from jsonb_array_elements(coalesce(settings->'blocks', '[]'::jsonb)) b))
   from businesses where slug = lower(p_slug);

@@ -1,7 +1,7 @@
 // Shared online store on Supabase. Same methods as LocalStore, plus owner sign-in.
 // Owners read and change only their own data (database rules in supabase/schema.sql).
 // Customers never sign in: they use the get_business / submit_request / get_quote / accept_quote functions.
-import { DEFAULT_SETTINGS } from './store.js';
+import { DEFAULT_SETTINGS } from './store.js?v=202611010308';
 
 const PICK = 'shineslot:business';
 const SDK = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
@@ -12,7 +12,7 @@ function fromRow(row) {
   return { id: row.id, token: row.token, status: row.status, createdAt: row.created_at, quote: row.quote, history: row.history || [], ownerNote: row.owner_note || '', ...row.data };
 }
 
-const DATA_KEYS = ['name', 'phone', 'email', 'vehicle', 'services', 'times', 'address', 'notes', 'photos', 'details', 'size', 'sizePrice'];
+const DATA_KEYS = ['name', 'phone', 'email', 'vehicle', 'services', 'times', 'address', 'notes', 'photos', 'details', 'size', 'sizePrice', 'paid'];
 const pick = (obj, keys) => Object.fromEntries(keys.filter(k => k in obj).map(k => [k, obj[k]]));
 
 export function slugify(text) {

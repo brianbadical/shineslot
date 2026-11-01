@@ -187,3 +187,25 @@ test('window tint trade: free-text item plus optional questions', async () => {
   assert.deepEqual(r.details, { shade: '20%', goal: ['Heat'] });
   assert.deepEqual(cleanDetails({ shade: '15%' }, 'tint'), {});
 });
+
+test('getting paid: pay settings, links, mark paid, earnings', async () => {
+  const { validatePay, payLinks, applyPaid, applyUnpaid, earnings } = await import('../logic.js');
+  let { pay, errors } = validatePay({ on: true, cashapp: '$SterlShine', venmo: '@sterl-shine', paypal: 'https://paypal.me/sterl/20', cardLink: 'https://square.link/u/abc' });
+  assert.deepEqual(errors, []);
+  assert.equal(pay.paypal, 'sterl');
+  const links = payLinks(pay, 140);
+  assert.equal(links[0].label, 'Pay by card');
+  assert.equal(links.find(l => l.label === 'Cash App').href, 'https://cash.app/$SterlShine/140');
+  assert.deepEqual(payLinks({ ...pay, on: false }, 140), []);
+  assert.equal(validatePay({ on: true }).errors.length, 1);
+  assert.equal(validatePay({ cardLink: 'javascript:alert(1)' }).errors.length, 1);
+  let r = applyAccept(applyQuote(makeRequest(good, { id: 'p', now }), { price: 140, when: '2026-11-02T09:00', now }), { now });
+  assert.throws(() => applyPaid(makeRequest(good, { id: 'q', now }), { amount: 10, method: 'Cash', now }));
+  const e0 = earnings([r], '2026-11-05');
+  assert.deepEqual([e0.owed, e0.owedCount], [140, 1]);
+  r = applyPaid(r, { amount: '140', tip: '20', method: 'Cash App', now: '2026-11-04T15:00:00' });
+  const e = earnings([r], '2026-11-05');
+  assert.deepEqual([e.week, e.month, e.year, e.tips, e.owedCount], [160, 160, 160, 20, 0]);
+  assert.equal(earnings([r], '2026-11-12').week, 0);
+  assert.equal(applyUnpaid(r, { now }).paid, null);
+});

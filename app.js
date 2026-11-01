@@ -1,11 +1,11 @@
 import {
   TRADES, tradeOf, MAX_PHOTOS, STATUS_LABEL, makeRequest, validateRequest, applyQuote, applyAccept,
-  applyDone, applyDecline, inboxOrder, WEEKDAYS, WEEKDAY_NAMES, hoursOf, validateBlock, blocksOn, isOpenDay, openDays, clashes, prettyTime, prettyDay, detailLines, parseSizes, sizesText, sizePrice, jobsForDay, dayTotal, weekOf, shiftDay, money, prettyWhen, localDay, mapsLink,
-} from './logic.js';
-import { LocalStore, newId } from './store.js';
-import { CloudStore, slugify } from './cloud.js';
-import { SUPABASE_URL, SUPABASE_KEY } from './config.js';
-import { sampleRequests } from './sample.js';
+  applyDone, applyDecline, inboxOrder, WEEKDAYS, WEEKDAY_NAMES, hoursOf, validateBlock, blocksOn, isOpenDay, openDays, clashes, prettyTime, prettyDay, detailLines, parseSizes, sizesText, sizePrice, validatePay, payLinks, applyPaid, applyUnpaid, earnings, PAY_METHODS, jobsForDay, dayTotal, weekOf, shiftDay, money, prettyWhen, localDay, mapsLink,
+} from './logic.js?v=202611010308';
+import { LocalStore, newId } from './store.js?v=202611010308';
+import { CloudStore, slugify } from './cloud.js?v=202611010308';
+import { SUPABASE_URL, SUPABASE_KEY } from './config.js?v=202611010308';
+import { sampleRequests } from './sample.js?v=202611010308';
 
 // Falls back to memory (lost on reload) if the browser blocks storage.
 function safeStorage() {
@@ -219,14 +219,32 @@ async function viewQuote(token) {
       <div class="tags">${r.services.map(x => `<span>${esc(x)}</span>`).join('')}</div>
       ${r.quote.note ? `<p>${esc(r.quote.note)}</p>` : ''}
       <button class="btn block" id="accept">Accept and book</button>
-      <p class="meta" style="text-align:center">Pay ${esc(s.owner || tradeOf(s.trade).worker)} on the day. Need a different time? Reply to their message.</p></div>`;
-  else if (r.status === 'accepted' || r.status === 'done') body = `<div class="done-note"><div class="big">✅</div><h1>${r.status === 'done' ? 'All done. Thanks!' : "You're booked"}</h1><p class="lead">${esc(prettyWhen(r.quote.when))} · ${money(r.quote.price)}<br>${tradeOf(s.trade).atShop ? (s.shopAddress ? 'Bring it to ' + esc(s.shopAddress) : '') : esc(r.address)}</p></div>`;
+      <p class="meta" style="text-align:center">${s.pay && s.pay.on ? 'After you book you can pay here, or' : 'Pay'} ${esc(s.owner || tradeOf(s.trade).worker)} on the day. Need a different time? Reply to their message.</p></div>`;
+  else if (r.status === 'accepted' || r.status === 'done') body = `<div class="done-note"><div class="big">✅</div><h1>${r.status === 'done' ? 'All done. Thanks!' : "You're booked"}</h1><p class="lead">${esc(prettyWhen(r.quote.when))} · ${money(r.quote.price)}<br>${tradeOf(s.trade).atShop ? (s.shopAddress ? 'Bring it to ' + esc(s.shopAddress) : '') : esc(r.address)}</p></div>
+    ${r.paid ? receiptHtml(r, s) : payHtml(s, r.quote.price)}`;
   else body = `<div class="done-note"><h1>Not available</h1><p class="lead">${esc(s.business || tradeOf(s.trade).defaultBusiness)} can't take this job. Thanks for asking.</p></div>`;
   app.innerHTML = body;
   $('#accept')?.addEventListener('click', async () => {
     try { await store.acceptQuote(token, applyAccept); toast('Booked'); render(); }
     catch (e) { toast(e.message); }
   });
+}
+
+function payHtml(s, amount) {
+  const links = payLinks(s.pay, amount);
+  if (!links.length) return '';
+  return `<div class="card"><h2 style="margin-top:0">Pay ${esc(money(amount))}</h2><p class="meta">Pay now or on the day, whichever you like.</p>
+    <div class="btns">${links.map(l => l.href ? `<a class="btn${l.label === 'Pay by card' ? '' : ' ghost'}" href="${esc(l.href)}" target="_blank" rel="noopener">${esc(l.label)}</a>` : `<span class="btn ghost" style="cursor:default">${esc(l.label)}</span>`).join('')}</div></div>`;
+}
+
+function receiptHtml(r, s) {
+  const p = r.paid;
+  return `<div class="card receipt"><h2 style="margin-top:0">Receipt</h2>
+    <div class="meta">${esc(s.business || tradeOf(s.trade).defaultBusiness)}</div>
+    <div class="row-line"><span>${esc(r.services.join(', ') || 'Service')}</span><b>${money(p.amount)}</b></div>
+    ${p.tip ? `<div class="row-line"><span>Tip</span><b>${money(p.tip)}</b></div>` : ''}
+    <div class="row-line total"><span>Paid${p.method ? ' by ' + esc(p.method) : ''}</span><b>${money(p.amount + (p.tip || 0))}</b></div>
+    <div class="meta">${esc(prettyDay(localDay(new Date(p.at))))} · Thank you!</div></div>`;
 }
 
 // ---------- detailer: inbox ----------
@@ -337,6 +355,11 @@ async function viewToday() {
       ${r.ownerNote ? `<p class="meta">📝 ${esc(r.ownerNote)}</p>` : ''}
       <div class="btns">${r.address ? `<a class="btn ghost small" href="${mapsLink(r.address)}" target="_blank" rel="noopener">Directions</a>` : ''}
       ${r.status === 'accepted' ? `<button class="btn small" data-done="${esc(r.id)}">Mark done</button>` : `<span class="status done">Done</span>`}</div>
+      ${r.paid ? `<div class="quote-box">💵 Paid <b>${money(r.paid.amount + (r.paid.tip || 0))}</b>${r.paid.tip ? ` (incl. ${money(r.paid.tip)} tip)` : ''} · ${esc(r.paid.method)} <button class="btn ghost small" data-unpaid="${esc(r.id)}">Undo</button></div>`
+        : `<details class="answers"><summary>💵 Mark paid</summary><form data-paid="${esc(r.id)}" novalidate>
+          <div class="row"><div><label>Amount</label><input name="amount" inputmode="decimal" value="${r.quote.price}"></div><div><label>Tip (optional)</label><input name="tip" inputmode="decimal" placeholder="$0"></div></div>
+          <label>How they paid</label><select name="method">${PAY_METHODS.map(m => `<option>${m}</option>`).join('')}</select>
+          <div class="errors" data-err></div><button class="btn small" type="submit" style="margin-top:10px">Save payment</button></form></details>`}
     </div>`).join('') : `<div class="card empty">Nothing booked${isToday ? ' today' : ' this day'}.</div>`}
   <h2>Availability</h2>
   <div class="card">
@@ -366,10 +389,30 @@ async function viewToday() {
   });
   app.querySelector('[data-week]').onclick = () => { calMode = 'week'; render(); };
   app.querySelectorAll('[data-day]').forEach(b => b.onclick = () => { viewDay = shiftDay(viewDay, Number(b.dataset.day)); render(); });
+  app.querySelectorAll('[data-paid]').forEach(f => f.addEventListener('submit', async e => {
+    e.preventDefault();
+    try {
+      const r = await store.getRequest(f.dataset.paid);
+      await store.putRequest(applyPaid(r, { amount: f.amount.value, tip: f.tip.value, method: f.method.value, now: nowIso() }));
+      toast('Payment saved'); render();
+    } catch (err) { f.querySelector('[data-err]').textContent = err.message; }
+  }));
+  app.querySelectorAll('[data-unpaid]').forEach(b => b.onclick = async () => {
+    const r = await store.getRequest(b.dataset.unpaid);
+    await store.putRequest(applyUnpaid(r, { now: nowIso() })); toast('Payment removed'); render();
+  });
   app.querySelectorAll('[data-done]').forEach(b => b.onclick = async () => {
     const r = await store.getRequest(b.dataset.done);
     await store.putRequest(applyDone(r, { now: nowIso() })); toast('Nice work'); render();
   });
+}
+
+// Money actually received (jobs marked paid). Hidden until the owner marks something paid.
+function earningsHtml(reqs) {
+  if (!reqs.some(r => r.paid)) return '';
+  const e = earnings(reqs);
+  return `<div class="card earn"><div><span>This week</span><b>${money(e.week)}</b></div><div><span>This month</span><b>${money(e.month)}</b></div><div><span>This year</span><b>${money(e.year)}</b></div>
+    ${e.owedCount ? `<p class="meta" style="grid-column:1/-1;margin:6px 0 0">Not marked paid yet: ${money(e.owed)} from ${e.owedCount} job${e.owedCount === 1 ? '' : 's'}${e.tips ? ` · Tips this year: ${money(e.tips)}` : ''}</p>` : e.tips ? `<p class="meta" style="grid-column:1/-1;margin:6px 0 0">Tips this year: ${money(e.tips)}</p>` : ''}</div>`;
 }
 
 function viewWeek(reqs, settings) {
@@ -381,6 +424,7 @@ function viewWeek(reqs, settings) {
   app.innerHTML = `
   <div class="daynav"><button class="btn ghost small" data-wk="-7" aria-label="Previous week">◀</button><strong>${esc(short(week[0].date))} – ${esc(short(week[6].date).split(', ')[1])}</strong><button class="btn ghost small" data-wk="7" aria-label="Next week">▶</button></div>
   <div class="big-total"><span>${count} job${count === 1 ? '' : 's'} this week</span><b>${money(Math.round(total * 100) / 100)}</b></div>
+  ${earningsHtml(reqs)}
   ${week.map(d => `<div class="card day${d.date === today ? ' is-today' : ''}" data-open="${d.date}" role="button" tabindex="0">
       <div class="day-head"><b>${d.date === today ? 'Today · ' : ''}${esc(short(d.date))}</b><span>${d.jobs.length ? money(d.total) : ''}</span></div>
       ${d.jobs.map(r => `<div class="slot${r.status === 'done' ? ' done' : ''}"><span class="t">${esc(prettyWhen(r.quote.when).split(', ').pop())}</span><span class="w">${esc(r.name.split(' ')[0])} · ${esc(r.vehicle)}</span></div>`).join('')}
@@ -436,6 +480,19 @@ async function viewSettings() {
     <div class="errors" data-err></div>
     <button class="btn block" type="submit">Save service and prices</button>
   </form>
+  <h2>Getting paid <span class="opt">(optional)</span></h2>
+  <form id="pay" class="card" novalidate>
+    <label class="chip"><input type="checkbox" name="on"${s.pay?.on ? ' checked' : ''}><span>Show pay buttons to customers after they book</span></label>
+    <p class="meta">Money goes straight to you. ShineSlot never touches it and takes nothing. Fill in only the ones you use.</p>
+    <div class="row"><div><label for="cashapp">Cash App</label><input id="cashapp" name="cashapp" value="${esc(s.pay?.cashapp ? '$' + s.pay.cashapp : '')}" placeholder="$YourCashtag"></div>
+      <div><label for="venmo">Venmo</label><input id="venmo" name="venmo" value="${esc(s.pay?.venmo ? '@' + s.pay.venmo : '')}" placeholder="@your-name"></div></div>
+    <div class="row"><div><label for="paypal">PayPal.me name</label><input id="paypal" name="paypal" value="${esc(s.pay?.paypal || '')}" placeholder="yourname"></div>
+      <div><label for="zelle">Zelle (phone or email)</label><input id="zelle" name="zelle" value="${esc(s.pay?.zelle || '')}"></div></div>
+    <label for="cardLink">Card payment link (from Square or Stripe)</label><input id="cardLink" name="cardLink" value="${esc(s.pay?.cardLink || '')}" placeholder="https://square.link/...">
+    <p class="meta">Mark jobs paid from the Calendar to see your earnings by week, month and year. That works even with pay buttons off.</p>
+    <div class="errors" data-err></div>
+    <button class="btn block" type="submit">Save payment settings</button>
+  </form>
   <h2>Working hours</h2>
   <form id="hrs" class="card">
     <p class="meta">Customers only see open days. To take a single day or a few hours off, open that day in the Calendar.</p>
@@ -469,6 +526,13 @@ async function viewSettings() {
       hours[k] = [a, b];
     }
     await store.saveSettings({ hours }); toast('Hours saved'); render();
+  });
+  $('#pay').addEventListener('submit', async e => {
+    e.preventDefault();
+    const f = new FormData(e.target);
+    const { pay, errors } = validatePay({ on: !!f.get('on'), cashapp: f.get('cashapp'), venmo: f.get('venmo'), paypal: f.get('paypal'), zelle: f.get('zelle'), cardLink: f.get('cardLink') });
+    if (errors.length) { e.target.querySelector('[data-err]').innerHTML = errors.map(esc).join('<br>'); return; }
+    await store.saveSettings({ pay }); toast('Saved'); render();
   });
   $('#svc').addEventListener('submit', async e => {
     e.preventDefault();

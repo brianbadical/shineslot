@@ -391,3 +391,71 @@ export function clashes(settings, reqs, when, selfId) {
 
 export function prettyTime(t) { const [h, m] = t.split(':').map(Number); return `${((h + 11) % 12) + 1}:${String(m).padStart(2, '0')} ${h < 12 ? 'AM' : 'PM'}`; }
 export function prettyDay(day) { return prettyWhen(day + 'T00:00').split(', ').slice(0, 2).join(', '); }
+
+// ----- getting paid (optional for each owner) -----
+export const PAY_METHODS = ['Cash', 'Card', 'Cash App', 'Venmo', 'PayPal', 'Zelle', 'Check', 'Other'];
+
+// Owner's pay details. Returns { pay, errors }. Nothing here moves money; the buttons
+// just open the owner's own Cash App, Venmo, PayPal or card page.
+export function validatePay(raw = {}) {
+  const errors = [], pay = { on: !!raw.on };
+  const cashapp = clean(raw.cashapp).replace(/^\$/, '');
+  if (cashapp) { if (/^[A-Za-z][A-Za-z0-9_-]{0,19}$/.test(cashapp)) pay.cashapp = cashapp; else errors.push('Cash App: use your $cashtag, like $SterlShine.'); }
+  const venmo = clean(raw.venmo).replace(/^@/, '');
+  if (venmo) { if (/^[A-Za-z0-9_-]{3,30}$/.test(venmo)) pay.venmo = venmo; else errors.push('Venmo: use your username, like @Sterl-Shine.'); }
+  const paypal = clean(raw.paypal).replace(/^(https?:\/\/)?(www\.)?paypal\.me\//i, '').replace(/\/.*$/, '');
+  if (paypal) { if (/^[A-Za-z0-9]{1,20}$/.test(paypal)) pay.paypal = paypal; else errors.push('PayPal: use your paypal.me name.'); }
+  const zelle = clean(raw.zelle).slice(0, 60);
+  if (zelle) pay.zelle = zelle;
+  const card = clean(raw.cardLink);
+  if (card) { if (/^https:\/\/[^\s"'<>]{4,300}$/.test(card)) pay.cardLink = card; else errors.push('Card link must start with https:// (copy it from Square or Stripe).'); }
+  if (pay.on && !pay.cashapp && !pay.venmo && !pay.paypal && !pay.zelle && !pay.cardLink) errors.push('Add at least one way to pay, or turn pay buttons off.');
+  return { pay, errors };
+}
+
+// Buttons for the customer's page. amount fills in where the app allows it.
+export function payLinks(pay, amount) {
+  if (!pay || !pay.on) return [];
+  const a = amount > 0 ? String(Math.round(amount * 100) / 100) : '';
+  const out = [];
+  if (pay.cardLink) out.push({ label: 'Pay by card', href: pay.cardLink });
+  if (pay.cashapp) out.push({ label: 'Cash App', href: `https://cash.app/$${encodeURIComponent(pay.cashapp)}${a ? '/' + a : ''}` });
+  if (pay.venmo) out.push({ label: 'Venmo', href: `https://venmo.com/${encodeURIComponent(pay.venmo)}?txn=pay${a ? '&amount=' + a : ''}` });
+  if (pay.paypal) out.push({ label: 'PayPal', href: `https://paypal.me/${encodeURIComponent(pay.paypal)}${a ? '/' + a + 'USD' : ''}` });
+  if (pay.zelle) out.push({ label: `Zelle: ${pay.zelle}` });
+  return out;
+}
+
+export function applyPaid(req, { amount, tip, method, now }) {
+  if (req.status !== 'accepted' && req.status !== 'done') throw new Error('Only booked jobs can be marked paid.');
+  const amt = parsePrice(amount);
+  const t = clean(tip) ? Number(String(tip).replace(/[$,\s]/g, '')) : 0;
+  if (!Number.isFinite(t) || t < 0 || t > MAX_PRICE) throw new Error('That tip does not look right.');
+  const m = PAY_METHODS.includes(method) ? method : 'Other';
+  const paid = { amount: amt, tip: Math.round(t * 100) / 100, method: m, at: now };
+  return { ...req, paid, history: [...req.history, { at: now, what: `Paid ${money(amt + paid.tip)} (${m})` }] };
+}
+
+export function applyUnpaid(req, { now }) {
+  const { paid, ...rest } = req;
+  return { ...rest, paid: null, history: [...req.history, { at: now, what: 'Payment removed' }] };
+}
+
+// Money in by week (Monday start), month and year, plus what is still owed for past jobs.
+export function earnings(reqs, today = localDay(), nowWhen = today + 'T23:59') {
+  const d = new Date(today + 'T12:00');
+  const monday = shiftDay(today, -((d.getDay() + 6) % 7));
+  const sum = { week: 0, month: 0, year: 0, tips: 0, owed: 0, owedCount: 0 };
+  for (const r of reqs) {
+    if (r.paid && r.paid.at) {
+      const day = localDay(new Date(r.paid.at)), got = r.paid.amount + (r.paid.tip || 0);
+      if (day.slice(0, 4) === today.slice(0, 4)) { sum.year += got; sum.tips += r.paid.tip || 0; }
+      if (day.slice(0, 7) === today.slice(0, 7)) sum.month += got;
+      if (day >= monday && day <= today) sum.week += got;
+    } else if ((r.status === 'done' || (r.status === 'accepted' && r.quote && r.quote.when <= nowWhen)) && r.quote) {
+      sum.owed += r.quote.price; sum.owedCount++;
+    }
+  }
+  for (const k of ['week', 'month', 'year', 'tips', 'owed']) sum[k] = Math.round(sum[k] * 100) / 100;
+  return sum;
+}
