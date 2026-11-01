@@ -1,11 +1,11 @@
 import {
   TRADES, tradeOf, MAX_PHOTOS, STATUS_LABEL, makeRequest, validateRequest, applyQuote, applyAccept,
   applyDone, applyDecline, inboxOrder, WEEKDAYS, WEEKDAY_NAMES, hoursOf, validateBlock, blocksOn, isOpenDay, openDays, clashes, prettyTime, prettyDay, detailLines, parseSizes, sizesText, sizePrice, servicesOf, parseChoices, validatePay, payLinks, applyPaid, applyUnpaid, earnings, PAY_METHODS, jobsForDay, dayTotal, weekOf, shiftDay, money, prettyWhen, localDay, mapsLink,
-} from './logic.js?v=202611010329';
-import { LocalStore, newId } from './store.js?v=202611010329';
-import { CloudStore, slugify } from './cloud.js?v=202611010329';
-import { SUPABASE_URL, SUPABASE_KEY } from './config.js?v=202611010329';
-import { sampleRequests } from './sample.js?v=202611010329';
+} from './logic.js?v=202611010337';
+import { LocalStore, newId } from './store.js?v=202611010337';
+import { CloudStore, slugify } from './cloud.js?v=202611010337';
+import { SUPABASE_URL, SUPABASE_KEY } from './config.js?v=202611010337';
+import { sampleRequests } from './sample.js?v=202611010337';
 
 // Falls back to memory (lost on reload) if the browser blocks storage.
 function safeStorage() {

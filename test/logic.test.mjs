@@ -185,7 +185,7 @@ test('window tint trade: free-text item plus optional questions', async () => {
   assert.match(validateRequest({ ...req, vehicle: '' }, 'tint').join(' '), /tinting/);
   const r = makeRequest({ ...req, details: { shade: '20%', goal: ['Heat', 'Nope'] } }, { id: 't', now, trade: 'tint' });
   assert.deepEqual(r.details, { shade: '20%', goal: ['Heat'] });
-  assert.deepEqual(cleanDetails({ shade: '15%' }, 'tint'), {});
+  assert.deepEqual(cleanDetails({ shade: '50%' }, 'tint'), {});
 });
 
 test('getting paid: pay settings, links, mark paid, earnings', async () => {
