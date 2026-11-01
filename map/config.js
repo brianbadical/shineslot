@@ -8,7 +8,7 @@ window.PYOTM = {
   supabaseUrl: 'https://ndjuxkuwgxvgrkxgblni.supabase.co',
   supabaseKey: 'sb_publishable_btWNzQJywjlfNeUF5PLF-g_8JJ-eFDj',
   // Leave false until supabase/map-signups.sql has been run. While false, sign-ups stay in the browser (test mode).
-  online: false, // set true after map-signups.sql is run
+  online: true,
   contactEmail: 'thebrainsmith@gmail.com',
   postalAddress: '',
 };
