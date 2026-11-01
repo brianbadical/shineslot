@@ -1,12 +1,12 @@
 import {
   TRADES, tradeOf, MAX_PHOTOS, STATUS_LABEL, makeRequest, validateRequest, applyQuote, applyAccept,
-  applyDone, applyDecline, inboxOrder, WEEKDAYS, WEEKDAY_NAMES, hoursOf, validateBlock, blocksOn, isOpenDay, openDays, clashes, prettyTime, prettyDay, detailLines, parseSizes, sizesText, sizePrice, servicesOf, parseChoices, validatePay, payLinks, applyPaid, applyUnpaid, earnings, PAY_METHODS, splitBookLink, RATING_GOOD, RATING_BAD, canRate, validateRating, ratingSummary, starsText, REPEAT_CHOICES, repeatLabel, dueForRebook, againFields, jobsForDay, dayTotal, weekOf, shiftDay, money, prettyWhen, localDay, mapsLink,
-} from './logic.js?v=202611010358';
-import { LocalStore, newId } from './store.js?v=202611010358';
-import { CloudStore, slugify } from './cloud.js?v=202611010358';
-import { SUPABASE_URL, SUPABASE_KEY } from './config.js?v=202611010358';
-import { sampleRequests } from './sample.js?v=202611010358';
-import qrcode from './qr.js?v=202611010358';
+  applyDone, applyDecline, inboxOrder, WEEKDAYS, WEEKDAY_NAMES, hoursOf, validateBlock, blocksOn, isOpenDay, openDays, clashes, prettyTime, prettyDay, detailLines, parseSizes, sizesText, sizePrice, servicesOf, parseChoices, tradeFor, parseQuestions, validatePay, payLinks, applyPaid, applyUnpaid, earnings, PAY_METHODS, splitBookLink, RATING_GOOD, RATING_BAD, canRate, validateRating, ratingSummary, starsText, REPEAT_CHOICES, repeatLabel, dueForRebook, againFields, jobsForDay, dayTotal, weekOf, shiftDay, money, prettyWhen, localDay, mapsLink,
+} from './logic.js?v=202611010359';
+import { LocalStore, newId } from './store.js?v=202611010359';
+import { CloudStore, slugify } from './cloud.js?v=202611010359';
+import { SUPABASE_URL, SUPABASE_KEY } from './config.js?v=202611010359';
+import { sampleRequests } from './sample.js?v=202611010359';
+import qrcode from './qr.js?v=202611010359';
 
 // Falls back to memory (lost on reload) if the browser blocks storage.
 function safeStorage() {
@@ -75,7 +75,7 @@ async function viewRequest(slug, ref = '') {
   const s = await store.publicBusiness(slug);
   if (!s) { await shell(true, {}); app.innerHTML = `<div class="card empty">This booking link doesn't work. Ask for a new one.</div>`; return; }
   await shell(true, s);
-  const t = tradeOf(s.trade);
+  const t = tradeFor(s);
   draftPhotos = [];
   app.innerHTML = `
   <h1>Request a quote</h1>
@@ -122,11 +122,11 @@ async function viewRequest(slug, ref = '') {
       sizeOther: f.get('size') === 'other',
       details: Object.fromEntries((t.questions || []).filter(q => q.key).map(q => [q.key, q.type === 'multi' ? f.getAll('d_' + q.key) : f.get('d_' + q.key)])),
     };
-    const errors = validateRequest(input, s.trade);
+    const errors = validateRequest(input, t);
     if ((s.sizes || []).length && !input.size && !input.sizeOther) errors.unshift(`Pick your ${(t.sizesLabel || 'size').toLowerCase()}.`);
     if (errors.length) { $('#err').innerHTML = errors.map(esc).join('<br>'); $('#err').scrollIntoView({ block: 'center' }); return; }
     try {
-      const req = makeRequest(input, { id: newId(), now: nowIso(), trade: s.trade });
+      const req = makeRequest(input, { id: newId(), now: nowIso(), trade: t });
       e.target.querySelector('button[type=submit]').disabled = true;
       const token = await store.submitRequest(slug, req);
       location.hash = 'q-' + token;
@@ -171,6 +171,7 @@ function pkgHtml(s) {
 // required questions); part 1 = the rest, folded so the form stays short on a phone.
 function questionsHtml(t, part) {
   const sections = [];
+  if (!t.questions || !t.questions.length) return '';
   for (const q of t.questions) { if (q.section) sections.push({ title: q.section, qs: [] }); else sections.at(-1).qs.push(q); }
   const field = q => {
     const id = 'd_' + q.key, opt = q.required ? '' : ' <span class="opt">(optional)</span>';
@@ -186,7 +187,9 @@ function questionsHtml(t, part) {
       if (qs[i].half && qs[i + 1]?.half) { h += `<div class="row"><div>${field(qs[i])}</div><div>${field(qs[i + 1])}</div></div>`; i += 2; }
       else h += field(qs[i++]);
     } return h; };
+  if (!sections.length) return '';
   if (part === 0) return `<h2>${esc(sections[0].title)}</h2>` + body(sections[0].qs);
+  if (sections.length < 2) return '';
   return `<h2>A few more questions <span class="opt">(optional, helps us price it right)</span></h2>` +
     sections.slice(1).map(sec => `<details class="more"><summary>${esc(sec.title)}</summary>${body(sec.qs)}</details>`).join('');
 }
@@ -356,6 +359,16 @@ async function viewInbox() {
   bindRebook(everything, settings);
   const all = await store.listRequests();
   bindCards(settings, all);
+}
+
+// Owners turn the trade's optional questions on or off and trim the answers.
+function extraQuestionsHtml(s) {
+  const qs = (tradeOf(s.trade).questions || []).filter(q => q.key && !q.required);
+  if (!qs.length) return '';
+  const ov = s.questions || {};
+  return `<label>Extra questions on your form</label><p class="meta">Untick what you don't need to ask. Delete answers that don't fit your work.</p>
+    ${qs.map(q => { const o = ov[q.key] || {}; return `<div class="q-edit"><label class="chip"><input type="checkbox" name="ask_${esc(q.key)}"${o.off ? '' : ' checked'}><span>${esc(q.label)}</span></label>
+      ${q.options ? `<textarea name="opts_${esc(q.key)}" rows="${Math.min(6, q.options.length)}" aria-label="Answers for ${esc(q.label)}">${esc((o.options || q.options).join('\n'))}</textarea>` : ''}</div>`; }).join('')}`;
 }
 
 // Three steps for new owners. Disappears once all are done, or when they tap "Hide".
@@ -664,6 +677,7 @@ async function viewSettings() {
     <label for="sizes">${esc(tradeOf(s.trade).sizesLabel || 'Sizes')} and starting prices</label>
     <textarea id="sizes" name="sizes" rows="4" placeholder="One per line, for example:&#10;Car = 120&#10;Small SUV = 140&#10;Large SUV / pickup = 170+">${esc(sizesText(s.sizes))}</textarea>
     <p class="meta">Customers tap one. Add + after a price for "and up". The price fills in when you quote.</p>
+    ${extraQuestionsHtml(s)}
     <div class="errors" data-err></div>
     <button class="btn block" type="submit">Save service and prices</button>
   </form></details>
@@ -728,11 +742,12 @@ async function viewSettings() {
     const f = new FormData(e.target);
     const { sizes, errors: e1 } = parseSizes(f.get('sizes'));
     const { choices, errors: e2 } = parseChoices(f.get('choices'));
-    const errors = [...e2, ...e1];
+    const { questions, errors: e3 } = parseQuestions(s.trade, Object.fromEntries(f.entries()));
+    const errors = [...e2, ...e1, ...e3];
     if (errors.length) { e.target.querySelector('[data-err]').innerHTML = errors.map(esc).join('<br>'); return; }
     const pkg = { name: f.get('pkgName').trim(), time: f.get('pkgTime').trim(), about: f.get('pkgAbout').trim() };
     const same = choices.join('\n') === tradeOf((await store.getSettings()).trade).services.join('\n');
-    await store.saveSettings({ sizes, pkg, services: same ? null : choices }); toast('Saved'); render();
+    await store.saveSettings({ sizes, pkg, services: same ? null : choices, questions }); toast('Saved'); render();
   });
   $('#out')?.addEventListener('click', async () => { await store.signOut(); render(); });
   let armed = false;

@@ -131,6 +131,9 @@ input,textarea,select{font-size:1rem;min-height:46px}
 .step.done{color:var(--muted);text-decoration:line-through}
 .step.done .num{background:#cfe9e5;color:var(--brand-dark)}
 .start .btn{margin-top:10px}
+.q-edit{border-top:1px solid var(--line);padding:10px 0}
+.q-edit .chip span{white-space:normal}
+.q-edit textarea{margin-top:8px;min-height:auto}
 
 /* ratings */
 .stars{display:flex;gap:6px;margin:6px 0 10px}

@@ -185,7 +185,7 @@ test('window tint trade: free-text item plus optional questions', async () => {
   assert.match(validateRequest({ ...req, vehicle: '' }, 'tint').join(' '), /tinting/);
   const r = makeRequest({ ...req, details: { shade: '20%', goal: ['Heat', 'Nope'] } }, { id: 't', now, trade: 'tint' });
   assert.deepEqual(r.details, { shade: '20%', goal: ['Heat'] });
-  assert.deepEqual(cleanDetails({ shade: '50%' }, 'tint'), {});
+  assert.deepEqual(cleanDetails({ shade: '15%' }, 'tint'), {});
 });
 
 test('getting paid: pay settings, links, mark paid, earnings', async () => {
@@ -228,6 +228,26 @@ test('every starter template works end to end', () => {
   }
   assert.ok(Object.keys(TRADES).length >= 14);
   assert.match(validateRequest({ name: 'A', phone: '555-123-4567', vehicle: 'x', services: ['Mowing'] }, 'lawn').join(' '), /Add the address/);
+});
+
+test('owners turn extra questions off and trim answers', async () => {
+  const { tradeFor, parseQuestions, cleanDetails } = await import('../logic.js');
+  const form = { ask_kind: 'on', ask_shade: 'on', opts_shade: '5% (limo)\n20%\n35%', opts_film: 'Ceramic', ask_oldTint: 'on', ask_windows: 'on', ask_winSizes: 'on', ask_goal: 'on', opts_kind: TRADES.tint.questions.find(q => q.key === 'kind').options.join('\n'), opts_oldTint: 'Yes\nNo\nNot sure', opts_goal: TRADES.tint.questions.find(q => q.key === 'goal').options.join('\n') };
+  const { questions, errors } = parseQuestions('tint', form);
+  assert.deepEqual(errors, []);
+  assert.deepEqual(questions, { shade: { options: ['5% (limo)', '20%', '35%'] }, film: { off: true, options: ['Ceramic'] } });
+  const t = tradeFor({ trade: 'tint', questions });
+  assert.equal(t.questions.some(q => q.key === 'film'), false);
+  assert.deepEqual(t.questions.find(q => q.key === 'shade').options, ['5% (limo)', '20%', '35%']);
+  assert.deepEqual(cleanDetails({ shade: '50%' }, t), {});
+  assert.deepEqual(cleanDetails({ shade: '20%' }, t), { shade: '20%' });
+  // required cleaning questions can never be turned off
+  const c = tradeFor({ trade: 'cleaning', questions: { beds: { off: true } } });
+  assert.ok(c.questions.some(q => q.key === 'beds'));
+  // a section with every question off disappears
+  const off = Object.fromEntries(['windows', 'winSizes', 'goal'].map(k => [k, { off: true }]));
+  assert.equal(tradeFor({ trade: 'tint', questions: off }).questions.some(q => q.section === 'Homes, businesses and boats'), false);
+  assert.equal(parseQuestions('tint', { ...form, opts_shade: '' }).errors.length, 1);
 });
 
 import { splitBookLink, cleanRef, canRate, validateRating, ratingSummary } from '../logic.js';

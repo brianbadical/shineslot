@@ -62,7 +62,7 @@ returns jsonb language sql stable security definer set search_path = public as $
     'slug', slug,
     'trade', settings->>'trade', 'business', settings->>'business', 'owner', settings->>'owner',
     'area', settings->>'area', 'intro', settings->>'intro', 'shopAddress', settings->>'shopAddress',
-    'hours', settings->'hours', 'sizes', settings->'sizes', 'pkg', settings->'pkg', 'services', settings->'services',
+    'hours', settings->'hours', 'sizes', settings->'sizes', 'pkg', settings->'pkg', 'services', settings->'services', 'questions', settings->'questions',
     -- pay buttons only when the owner turned them on
     'pay', case when (settings->'pay'->>'on') = 'true' then settings->'pay' end,
     -- blocked times without the owner's private notes
