@@ -86,3 +86,12 @@ textarea{min-height:80px;resize:vertical}
 .hours-row input[type=time]{padding:8px 6px;min-width:0;font-size:.9rem}
 .hours-row .chip span{width:100%;text-align:center}
 @media (max-width:420px){.row{grid-template-columns:1fr}}
+.opt{font-weight:400;color:var(--muted);font-size:.85em}
+details.more{border:1px solid var(--line);border-radius:11px;padding:2px 12px 12px;margin-top:8px}
+details.more summary,details.answers summary{cursor:pointer;font-weight:700;padding:10px 0 2px}
+details.answers{background:#f7fafb;border:1px solid var(--line);border-radius:11px;padding:2px 12px 10px;margin-top:8px;font-size:.9rem}
+details.answers dl{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:4px 10px;margin:8px 0 0}
+details.answers dt{color:var(--muted)}
+details.answers dd{margin:0;font-weight:600;overflow-wrap:anywhere}
+details.answers textarea{margin-top:8px;min-height:70px}
+details.answers .btn{margin-top:8px}

@@ -1,6 +1,6 @@
 import {
   TRADES, tradeOf, MAX_PHOTOS, STATUS_LABEL, makeRequest, validateRequest, applyQuote, applyAccept,
-  applyDone, applyDecline, inboxOrder, WEEKDAYS, WEEKDAY_NAMES, hoursOf, validateBlock, blocksOn, isOpenDay, openDays, clashes, prettyTime, prettyDay, jobsForDay, dayTotal, weekOf, shiftDay, money, prettyWhen, localDay, mapsLink,
+  applyDone, applyDecline, inboxOrder, WEEKDAYS, WEEKDAY_NAMES, hoursOf, validateBlock, blocksOn, isOpenDay, openDays, clashes, prettyTime, prettyDay, detailLines, jobsForDay, dayTotal, weekOf, shiftDay, money, prettyWhen, localDay, mapsLink,
 } from './logic.js';
 import { LocalStore, newId } from './store.js';
 import { CloudStore, slugify } from './cloud.js';
@@ -78,7 +78,7 @@ async function viewRequest(slug) {
       <div><label for="phone">Phone</label><input id="phone" name="phone" type="tel" autocomplete="tel"></div>
       <div><label for="email">Email</label><input id="email" name="email" type="email" autocomplete="email"></div>
     </div>
-    <label for="vehicle">${esc(t.itemLabel)}</label><input id="vehicle" name="vehicle" placeholder="${esc(t.itemHint)}">
+    ${t.questions ? questionsHtml(t, 0) : `<label for="vehicle">${esc(t.itemLabel)}</label><input id="vehicle" name="vehicle" placeholder="${esc(t.itemHint)}">`}
     <label>${esc(t.servicesLabel)}</label>
     <div class="chips">${t.services.map(x => `<label class="chip"><input type="checkbox" name="services" value="${esc(x)}"><span>${esc(x)}</span></label>`).join('')}</div>
     <label>${esc(t.photosLabel)} (optional, up to ${MAX_PHOTOS})</label>
@@ -89,7 +89,8 @@ async function viewRequest(slug) {
       : `<p class="meta">No open days in the next two weeks. Send your request anyway and we'll find a time.</p>`; })()}
     <div class="chips" style="margin-top:8px">${['Morning', 'Afternoon', 'Evening'].map(x => `<label class="chip"><input type="checkbox" name="times" value="${x}"><span>${x}</span></label>`).join('')}</div>
     ${t.atShop ? '' : `<label for="address">${esc(t.addressLabel)}</label><input id="address" name="address" placeholder="Street address or area" autocomplete="street-address">`}
-    <label for="notes">${esc(t.notesLabel)}</label><textarea id="notes" name="notes" placeholder="${esc(t.notesHint)}"></textarea>
+    ${t.questions ? questionsHtml(t, 1) : ''}
+    <label for="notes">${esc(t.notesLabel)}</label><textarea id="notes" name="notes" placeholder="${esc(t.questions ? 'Anything we missed?' : t.notesHint)}"></textarea>
     <div class="errors" id="err"></div>
     <button class="btn block" type="submit">Send request</button>
   </form>`;
@@ -101,6 +102,7 @@ async function viewRequest(slug) {
       name: f.get('name'), phone: f.get('phone'), email: f.get('email'), vehicle: f.get('vehicle'),
       services: f.getAll('services'), times: f.getAll('times'), address: f.get('address') || '', notes: f.get('notes'),
       photos: draftPhotos,
+      details: Object.fromEntries((t.questions || []).filter(q => q.key).map(q => [q.key, q.type === 'multi' ? f.getAll('d_' + q.key) : f.get('d_' + q.key)])),
     };
     const errors = validateRequest(input, s.trade);
     if (errors.length) { $('#err').innerHTML = errors.map(esc).join('<br>'); $('#err').scrollIntoView({ block: 'center' }); return; }
@@ -111,6 +113,43 @@ async function viewRequest(slug) {
       location.hash = 'q-' + token;
     } catch (err) { $('#err').textContent = err.message; e.target.querySelector('button[type=submit]').disabled = false; }
   });
+}
+
+// Intake questions, split into sections. part 0 = the first section (shown open, has the
+// required questions); part 1 = the rest, folded so the form stays short on a phone.
+function questionsHtml(t, part) {
+  const sections = [];
+  for (const q of t.questions) { if (q.section) sections.push({ title: q.section, qs: [] }); else sections.at(-1).qs.push(q); }
+  const field = q => {
+    const id = 'd_' + q.key, opt = q.required ? '' : ' <span class="opt">(optional)</span>';
+    const hint = q.hint && q.type ? `<div class="meta">${esc(q.hint)}</div>` : '';
+    if (q.type === 'choice' || q.type === 'multi') return `<label>${esc(q.label)}${opt}</label><div class="chips">${q.options.map(o =>
+      `<label class="chip"><input type="${q.type === 'multi' ? 'checkbox' : 'radio'}" name="${id}" value="${esc(o)}"><span>${esc(o)}</span></label>`).join('')}</div>${hint}`;
+    if (q.type === 'select') return `<label for="${id}">${esc(q.label)}${opt}</label><select id="${id}" name="${id}"><option value="">Pick one</option>${q.options.map(o => `<option>${esc(o)}</option>`).join('')}</select>`;
+    if (q.type === 'date') return `<label for="${id}">${esc(q.label)}${opt}</label><input id="${id}" name="${id}" type="date">`;
+    return `<label for="${id}">${esc(q.label)}${opt}</label><input id="${id}" name="${id}" maxlength="300" placeholder="${esc(q.hint || '')}">`;
+  };
+  const body = qs => { let h = '', i = 0;
+    while (i < qs.length) {
+      if (qs[i].half && qs[i + 1]?.half) { h += `<div class="row"><div>${field(qs[i])}</div><div>${field(qs[i + 1])}</div></div>`; i += 2; }
+      else h += field(qs[i++]);
+    } return h; };
+  if (part === 0) return `<h2>${esc(sections[0].title)}</h2>` + body(sections[0].qs);
+  return `<h2>A few more questions <span class="opt">(optional, helps us price it right)</span></h2>` +
+    sections.slice(1).map(sec => `<details class="more"><summary>${esc(sec.title)}</summary>${body(sec.qs)}</details>`).join('');
+}
+
+function detailsHtml(r, t) {
+  const lines = detailLines(r.details, t);
+  if (!lines.length) return '';
+  return `<details class="answers"><summary>Their answers (${lines.length})</summary><dl>${lines.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('')}</dl></details>`;
+}
+
+// Private notes and impressions. Only the owner sees these, never the customer.
+function ownerNoteHtml(r) {
+  return `<details class="answers"${r.ownerNote ? ' open' : ''}><summary>Your notes (only you see these)</summary>
+    <textarea data-onote maxlength="2000" placeholder="Impressions from the call, door code, anything to remember">${esc(r.ownerNote || '')}</textarea>
+    <button class="btn ghost small" type="button" data-onote-save>Save notes</button></details>`;
 }
 
 function drawPhotos() {
@@ -174,14 +213,21 @@ async function viewInbox() {
   await shell(false);
   const reqs = inboxOrder((await store.listRequests()).filter(r => r.status !== 'done' && r.status !== 'declined'));
   if (!reqs.length) {
-    app.innerHTML = `<h1>Requests</h1><div class="card empty">No open requests yet.<br><br><a class="btn" href="#share">Share your link</a></div>`;
+    app.innerHTML = `<h1>Requests</h1>${await phoneCallButton()}<div class="card empty">No open requests yet.<br><br><a class="btn" href="#share">Share your link</a></div>`;
     return;
   }
   const settings = await store.getSettings();
   const t = tradeOf(settings.trade);
-  app.innerHTML = `<h1>Requests</h1>` + reqs.map(r => card(r, t)).join('');
+  app.innerHTML = `<h1>Requests</h1>${await phoneCallButton()}` + reqs.map(r => card(r, t)).join('');
   const all = await store.listRequests();
   bindCards(settings, all);
+}
+
+// When a customer calls, the owner fills in the same request form for them.
+async function phoneCallButton() {
+  const biz = await store.business();
+  const href = store.mode === 'cloud' ? '#book-' + biz.slug : '#request';
+  return `<div class="btns" style="margin:0 0 12px"><a class="btn ghost small" href="${esc(href)}">📞 Took a call? Fill in the form for them</a></div>`;
 }
 
 function card(r, t) {
@@ -193,6 +239,8 @@ function card(r, t) {
     ${r.address ? `<div class="meta">📍 ${esc(r.address)}</div>` : ''}
     <div class="tags">${r.services.map(x => `<span>${esc(x)}</span>`).join('')}${r.times.map(x => `<span>🕑 ${esc(x)}</span>`).join('')}</div>
     ${r.notes ? `<p class="meta">“${esc(r.notes)}”</p>` : ''}
+    ${detailsHtml(r, t)}
+    ${ownerNoteHtml(r)}
     ${r.photos.length ? `<div class="photos">${r.photos.map((p, i) => `<a href="${p}" target="_blank" rel="noopener"><img src="${p}" alt="Photo ${i + 1} from ${esc(r.name)}"></a>`).join('')}</div>` : ''}
     ${r.status === 'accepted'
       ? `<div class="quote-box">Booked for <b>${esc(prettyWhen(r.quote.when))}</b> at <b>${money(r.quote.price)}</b>. It's on your <a href="#today">Calendar</a>.</div>`
@@ -231,6 +279,13 @@ function bindCards(settings, all) {
       const r = await store.getRequest(id);
       await store.putRequest(applyDecline(r, { now: nowIso() })); toast('Declined'); render();
     });
+    el.querySelector('[data-onote-save]')?.addEventListener('click', async () => {
+      try {
+        const r = await store.getRequest(id);
+        await store.putRequest({ ...r, ownerNote: el.querySelector('[data-onote]').value.trim().slice(0, 2000) });
+        toast('Notes saved');
+      } catch (err) { toast(err.message); }
+    });
     el.querySelector('[data-copy]')?.addEventListener('click', e => copy(`${baseLink()}#q-${e.currentTarget.dataset.copy}`));
   });
 }
@@ -256,7 +311,9 @@ async function viewToday() {
       ${r.address ? `<div class="meta">📍 ${esc(r.address)}</div>` : ''}
       ${r.phone ? `<div class="meta">📞 ${esc(r.phone)}</div>` : ''}
       ${r.notes ? `<p class="meta">“${esc(r.notes)}”</p>` : ''}
-      ${r.quote.note ? `<p class="meta">Your note: ${esc(r.quote.note)}</p>` : ''}
+      ${r.quote.note ? `<p class="meta">Note to customer: ${esc(r.quote.note)}</p>` : ''}
+      ${detailsHtml(r, tradeOf(settings.trade))}
+      ${r.ownerNote ? `<p class="meta">📝 ${esc(r.ownerNote)}</p>` : ''}
       <div class="btns">${r.address ? `<a class="btn ghost small" href="${mapsLink(r.address)}" target="_blank" rel="noopener">Directions</a>` : ''}
       ${r.status === 'accepted' ? `<button class="btn small" data-done="${esc(r.id)}">Mark done</button>` : `<span class="status done">Done</span>`}</div>
     </div>`).join('') : `<div class="card empty">Nothing booked${isToday ? ' today' : ' this day'}.</div>`}

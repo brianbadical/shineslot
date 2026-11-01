@@ -8,10 +8,10 @@ const SDK = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 function fail(error) { if (error) throw new Error(error.message || 'Something went wrong. Please try again.'); }
 
 function fromRow(row) {
-  return { id: row.id, token: row.token, status: row.status, createdAt: row.created_at, quote: row.quote, history: row.history || [], ...row.data };
+  return { id: row.id, token: row.token, status: row.status, createdAt: row.created_at, quote: row.quote, history: row.history || [], ownerNote: row.owner_note || '', ...row.data };
 }
 
-const DATA_KEYS = ['name', 'phone', 'email', 'vehicle', 'services', 'times', 'address', 'notes', 'photos'];
+const DATA_KEYS = ['name', 'phone', 'email', 'vehicle', 'services', 'times', 'address', 'notes', 'photos', 'details'];
 const pick = (obj, keys) => Object.fromEntries(keys.filter(k => k in obj).map(k => [k, obj[k]]));
 
 export function slugify(text) {
@@ -77,7 +77,7 @@ export class CloudStore {
   }
   async putRequest(req) {
     const c = await this.client();
-    const { error } = await c.from('requests').update({ status: req.status, quote: req.quote, history: req.history, data: pick(req, DATA_KEYS) }).eq('id', req.id);
+    const { error } = await c.from('requests').update({ status: req.status, quote: req.quote, history: req.history, owner_note: req.ownerNote || null, data: pick(req, DATA_KEYS) }).eq('id', req.id);
     fail(error);
     return req;
   }

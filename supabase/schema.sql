@@ -29,6 +29,8 @@ create table if not exists public.requests (
   created_at timestamptz not null default now(),
   check (octet_length(data::text) < 700000)
 );
+-- Owner's private notes on a request (never shown to the customer; get_quote does not return it).
+alter table public.requests add column if not exists owner_note text check (char_length(owner_note) <= 2000);
 create index if not exists requests_business_idx on public.requests(business_id, created_at desc);
 
 alter table public.businesses enable row level security;

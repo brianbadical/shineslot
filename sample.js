@@ -6,9 +6,9 @@ export function sampleRequests(now, trade = 'detailing') {
   const day = n => localDay(new Date(now.getFullYear(), now.getMonth(), now.getDate() + n));
   const mech = trade === 'mechanic', clean = trade === 'cleaning';
   const rows = clean ? [
-    { name: 'Jordan Sample', phone: '555-0101', vehicle: '3 bed, 2 bath house', services: ['Deep clean'], times: ['Saturday'], address: '100 Example St', notes: 'Two cats. Every 2 weeks after this.' },
-    { name: 'Casey Demo', email: 'casey@example.com', vehicle: '1 bed apartment', services: ['Move-in or move-out'], times: ['Weekday mornings'], address: '22 Sample Ave', notes: 'Moving out on the 15th.' },
-    { name: 'Riley Test', phone: '555-0103', vehicle: '2 bed condo', services: ['Standard clean', 'Inside fridge or oven'], times: ['Weekday afternoons'], address: '7 Placeholder Rd', notes: '' },
+    { name: 'Jordan Sample', phone: '555-0101', vehicle: '3 bed, 2 bath house', services: ['Deep clean'], times: ['Saturday'], address: '100 Example St', notes: 'Two cats. Every 2 weeks after this.', details: { homeType: 'House', beds: '3', baths: '2', sqft: '1,600', floors: ['Carpet', 'Hardwood'], pets: '2 cats', often: 'Every 2 weeks', focus: 'Kitchen and bathrooms', score: '5', access: "I'll be home", budget: '$150 to $200', heard: 'Friend' } },
+    { name: 'Casey Demo', email: 'casey@example.com', vehicle: '1 bed apartment', services: ['Move-in or move-out'], times: ['Weekday mornings'], address: '22 Sample Ave', notes: 'Moving out on the 15th.', details: { homeType: 'Apartment', beds: '1', baths: '1', often: 'One time', recent: 'Moving out on the 15th' } },
+    { name: 'Riley Test', phone: '555-0103', vehicle: '2 bed condo', services: ['Standard clean', 'Inside fridge or oven'], times: ['Weekday afternoons'], address: '7 Placeholder Rd', notes: '', details: { homeType: 'Condo', beds: '2', baths: '2' } },
   ] : [
     { name: 'Jordan Sample', phone: '555-0101', vehicle: '2019 Honda CR-V', services: mech ? ['Brakes'] : ['Interior', 'Pet hair'], times: ['Saturday'], address: '100 Example St', notes: mech ? 'Squeals when I stop, worse in the morning.' : 'Dog hair everywhere, back seats mostly.' },
     { name: 'Casey Demo', email: 'casey@example.com', vehicle: '2015 Ford F-150', services: mech ? ['Check engine light'] : ['Full detail'], times: ['Weekday evenings'], address: '22 Sample Ave', notes: mech ? 'Light came on last week, runs fine.' : '' },

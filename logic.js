@@ -55,8 +55,77 @@ export const TRADES = {
     intro: 'Tell me about your place and what you need. I will send you a price and a time.',
     noteHint: 'For example: deep clean, about 4 hours, supplies included',
     atShop: false,
+    // Questions from Selena's phone intake form. Home type, bedrooms and bathrooms are required
+    // and make up the "Your place" line; everything else is optional.
+    questions: [
+      { section: 'About your home' },
+      { key: 'homeType', label: 'Type of home', type: 'choice', options: ['House', 'Apartment', 'Condo', 'Townhouse', 'Other'], required: true },
+      { key: 'beds', label: 'Bedrooms', type: 'select', options: ['Studio', '1', '2', '3', '4', '5+'], required: true, half: true },
+      { key: 'baths', label: 'Bathrooms', type: 'select', options: ['1', '1.5', '2', '2.5', '3', '3.5', '4+'], required: true, half: true },
+      { key: 'sqft', label: 'About how many square feet?', hint: 'A guess is fine, for example 1,500' },
+      { key: 'floors', label: 'Floors', type: 'multi', options: ['Carpet', 'Hardwood', 'Tile', 'Laminate or vinyl', 'Other'] },
+      { key: 'pets', label: 'Pets', hint: 'Type and how many, for example 2 cats' },
+      { key: 'petsAway', label: 'Can pets be put away during the clean?', type: 'choice', options: ['Yes', 'No', 'No pets'] },
+      { section: 'What you need' },
+      { key: 'often', label: 'How often?', type: 'choice', options: ['One time', 'Weekly', 'Every 2 weeks', 'Monthly', 'Not sure yet'] },
+      { key: 'why', label: 'What made you reach out today?' },
+      { key: 'priority', label: 'What do you most want out of a cleaning service?', hint: 'For example less stress, ready for guests' },
+      { key: 'focus', label: 'Most important areas', hint: 'Kitchen, bathrooms...' },
+      { key: 'skip', label: 'Anything we should not touch?' },
+      { key: 'fragile', label: 'Fragile items or areas that need special care?' },
+      { section: 'How it is now' },
+      { key: 'nowCleaned', label: 'How often is it cleaned now?', hint: 'For example every few weeks, rarely' },
+      { key: 'score', label: 'How clean is it now? (1 = needs a lot, 10 = spotless)', type: 'select', options: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'] },
+      { key: 'problems', label: 'Problem areas?', hint: 'Mold, clutter, stains...' },
+      { key: 'recent', label: 'Recent move-in, move-out or renovation?' },
+      { key: 'usedBefore', label: 'Used a cleaning service before?', type: 'choice', options: ['Yes', 'No'] },
+      { section: 'Getting in and safety' },
+      { key: 'access', label: 'How will we get in?', type: 'choice', options: ["I'll be home", 'Key left for you', 'Door code', 'Other'], hint: "Please don't type door codes here. We'll ask when you book." },
+      { key: 'parking', label: 'Parking', hint: 'Driveway, street, garage...' },
+      { key: 'allergies', label: 'Allergies or sensitivity to cleaning products?' },
+      { section: 'Budget and timing' },
+      { key: 'budget', label: 'Budget or comfortable range', hint: 'For example $120 to $160' },
+      { key: 'start', label: 'Ideal start date', type: 'date' },
+      { key: 'comparing', label: 'Getting other quotes too?', type: 'choice', options: ['Yes', 'No'] },
+      { key: 'heard', label: 'How did you hear about us?' },
+    ],
+    composeItem: d => {
+      if (!d.homeType || !d.beds || !d.baths) return '';
+      const beds = d.beds === 'Studio' ? 'Studio' : `${d.beds} bed`;
+      return `${beds}, ${d.baths} bath ${d.homeType.toLowerCase()}` + (d.sqft ? ` · ${d.sqft} sq ft` : '');
+    },
   },
 };
+
+const MAX_ANSWER = 300;
+
+// Keep only answers to the trade's own questions, trimmed and short.
+export function cleanDetails(raw, trade = 'detailing') {
+  const out = {};
+  for (const q of tradeOf(trade).questions || []) {
+    if (!q.key || !raw || raw[q.key] == null) continue;
+    const v = raw[q.key];
+    if (q.type === 'multi') {
+      const list = (Array.isArray(v) ? v : [v]).map(x => String(x).trim()).filter(x => q.options.includes(x));
+      if (list.length) out[q.key] = list;
+    } else {
+      const t = String(v).trim().slice(0, MAX_ANSWER);
+      if (!t) continue;
+      if ((q.type === 'choice' || q.type === 'select') && !q.options.includes(t)) continue;
+      out[q.key] = t;
+    }
+  }
+  return out;
+}
+
+// Answers as [label, text] pairs in question order, for the owner's screens.
+export function detailLines(details, trade = 'detailing') {
+  if (!details) return [];
+  const t = typeof trade === 'string' ? tradeOf(trade) : trade;
+  return (t.questions || [])
+    .filter(q => q.key && details[q.key] != null && details[q.key] !== '')
+    .map(q => [q.label.replace(/ \(.*\)$/, ''), Array.isArray(details[q.key]) ? details[q.key].join(', ') : String(details[q.key])]);
+}
 export const tradeOf = key => TRADES[key] || TRADES.detailing;
 export const SERVICES = TRADES.detailing.services;
 export const TIMES = ['Weekday mornings', 'Weekday afternoons', 'Weekday evenings', 'Saturday', 'Sunday'];
@@ -70,14 +139,20 @@ const clean = v => String(v ?? '').trim();
 
 export function validateRequest(input, trade = 'detailing') {
   const errors = [];
+  const t = tradeOf(trade);
+  if (t.composeItem) {
+    const d = cleanDetails(input.details, trade);
+    for (const q of t.questions) if (q.required && !d[q.key]) errors.push(`Please answer: ${q.label}.`);
+    input = { ...input, vehicle: t.composeItem(d) || input.vehicle };
+  }
   if (!clean(input.name)) errors.push('Add your name.');
   const phone = clean(input.phone), email = clean(input.email);
   if (!phone && !email) errors.push('Add a phone number or email so we can reply.');
   if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) errors.push('That email does not look right.');
   if (phone && phone.replace(/\D/g, '').length < 7) errors.push('That phone number looks too short.');
-  if (!clean(input.vehicle)) errors.push(tradeOf(trade).itemError); // 'vehicle' holds the car, or the home for cleaning
+  if (!clean(input.vehicle) && !t.composeItem) errors.push(t.itemError); // 'vehicle' holds the car, or the home for cleaning
   if (!Array.isArray(input.services) || input.services.length === 0) errors.push('Pick at least one thing you want done.');
-  if (!tradeOf(trade).atShop && !clean(input.address)) errors.push('Add the address or area where the car will be.');
+  if (!t.atShop && !clean(input.address)) errors.push(trade === 'cleaning' ? 'Add the address.' : 'Add the address or area where the car will be.');
   if ((input.photos || []).length > MAX_PHOTOS) errors.push(`Up to ${MAX_PHOTOS} photos.`);
   return errors;
 }
@@ -85,6 +160,9 @@ export function validateRequest(input, trade = 'detailing') {
 export function makeRequest(input, { id, now, trade = 'detailing' }) {
   const errors = validateRequest(input, trade);
   if (errors.length) throw new Error(errors.join(' '));
+  const t = tradeOf(trade);
+  const details = cleanDetails(input.details, trade);
+  if (t.composeItem) input = { ...input, vehicle: t.composeItem(details) };
   return {
     id,
     createdAt: now,
@@ -98,6 +176,7 @@ export function makeRequest(input, { id, now, trade = 'detailing' }) {
     address: clean(input.address),
     notes: clean(input.notes),
     photos: (input.photos || []).slice(0, MAX_PHOTOS),
+    ...(Object.keys(details).length ? { details } : {}),
     quote: null,
     history: [{ at: now, what: 'Request sent' }],
   };

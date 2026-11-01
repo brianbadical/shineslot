@@ -117,9 +117,9 @@ test('demo store hands customers a token and accepts by token', async () => {
 test('cleaning trade asks about the home and needs an address', async () => {
   const home = { name: 'Ann', phone: '555-123-4567', vehicle: '', services: ['Deep clean'], address: '' };
   const errs = validateRequest(home, 'cleaning').join(' ');
-  assert.match(errs, /place/);
+  assert.match(errs, /Bedrooms/);
   assert.match(errs, /address/);
-  assert.deepEqual(validateRequest({ ...home, vehicle: '3 bed house', address: '1 Main' }, 'cleaning'), []);
+  assert.deepEqual(validateRequest({ ...home, details: { homeType: 'House', beds: '3', baths: '2' }, address: '1 Main' }, 'cleaning'), []);
   assert.equal(TRADES.cleaning.atShop, false);
   const rows = sampleRequests(new Date('2026-11-01T15:00:00'), 'cleaning');
   assert.equal(rows.length, 3);
@@ -147,4 +147,19 @@ test('availability: hours, blocks, open days and clashes', async () => {
   assert.throws(() => validateBlock({ date: '2026-11-05', start: '14:00', end: '12:00' }));
   assert.throws(() => validateBlock({ date: 'soon' }));
   assert.equal(prettyTime('13:05'), '1:05 PM');
+});
+
+test('cleaning intake answers: required home basics, answers kept clean, place line built', async () => {
+  const { cleanDetails, detailLines } = await import('../logic.js');
+  const base = { name: 'Sel', phone: '555-123-4567', services: ['Deep clean'], address: '1 Main St' };
+  assert.match(validateRequest(base, 'cleaning').join(' '), /Type of home/);
+  const details = { homeType: 'House', beds: '3', baths: '2.5', sqft: '1,800', floors: ['Tile', 'Lava'], score: '11', budget: '  $150  ', junk: 'x' };
+  assert.deepEqual(validateRequest({ ...base, details }, 'cleaning'), []);
+  const r = makeRequest({ ...base, details }, { id: 'c', now, trade: 'cleaning' });
+  assert.equal(r.vehicle, '3 bed, 2.5 bath house · 1,800 sq ft');
+  assert.deepEqual(r.details, { homeType: 'House', beds: '3', baths: '2.5', sqft: '1,800', floors: ['Tile'], budget: '$150' });
+  assert.deepEqual(cleanDetails({ beds: '2' }, 'detailing'), {});
+  assert.deepEqual(detailLines(r.details, 'cleaning')[0], ['Type of home', 'House']);
+  const studio = makeRequest({ ...base, details: { homeType: 'Apartment', beds: 'Studio', baths: '1' } }, { id: 'd', now, trade: 'cleaning' });
+  assert.equal(studio.vehicle, 'Studio, 1 bath apartment');
 });
