@@ -185,7 +185,7 @@ test('window tint trade: free-text item plus optional questions', async () => {
   assert.match(validateRequest({ ...req, vehicle: '' }, 'tint').join(' '), /tinting/);
   const r = makeRequest({ ...req, details: { shade: '20%', goal: ['Heat', 'Nope'] } }, { id: 't', now, trade: 'tint' });
   assert.deepEqual(r.details, { shade: '20%', goal: ['Heat'] });
-  assert.deepEqual(cleanDetails({ shade: '15%' }, 'tint'), {});
+  assert.deepEqual(cleanDetails({ shade: '50%' }, 'tint'), {});
 });
 
 test('getting paid: pay settings, links, mark paid, earnings', async () => {
@@ -230,26 +230,6 @@ test('every starter template works end to end', () => {
   assert.match(validateRequest({ name: 'A', phone: '555-123-4567', vehicle: 'x', services: ['Mowing'] }, 'lawn').join(' '), /Add the address/);
 });
 
-test('owners turn extra questions off and trim answers', async () => {
-  const { tradeFor, parseQuestions, cleanDetails } = await import('../logic.js');
-  const form = { ask_kind: 'on', ask_shade: 'on', opts_shade: '5% (limo)\n20%\n35%', opts_film: 'Ceramic', ask_oldTint: 'on', ask_windows: 'on', ask_winSizes: 'on', ask_goal: 'on', opts_kind: TRADES.tint.questions.find(q => q.key === 'kind').options.join('\n'), opts_oldTint: 'Yes\nNo\nNot sure', opts_goal: TRADES.tint.questions.find(q => q.key === 'goal').options.join('\n') };
-  const { questions, errors } = parseQuestions('tint', form);
-  assert.deepEqual(errors, []);
-  assert.deepEqual(questions, { shade: { options: ['5% (limo)', '20%', '35%'] }, film: { off: true, options: ['Ceramic'] } });
-  const t = tradeFor({ trade: 'tint', questions });
-  assert.equal(t.questions.some(q => q.key === 'film'), false);
-  assert.deepEqual(t.questions.find(q => q.key === 'shade').options, ['5% (limo)', '20%', '35%']);
-  assert.deepEqual(cleanDetails({ shade: '50%' }, t), {});
-  assert.deepEqual(cleanDetails({ shade: '20%' }, t), { shade: '20%' });
-  // required cleaning questions can never be turned off
-  const c = tradeFor({ trade: 'cleaning', questions: { beds: { off: true } } });
-  assert.ok(c.questions.some(q => q.key === 'beds'));
-  // a section with every question off disappears
-  const off = Object.fromEntries(['windows', 'winSizes', 'goal'].map(k => [k, { off: true }]));
-  assert.equal(tradeFor({ trade: 'tint', questions: off }).questions.some(q => q.section === 'Homes, businesses and boats'), false);
-  assert.equal(parseQuestions('tint', { ...form, opts_shade: '' }).errors.length, 1);
-});
-
 import { splitBookLink, cleanRef, canRate, validateRating, ratingSummary } from '../logic.js';
 
 test('booking link can say who sent the customer', () => {
@@ -285,4 +265,25 @@ test('demo store: a job can be rated once', async () => {
   await st.rateJob('z', { stars: 5, tags: [] });
   assert.equal((await st.getRequest('z')).rating.stars, 5);
   await assert.rejects(st.rateJob('z', { stars: 1, tags: [] }));
+});
+
+import { repeatWeeks, repeatLabel, dueForRebook, againFields } from '../logic.js';
+
+test('repeat customers: how often, and who is due to rebook', () => {
+  assert.equal(makeRequest({ ...good, repeat: '2' }, { id: 'a', now }).repeat, '2');
+  assert.equal(makeRequest({ ...good, repeat: '9' }, { id: 'a', now }).repeat, undefined);
+  assert.equal(repeatWeeks({ details: { often: 'Monthly' } }), 4);
+  assert.equal(repeatLabel({ repeat: '1' }), 'Every week');
+  assert.equal(repeatLabel({}), '');
+  const job = (id, when, extra = {}) => ({ id, name: 'Ann', phone: '(555) 123-4567', status: 'done', quote: { price: 100, when }, repeat: '2', ...extra });
+  // last visit Oct 20 + 2 weeks = Nov 3, due within 3 days of Nov 1
+  assert.deepEqual(dueForRebook([job('a', '2026-10-06T09:00'), job('b', '2026-10-20T09:00')], '2026-11-01').map(d => [d.req.id, d.due]), [['b', '2026-11-03']]);
+  // not due yet
+  assert.equal(dueForRebook([job('b', '2026-10-27T09:00')], '2026-11-01').length, 0);
+  // already has something open or booked ahead
+  assert.equal(dueForRebook([job('b', '2026-10-20T09:00'), { id: 'c', phone: '555-123-4567', status: 'new' }], '2026-11-01').length, 0);
+  assert.equal(dueForRebook([job('b', '2026-10-20T09:00'), job('d', '2026-11-05T09:00', { status: 'accepted' })], '2026-11-01').length, 0);
+  // one-time customers never show
+  assert.equal(dueForRebook([job('b', '2026-10-01T09:00', { repeat: undefined })], '2026-11-01').length, 0);
+  assert.deepEqual(againFields({ name: 'Ann', phone: '1', notes: 'x', photos: [], services: ['A'], email: '' }), { name: 'Ann', phone: '1', services: ['A'] });
 });

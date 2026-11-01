@@ -1,12 +1,12 @@
 import {
   TRADES, tradeOf, MAX_PHOTOS, STATUS_LABEL, makeRequest, validateRequest, applyQuote, applyAccept,
-  applyDone, applyDecline, inboxOrder, WEEKDAYS, WEEKDAY_NAMES, hoursOf, validateBlock, blocksOn, isOpenDay, openDays, clashes, prettyTime, prettyDay, detailLines, parseSizes, sizesText, sizePrice, servicesOf, parseChoices, tradeFor, parseQuestions, validatePay, payLinks, applyPaid, applyUnpaid, earnings, PAY_METHODS, splitBookLink, RATING_GOOD, RATING_BAD, canRate, validateRating, ratingSummary, starsText, jobsForDay, dayTotal, weekOf, shiftDay, money, prettyWhen, localDay, mapsLink,
-} from './logic.js?v=202611010357';
-import { LocalStore, newId } from './store.js?v=202611010357';
-import { CloudStore, slugify } from './cloud.js?v=202611010357';
-import { SUPABASE_URL, SUPABASE_KEY } from './config.js?v=202611010357';
-import { sampleRequests } from './sample.js?v=202611010357';
-import qrcode from './qr.js?v=202611010357';
+  applyDone, applyDecline, inboxOrder, WEEKDAYS, WEEKDAY_NAMES, hoursOf, validateBlock, blocksOn, isOpenDay, openDays, clashes, prettyTime, prettyDay, detailLines, parseSizes, sizesText, sizePrice, servicesOf, parseChoices, validatePay, payLinks, applyPaid, applyUnpaid, earnings, PAY_METHODS, splitBookLink, RATING_GOOD, RATING_BAD, canRate, validateRating, ratingSummary, starsText, REPEAT_CHOICES, repeatLabel, dueForRebook, againFields, jobsForDay, dayTotal, weekOf, shiftDay, money, prettyWhen, localDay, mapsLink,
+} from './logic.js?v=202611010358';
+import { LocalStore, newId } from './store.js?v=202611010358';
+import { CloudStore, slugify } from './cloud.js?v=202611010358';
+import { SUPABASE_URL, SUPABASE_KEY } from './config.js?v=202611010358';
+import { sampleRequests } from './sample.js?v=202611010358';
+import qrcode from './qr.js?v=202611010358';
 
 // Falls back to memory (lost on reload) if the browser blocks storage.
 function safeStorage() {
@@ -75,7 +75,7 @@ async function viewRequest(slug, ref = '') {
   const s = await store.publicBusiness(slug);
   if (!s) { await shell(true, {}); app.innerHTML = `<div class="card empty">This booking link doesn't work. Ask for a new one.</div>`; return; }
   await shell(true, s);
-  const t = tradeFor(s);
+  const t = tradeOf(s.trade);
   draftPhotos = [];
   app.innerHTML = `
   <h1>Request a quote</h1>
@@ -96,6 +96,8 @@ async function viewRequest(slug, ref = '') {
     <div class="chips">${servicesOf(s).map(x => `<label class="chip"><input type="checkbox" name="services" value="${esc(x)}"><span>${esc(x)}</span></label>`).join('')}</div>
     <label>${esc(t.photosLabel)} (optional, up to ${MAX_PHOTOS})</label>
     <div class="photos" id="ph"></div>
+    ${(t.questions || []).some(q => q.key === 'often') ? '' : `<label>How often?</label><div class="chips">${REPEAT_CHOICES.map(([v, l], i) =>
+      `<label class="chip"><input type="radio" name="repeat" value="${v}"${i ? '' : ' checked'}><span>${l}</span></label>`).join('')}</div>`}
     <label>When are you free? (pick any)</label>
     ${(() => { const days = openDays(s, localDay(), 14); return days.length
       ? `<div class="chips">${days.map(d => `<label class="chip"><input type="checkbox" name="times" value="${esc(prettyDay(d))}"><span>${esc(prettyDay(d))}</span></label>`).join('')}</div>`
@@ -108,27 +110,49 @@ async function viewRequest(slug, ref = '') {
     <button class="btn block" type="submit">Send request</button>
   </form>`;
   drawPhotos();
+  ref = fillAgain(slug) || ref;
   $('#rq').addEventListener('submit', async e => {
     e.preventDefault();
     const f = new FormData(e.target);
     const input = {
       name: f.get('name'), phone: f.get('phone'), email: f.get('email'), vehicle: f.get('vehicle'),
       services: f.getAll('services'), times: f.getAll('times'), address: f.get('address') || '', notes: f.get('notes'),
-      photos: draftPhotos, ref,
+      photos: draftPhotos, ref, repeat: f.get('repeat') || '',
       size: f.get('size') != null && f.get('size') !== 'other' ? s.sizes[+f.get('size')] : null,
       sizeOther: f.get('size') === 'other',
       details: Object.fromEntries((t.questions || []).filter(q => q.key).map(q => [q.key, q.type === 'multi' ? f.getAll('d_' + q.key) : f.get('d_' + q.key)])),
     };
-    const errors = validateRequest(input, t);
+    const errors = validateRequest(input, s.trade);
     if ((s.sizes || []).length && !input.size && !input.sizeOther) errors.unshift(`Pick your ${(t.sizesLabel || 'size').toLowerCase()}.`);
     if (errors.length) { $('#err').innerHTML = errors.map(esc).join('<br>'); $('#err').scrollIntoView({ block: 'center' }); return; }
     try {
-      const req = makeRequest(input, { id: newId(), now: nowIso(), trade: t });
+      const req = makeRequest(input, { id: newId(), now: nowIso(), trade: s.trade });
       e.target.querySelector('button[type=submit]').disabled = true;
       const token = await store.submitRequest(slug, req);
       location.hash = 'q-' + token;
     } catch (err) { $('#err').textContent = err.message; e.target.querySelector('button[type=submit]').disabled = false; }
   });
+}
+
+// "Book again": fill the form with what the customer sent last time. Returns who sent them, if anyone.
+const AGAIN = 'shineslot:again';
+function fillAgain(slug) {
+  let a = null; try { a = JSON.parse(sessionStorage.getItem(AGAIN) || 'null'); sessionStorage.removeItem(AGAIN); } catch {}
+  if (!a || a.slug !== slug) return '';
+  const f = $('#rq'), v = a.fields || {};
+  const set = (name, val) => {
+    const els = f.querySelectorAll(`[name="${name}"]`);
+    els.forEach(el => {
+      if (el.type === 'checkbox' || el.type === 'radio') el.checked = (Array.isArray(val) ? val : [val]).includes(el.value);
+      else el.value = val ?? '';
+    });
+  };
+  for (const k of ['name', 'phone', 'email', 'vehicle', 'address']) if (v[k]) set(k, v[k]);
+  if (v.services) set('services', v.services);
+  if (v.repeat) set('repeat', v.repeat);
+  for (const [k, val] of Object.entries(v.details || {})) set('d_' + k, val);
+  f.insertAdjacentHTML('afterbegin', `<p class="welcome">👋 Welcome back${v.name ? ', ' + esc(String(v.name).split(' ')[0]) : ''}! We filled in your details from last time. Just pick a day.</p>`);
+  return v.ref || '';
 }
 
 // The owner's main service, shown at the top of the customer form.
@@ -147,7 +171,6 @@ function pkgHtml(s) {
 // required questions); part 1 = the rest, folded so the form stays short on a phone.
 function questionsHtml(t, part) {
   const sections = [];
-  if (!t.questions || !t.questions.length) return '';
   for (const q of t.questions) { if (q.section) sections.push({ title: q.section, qs: [] }); else sections.at(-1).qs.push(q); }
   const field = q => {
     const id = 'd_' + q.key, opt = q.required ? '' : ' <span class="opt">(optional)</span>';
@@ -163,9 +186,7 @@ function questionsHtml(t, part) {
       if (qs[i].half && qs[i + 1]?.half) { h += `<div class="row"><div>${field(qs[i])}</div><div>${field(qs[i + 1])}</div></div>`; i += 2; }
       else h += field(qs[i++]);
     } return h; };
-  if (!sections.length) return '';
   if (part === 0) return `<h2>${esc(sections[0].title)}</h2>` + body(sections[0].qs);
-  if (sections.length < 2) return '';
   return `<h2>A few more questions <span class="opt">(optional, helps us price it right)</span></h2>` +
     sections.slice(1).map(sec => `<details class="more"><summary>${esc(sec.title)}</summary>${body(sec.qs)}</details>`).join('');
 }
@@ -232,10 +253,16 @@ async function viewQuote(token) {
       <p class="meta" style="text-align:center">${s.pay && s.pay.on ? 'After you book you can pay here, or' : 'Pay'} ${esc(s.owner || tradeOf(s.trade).worker)} on the day. Need a different time? Reply to their message.</p></div>`;
   else if (r.status === 'accepted' || r.status === 'done') body = `<div class="done-note"><div class="big">✅</div><h1>${r.status === 'done' ? 'All done. Thanks!' : "You're booked"}</h1><p class="lead">${esc(prettyWhen(r.quote.when))} · ${money(r.quote.price)}<br>${tradeOf(s.trade).atShop ? (s.shopAddress ? 'Bring it to ' + esc(s.shopAddress) : '') : esc(r.address)}</p></div>
     ${r.paid ? receiptHtml(r, s) : payHtml(s, r.quote.price)}
-    ${rateHtml(r, s)}`;
+    ${rateHtml(r, s)}
+    ${r.status === 'done' || canRate({ ...r, rating: null }, nowWhen()) ? `<button class="btn block" id="again">🔁 Book again</button>` : ''}`;
   else body = `<div class="done-note"><h1>Not available</h1><p class="lead">${esc(s.business || tradeOf(s.trade).defaultBusiness)} can't take this job. Thanks for asking.</p></div>`;
   app.innerHTML = body;
   bindRate(token);
+  $('#again')?.addEventListener('click', () => {
+    const slug = s.slug || 'demo';
+    try { sessionStorage.setItem(AGAIN, JSON.stringify({ slug, fields: againFields(r) })); } catch {}
+    location.hash = cloud ? 'book-' + slug : 'request';
+  });
   $('#accept')?.addEventListener('click', async () => {
     try { await store.acceptQuote(token, applyAccept); toast('Booked'); render(); }
     catch (e) { toast(e.message); }
@@ -297,28 +324,38 @@ function receiptHtml(r, s) {
 }
 
 // ---------- detailer: inbox ----------
-async function viewInbox() {
-  await shell(false);
-  const reqs = inboxOrder((await store.listRequests()).filter(r => r.status !== 'done' && r.status !== 'declined'));
-  if (!reqs.length) {
-    app.innerHTML = `<h1>Requests</h1>${startCard(await store.getSettings())}${await phoneCallButton()}<div class="card empty">No open requests yet.<br><br><a class="btn" href="#share">Share your link</a></div>`;
-    return;
-  }
-  const settings = await store.getSettings();
-  const t = tradeOf(settings.trade);
-  app.innerHTML = `<h1>Requests</h1>${startCard(settings)}${await phoneCallButton()}` + reqs.map(r => card(r, t)).join('');
-  const all = await store.listRequests();
-  bindCards(settings, all);
+// Regular customers due for their next visit, with a ready-to-send reminder.
+function rebookHtml(all, s) {
+  const due = dueForRebook(all, localDay());
+  if (!due.length) return '';
+  return `<div class="card rebook"><b>🔁 Time to rebook</b><p class="meta">Regulars due soon. Send them a reminder so they book again.</p>
+    ${due.map(d => `<div class="block-row"><div><b>${esc(d.req.name)}</b><div class="meta">${esc(REPEAT_CHOICES.find(c => c[0] === String(d.weeks))[1])} · due ${esc(prettyDay(d.due))}</div></div>
+      <button class="btn small" data-remind="${esc(d.req.id)}">Copy reminder</button></div>`).join('')}</div>`;
+}
+function bindRebook(all, s) {
+  app.querySelectorAll('[data-remind]').forEach(b => b.onclick = () => {
+    const r = all.find(x => x.id === b.dataset.remind);
+    const what = (r.services || [])[0] ? (r.services[0]).toLowerCase() : 'visit';
+    copy(`Hi ${r.name.split(' ')[0]}, it's ${s.owner ? s.owner : 'me'} from ${s.business || 'here'}. It's about time for your next ${what}. Tap here to book again: ${baseLink()}#q-${r.token}`);
+  });
 }
 
-// Owners turn the trade's optional questions on or off and trim the answers.
-function extraQuestionsHtml(s) {
-  const qs = (tradeOf(s.trade).questions || []).filter(q => q.key && !q.required);
-  if (!qs.length) return '';
-  const ov = s.questions || {};
-  return `<label>Extra questions on your form</label><p class="meta">Untick what you don't need to ask. Delete answers that don't fit your work.</p>
-    ${qs.map(q => { const o = ov[q.key] || {}; return `<div class="q-edit"><label class="chip"><input type="checkbox" name="ask_${esc(q.key)}"${o.off ? '' : ' checked'}><span>${esc(q.label)}</span></label>
-      ${q.options ? `<textarea name="opts_${esc(q.key)}" rows="${Math.min(6, q.options.length)}" aria-label="Answers for ${esc(q.label)}">${esc((o.options || q.options).join('\n'))}</textarea>` : ''}</div>`; }).join('')}`;
+async function viewInbox() {
+  await shell(false);
+  const everything = await store.listRequests();
+  const st0 = await store.getSettings();
+  const reqs = inboxOrder(everything.filter(r => r.status !== 'done' && r.status !== 'declined'));
+  if (!reqs.length) {
+    app.innerHTML = `<h1>Requests</h1>${startCard(st0)}${rebookHtml(everything, st0)}${await phoneCallButton()}<div class="card empty">No open requests yet.<br><br><a class="btn" href="#share">Share your link</a></div>`;
+    bindRebook(everything, st0);
+    return;
+  }
+  const settings = st0;
+  const t = tradeOf(settings.trade);
+  app.innerHTML = `<h1>Requests</h1>${startCard(settings)}${rebookHtml(everything, settings)}${await phoneCallButton()}` + reqs.map(r => card(r, t)).join('');
+  bindRebook(everything, settings);
+  const all = await store.listRequests();
+  bindCards(settings, all);
 }
 
 // Three steps for new owners. Disappears once all are done, or when they tap "Hide".
@@ -356,6 +393,7 @@ function card(r, t) {
     <div class="meta">${contact}</div>
     ${r.address ? `<div class="meta">📍 ${esc(r.address)}</div>` : ''}
     ${r.ref ? `<div class="meta">🤝 Sent by ${esc(r.ref)}</div>` : ''}
+    ${repeatLabel(r) ? `<div class="meta">🔁 Wants it ${esc(repeatLabel(r).toLowerCase())}</div>` : ''}
     <div class="tags">${r.size ? `<span>📏 ${esc(r.size)}</span>` : ''}${r.services.map(x => `<span>${esc(x)}</span>`).join('')}${r.times.map(x => `<span>🕑 ${esc(x)}</span>`).join('')}</div>
     ${r.notes ? `<p class="meta">“${esc(r.notes)}”</p>` : ''}
     ${detailsHtml(r, t)}
@@ -434,6 +472,7 @@ async function viewToday() {
       ${detailsHtml(r, tradeOf(settings.trade))}
       ${r.ownerNote ? `<p class="meta">📝 ${esc(r.ownerNote)}</p>` : ''}
       ${r.ref ? `<p class="meta">🤝 Sent by ${esc(r.ref)}</p>` : ''}
+      ${repeatLabel(r) ? `<p class="meta">🔁 ${esc(repeatLabel(r))}</p>` : ''}
       ${r.rating ? `<div class="quote-box"><span class="stars-show">${starsText(r.rating.stars)}</span>${(r.rating.tags || []).length ? ' · ' + esc(r.rating.tags.join(', ')) : ''}${r.rating.comment ? `<br>“${esc(r.rating.comment)}”` : ''}</div>` : ''}
       <div class="btns">${r.address ? `<a class="btn ghost small" href="${mapsLink(r.address)}" target="_blank" rel="noopener">Directions</a>` : ''}
       ${r.status === 'accepted' ? `<button class="btn small" data-done="${esc(r.id)}">Mark done</button>` : `<span class="status done">Done</span>`}
@@ -625,7 +664,6 @@ async function viewSettings() {
     <label for="sizes">${esc(tradeOf(s.trade).sizesLabel || 'Sizes')} and starting prices</label>
     <textarea id="sizes" name="sizes" rows="4" placeholder="One per line, for example:&#10;Car = 120&#10;Small SUV = 140&#10;Large SUV / pickup = 170+">${esc(sizesText(s.sizes))}</textarea>
     <p class="meta">Customers tap one. Add + after a price for "and up". The price fills in when you quote.</p>
-    ${extraQuestionsHtml(s)}
     <div class="errors" data-err></div>
     <button class="btn block" type="submit">Save service and prices</button>
   </form></details>
@@ -690,12 +728,11 @@ async function viewSettings() {
     const f = new FormData(e.target);
     const { sizes, errors: e1 } = parseSizes(f.get('sizes'));
     const { choices, errors: e2 } = parseChoices(f.get('choices'));
-    const { questions, errors: e3 } = parseQuestions(s.trade, Object.fromEntries(f.entries()));
-    const errors = [...e2, ...e1, ...e3];
+    const errors = [...e2, ...e1];
     if (errors.length) { e.target.querySelector('[data-err]').innerHTML = errors.map(esc).join('<br>'); return; }
     const pkg = { name: f.get('pkgName').trim(), time: f.get('pkgTime').trim(), about: f.get('pkgAbout').trim() };
     const same = choices.join('\n') === tradeOf((await store.getSettings()).trade).services.join('\n');
-    await store.saveSettings({ sizes, pkg, services: same ? null : choices, questions }); toast('Saved'); render();
+    await store.saveSettings({ sizes, pkg, services: same ? null : choices }); toast('Saved'); render();
   });
   $('#out')?.addEventListener('click', async () => { await store.signOut(); render(); });
   let armed = false;

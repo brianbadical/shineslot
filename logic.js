@@ -61,8 +61,7 @@ export const TRADES = {
     questions: [
       { section: 'About the job' },
       { key: 'kind', label: 'What kind of job?', type: 'choice', options: ['Car, truck or SUV', 'Home', 'Business', 'Boat'] },
-      { key: 'shade', label: 'How dark?', type: 'choice', options: ['5% (limo)', '20%', '35%', '50%', '70% (light)', 'Not sure'], hint: 'Lower number = darker.' },
-      { key: 'film', label: 'Film type', type: 'choice', options: ['Ceramic', 'Carbon', 'Standard', 'Not sure'] },
+      { key: 'shade', label: 'How dark?', type: 'choice', options: ['5% (limo)', '20%', '35%'], hint: 'Lower number = darker.' },
       { key: 'oldTint', label: 'Is there old tint to take off?', type: 'choice', options: ['Yes', 'No', 'Not sure'] },
       { section: 'Homes, businesses and boats' },
       { key: 'windows', label: 'About how many windows?' },
@@ -79,7 +78,6 @@ export const TRADES = {
     itemHint: 'For example 3 bed, 2 bath house',
     itemError: 'Tell us about the place (for example 3 bed, 2 bath house).',
     addressLabel: 'Address',
-    addressError: 'Add the address.',
     sizesLabel: 'Home size',
     servicesLabel: 'What kind of clean?',
     services: ['Standard clean', 'Deep clean', 'Airbnb or rental turnover', 'Move-in or move-out', 'Kitchen', 'Bathrooms', 'Inside fridge or oven', 'Windows', 'Laundry', 'Office'],
@@ -275,43 +273,7 @@ Object.assign(TRADES, {
   }),
 });
 
-export const tradeOf = key => (key && typeof key === 'object') ? key : (TRADES[key] || TRADES.detailing);
-
-// The trade as this owner set it up: extra questions they turned off are removed, and
-// questions where they trimmed the answers use their list. Required questions always stay.
-export const MAX_ANSWERS = 12;
-export function tradeFor(settings) {
-  const base = tradeOf(settings && settings.trade);
-  const ov = (settings && settings.questions) || {};
-  if (!base.questions || !Object.keys(ov).length) return base;
-  const qs = base.questions.map(q => {
-    const o = q.key && !q.required ? ov[q.key] : null;
-    if (!o) return q;
-    if (o.off) return null;
-    return q.options && Array.isArray(o.options) && o.options.length ? { ...q, options: o.options } : q;
-  }).filter(Boolean);
-  const questions = qs.filter((q, i) => !q.section || (qs[i + 1] && !qs[i + 1].section));
-  return { ...base, questions };
-}
-
-// Read the "Extra questions" part of Settings: { key: { off, options } } for questions the owner changed.
-export function parseQuestions(trade, form) {
-  const out = {}, errors = [];
-  for (const q of tradeOf(trade).questions || []) {
-    if (!q.key || q.required) continue;
-    const on = !!form['ask_' + q.key];
-    let options;
-    if (q.options && form['opts_' + q.key] != null) {
-      options = [...new Set(String(form['opts_' + q.key]).split('\n').map(x => x.trim().slice(0, 40)).filter(Boolean))];
-      if (on && !options.length) { errors.push(`"${q.label}" needs at least one answer, or turn it off.`); continue; }
-      if (options.length > MAX_ANSWERS) errors.push(`"${q.label}": up to ${MAX_ANSWERS} answers.`);
-      options = options.slice(0, MAX_ANSWERS);
-      if (options.join('\n') === q.options.join('\n')) options = undefined;
-    }
-    if (!on || options) out[q.key] = { ...(on ? {} : { off: true }), ...(options ? { options } : {}) };
-  }
-  return { questions: out, errors };
-}
+export const tradeOf = key => TRADES[key] || TRADES.detailing;
 export const SERVICES = TRADES.detailing.services;
 export const TIMES = ['Weekday mornings', 'Weekday afternoons', 'Weekday evenings', 'Saturday', 'Sunday'];
 export const MAX_PRICE = 10000;
@@ -337,7 +299,7 @@ export function validateRequest(input, trade = 'detailing') {
   if (phone && phone.replace(/\D/g, '').length < 7) errors.push('That phone number looks too short.');
   if (!clean(input.vehicle) && !t.composeItem) errors.push(t.itemError); // 'vehicle' holds the car, or the home for cleaning
   if (!Array.isArray(input.services) || input.services.length === 0) errors.push('Pick at least one thing you want done.');
-  if (!t.atShop && !clean(input.address)) errors.push(t.addressError || 'Add the address or area where the car will be.');
+  if (!t.atShop && !clean(input.address)) errors.push(t.addressError || (trade === 'cleaning' ? 'Add the address.' : 'Add the address or area where the car will be.'));
   if ((input.photos || []).length > MAX_PHOTOS) errors.push(`Up to ${MAX_PHOTOS} photos.`);
   return errors;
 }
@@ -364,6 +326,7 @@ export function makeRequest(input, { id, now, trade = 'detailing' }) {
     ...(Object.keys(details).length ? { details } : {}),
     ...(input.size && input.size.label ? { size: sizeTag(input.size), sizePrice: input.size.price } : {}),
     ...(cleanRef(input.ref) ? { ref: cleanRef(input.ref) } : {}),
+    ...(['1', '2', '4'].includes(String(input.repeat || '')) ? { repeat: String(input.repeat) } : {}),
     quote: null,
     history: [{ at: now, what: 'Request sent' }],
   };
@@ -637,3 +600,42 @@ export function ratingSummary(reqs) {
   return { count: rated.length, avg, recent: rated.slice(0, 5), flags };
 }
 export function starsText(n) { return '★'.repeat(n) + '☆'.repeat(5 - n); }
+
+// ---------- repeat customers ----------
+export const REPEAT_CHOICES = [['', 'Just this once'], ['1', 'Every week'], ['2', 'Every 2 weeks'], ['4', 'Every 4 weeks']];
+const OFTEN_WEEKS = { 'Weekly': 1, 'Every 2 weeks': 2, 'Monthly': 4 };
+// How many weeks between visits, or 0. Uses the "How often?" choice, or the cleaning form's answer.
+export function repeatWeeks(r) {
+  if (r && ['1', '2', '4'].includes(String(r.repeat || ''))) return Number(r.repeat);
+  return (r && r.details && OFTEN_WEEKS[r.details.often]) || 0;
+}
+export function repeatLabel(r) {
+  const w = repeatWeeks(r);
+  return w ? (REPEAT_CHOICES.find(c => c[0] === String(w)) || [])[1] : '';
+}
+const contactKey = r => (String(r.phone || '').replace(/\D/g, '').slice(-10) || String(r.email || '').toLowerCase().trim());
+// Regular customers whose next visit is due within `ahead` days and who have nothing booked or open yet.
+export function dueForRebook(reqs, today, ahead = 3) {
+  const byWho = new Map();
+  for (const r of reqs) {
+    const k = contactKey(r); if (!k) continue;
+    if (!byWho.has(k)) byWho.set(k, []);
+    byWho.get(k).push(r);
+  }
+  const out = [];
+  for (const list of byWho.values()) {
+    if (list.some(r => r.status === 'new' || r.status === 'quoted' || (r.status === 'accepted' && r.quote && r.quote.when.slice(0, 10) >= today))) continue;
+    const jobs = list.filter(r => (r.status === 'done' || r.status === 'accepted') && r.quote).sort((a, b) => b.quote.when.localeCompare(a.quote.when));
+    const last = jobs[0];
+    const w = last && (repeatWeeks(last) || repeatWeeks(list.find(repeatWeeks) || {}));
+    if (!w) continue;
+    const due = shiftDay(last.quote.when.slice(0, 10), w * 7);
+    if (due <= shiftDay(today, ahead)) out.push({ req: last, due, weeks: w });
+  }
+  return out.sort((a, b) => a.due.localeCompare(b.due));
+}
+// What a customer's earlier request fills in when they tap "Book again".
+export function againFields(r) {
+  const keep = ['name', 'phone', 'email', 'vehicle', 'address', 'services', 'details', 'repeat', 'ref'];
+  return Object.fromEntries(keep.filter(k => r && r[k] != null && r[k] !== '').map(k => [k, r[k]]));
+}
