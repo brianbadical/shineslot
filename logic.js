@@ -49,7 +49,7 @@ export const TRADES = {
     itemHint: 'For example 2021 Honda Civic, or 4 living room windows',
     itemError: 'Tell us what we are tinting (the car, or which windows).',
     addressLabel: 'Where is it?',
-    sizesLabel: 'Type of job',
+    sizesLabel: 'Vehicle type',
     servicesLabel: 'What do you need?',
     services: ['Full car (sides and back)', 'Front two windows', 'Windshield', 'Windshield strip (brow)', 'Remove old tint', 'Home windows', 'Business or storefront', 'Boat'],
     notesLabel: 'Anything else?',

@@ -1,11 +1,11 @@
 import {
   TRADES, tradeOf, MAX_PHOTOS, STATUS_LABEL, makeRequest, validateRequest, applyQuote, applyAccept,
   applyDone, applyDecline, inboxOrder, WEEKDAYS, WEEKDAY_NAMES, hoursOf, validateBlock, blocksOn, isOpenDay, openDays, clashes, prettyTime, prettyDay, detailLines, parseSizes, sizesText, sizePrice, servicesOf, parseChoices, validatePay, payLinks, applyPaid, applyUnpaid, earnings, PAY_METHODS, jobsForDay, dayTotal, weekOf, shiftDay, money, prettyWhen, localDay, mapsLink,
-} from './logic.js?v=202611010337';
-import { LocalStore, newId } from './store.js?v=202611010337';
-import { CloudStore, slugify } from './cloud.js?v=202611010337';
-import { SUPABASE_URL, SUPABASE_KEY } from './config.js?v=202611010337';
-import { sampleRequests } from './sample.js?v=202611010337';
+} from './logic.js?v=202611010339';
+import { LocalStore, newId } from './store.js?v=202611010339';
+import { CloudStore, slugify } from './cloud.js?v=202611010339';
+import { SUPABASE_URL, SUPABASE_KEY } from './config.js?v=202611010339';
+import { sampleRequests } from './sample.js?v=202611010339';
 
 // Falls back to memory (lost on reload) if the browser blocks storage.
 function safeStorage() {
@@ -82,7 +82,7 @@ async function viewRequest(slug) {
       <div><label for="email">Email</label><input id="email" name="email" type="email" autocomplete="email"></div>
     </div>
     ${(s.sizes || []).length ? `<label>${esc(t.sizesLabel || 'Size')}</label><div class="chips sizes">${s.sizes.map((z, i) =>
-      `<label class="chip"><input type="radio" name="size" value="${i}"><span>${esc(z.label)} <b>${esc(sizePrice(z))}</b></span></label>`).join('')}</div>
+      `<label class="chip"><input type="radio" name="size" value="${i}"><span>${esc(z.label)} <b>${esc(sizePrice(z))}</b></span></label>`).join('')}<label class="chip"><input type="radio" name="size" value="other"><span>Something else</span></label></div>
       <p class="meta">Starting prices. Your final price depends on the job.</p>` : ''}
     ${t.composeItem ? '' : `<label for="vehicle">${esc(t.itemLabel)}</label><input id="vehicle" name="vehicle" placeholder="${esc(t.itemHint)}">`}
     ${t.questions ? questionsHtml(t, 0) : ''}
@@ -109,11 +109,12 @@ async function viewRequest(slug) {
       name: f.get('name'), phone: f.get('phone'), email: f.get('email'), vehicle: f.get('vehicle'),
       services: f.getAll('services'), times: f.getAll('times'), address: f.get('address') || '', notes: f.get('notes'),
       photos: draftPhotos,
-      size: f.get('size') != null ? s.sizes[+f.get('size')] : null,
+      size: f.get('size') != null && f.get('size') !== 'other' ? s.sizes[+f.get('size')] : null,
+      sizeOther: f.get('size') === 'other',
       details: Object.fromEntries((t.questions || []).filter(q => q.key).map(q => [q.key, q.type === 'multi' ? f.getAll('d_' + q.key) : f.get('d_' + q.key)])),
     };
     const errors = validateRequest(input, s.trade);
-    if ((s.sizes || []).length && !input.size) errors.unshift(`Pick your ${(t.sizesLabel || 'size').toLowerCase()}.`);
+    if ((s.sizes || []).length && !input.size && !input.sizeOther) errors.unshift(`Pick your ${(t.sizesLabel || 'size').toLowerCase()}.`);
     if (errors.length) { $('#err').innerHTML = errors.map(esc).join('<br>'); $('#err').scrollIntoView({ block: 'center' }); return; }
     try {
       const req = makeRequest(input, { id: newId(), now: nowIso(), trade: s.trade });
