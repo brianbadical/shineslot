@@ -54,6 +54,11 @@ export class LocalStore {
     if (!found) throw new Error('This request was not found.');
     await this.putRequest(applyAccept(found.request, { now: new Date().toISOString() }));
   }
+  async rateJob(token, rating) {
+    const found = await this.getQuote(token);
+    if (!found || found.request.rating) throw new Error('This job was already rated.');
+    await this.putRequest({ ...found.request, rating: { ...rating, at: new Date().toISOString() } });
+  }
   // Owner sign-in does not exist in demo mode.
   async session() { return { demo: true }; }
   async business() { return { slug: 'demo' }; }

@@ -80,7 +80,7 @@ export const TRADES = {
     addressLabel: 'Address',
     sizesLabel: 'Home size',
     servicesLabel: 'What kind of clean?',
-    services: ['Standard clean', 'Deep clean', 'Move-in or move-out', 'Kitchen', 'Bathrooms', 'Inside fridge or oven', 'Windows', 'Laundry', 'Office'],
+    services: ['Standard clean', 'Deep clean', 'Airbnb or rental turnover', 'Move-in or move-out', 'Kitchen', 'Bathrooms', 'Inside fridge or oven', 'Windows', 'Laundry', 'Office'],
     notesLabel: 'Anything else?',
     notesHint: 'Pets, how often (weekly, every 2 weeks, one time), how to get in, parking...',
     photosLabel: 'Photos of the rooms',
@@ -325,6 +325,7 @@ export function makeRequest(input, { id, now, trade = 'detailing' }) {
     photos: (input.photos || []).slice(0, MAX_PHOTOS),
     ...(Object.keys(details).length ? { details } : {}),
     ...(input.size && input.size.label ? { size: sizeTag(input.size), sizePrice: input.size.price } : {}),
+    ...(cleanRef(input.ref) ? { ref: cleanRef(input.ref) } : {}),
     quote: null,
     history: [{ at: now, what: 'Request sent' }],
   };
@@ -562,3 +563,39 @@ export function parseChoices(text) {
   const list = [...new Set(String(text || '').split('\n').map(x => x.trim().slice(0, 50)).filter(Boolean))];
   return { choices: list.slice(0, MAX_CHOICES), errors: list.length > MAX_CHOICES ? [`Up to ${MAX_CHOICES} choices.`] : list.length ? [] : ['Add at least one choice.'] };
 }
+
+// ---------- referrals ----------
+// A booking link can say who sent the customer: #book-<link>~<name>, for example #book-selenas-cleaning~brian.
+export function cleanRef(v) {
+  const s = String(v ?? '').replace(/[^A-Za-z0-9 '-]/g, '').trim().slice(0, 30);
+  return s ? s[0].toUpperCase() + s.slice(1) : '';
+}
+export function splitBookLink(rest) {
+  const [slug, ref] = String(rest || '').split('~');
+  return { slug, ref: cleanRef(decodeURIComponent(ref || '')) };
+}
+
+// ---------- ratings ----------
+// Customers rate a job once, after it is done. Two taps: stars, then a few quick choices.
+export const RATING_GOOD = ['On time', 'Great work', 'Friendly', 'Fair price'];
+export const RATING_BAD = ['Late', 'Missed spots', 'Damage', 'No-show'];
+export function canRate(req, nowWhen) {
+  if (!req || req.rating) return false;
+  return req.status === 'done' || (req.status === 'accepted' && !!req.quote && req.quote.when <= nowWhen);
+}
+export function validateRating(input) {
+  const stars = Number(input && input.stars);
+  if (!Number.isInteger(stars) || stars < 1 || stars > 5) throw new Error('Tap 1 to 5 stars.');
+  const allowed = stars >= 4 ? RATING_GOOD : RATING_BAD;
+  const tags = [...new Set((input.tags || []).filter(t => allowed.includes(t)))];
+  const comment = clean(input.comment).slice(0, 500);
+  return { stars, tags, ...(comment ? { comment } : {}) };
+}
+export function ratingSummary(reqs) {
+  const rated = reqs.filter(r => r.rating && r.rating.stars).sort((a, b) => String(b.rating.at || '').localeCompare(String(a.rating.at || '')));
+  if (!rated.length) return { count: 0, avg: 0, recent: [], flags: 0 };
+  const avg = Math.round(rated.reduce((t, r) => t + r.rating.stars, 0) / rated.length * 10) / 10;
+  const flags = rated.filter(r => (r.rating.tags || []).some(t => t === 'Damage' || t === 'No-show')).length;
+  return { count: rated.length, avg, recent: rated.slice(0, 5), flags };
+}
+export function starsText(n) { return '★'.repeat(n) + '☆'.repeat(5 - n); }

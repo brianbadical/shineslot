@@ -92,10 +92,13 @@ begin
   return t;
 end $$;
 
+-- Customer's rating of a finished job (added 2026-11-01). Only the owner and that customer see it.
+alter table public.requests add column if not exists rating jsonb;
+
 -- A customer reads their own request.
 create or replace function public.get_quote(p_token text)
 returns jsonb language sql stable security definer set search_path = public as $$
-  select jsonb_build_object('status', r.status, 'data', r.data - 'photos', 'quote', r.quote,
+  select jsonb_build_object('status', r.status, 'data', r.data - 'photos', 'quote', r.quote, 'rating', r.rating,
     'business', public.get_business(b.slug))
   from requests r join businesses b on b.id = r.business_id where r.token = p_token;
 $$;
@@ -110,8 +113,24 @@ begin
   if not found then raise exception 'This quote can no longer be accepted.'; end if;
 end $$;
 
-revoke all on function public.get_business(text), public.submit_request(text, jsonb), public.get_quote(text), public.accept_quote(text) from public;
-grant execute on function public.get_business(text), public.submit_request(text, jsonb), public.get_quote(text), public.accept_quote(text) to anon, authenticated;
+-- A customer rates a booked or finished job, once. 1 to 5 stars, up to 4 quick choices, a short comment.
+create or replace function public.rate_job(p_token text, p_rating jsonb)
+returns void language plpgsql security definer set search_path = public as $$
+declare st int; tg jsonb; cm text;
+begin
+  st := (p_rating->>'stars')::int;
+  if st is null or st < 1 or st > 5 then raise exception 'Tap 1 to 5 stars.'; end if;
+  tg := coalesce(p_rating->'tags', '[]'::jsonb);
+  if jsonb_typeof(tg) <> 'array' or jsonb_array_length(tg) > 4 or octet_length(tg::text) > 200 then raise exception 'Too many choices.'; end if;
+  cm := left(coalesce(p_rating->>'comment', ''), 500);
+  update requests set rating = jsonb_build_object('stars', st, 'tags', tg, 'comment', nullif(cm, ''), 'at', now()),
+    history = history || jsonb_build_array(jsonb_build_object('at', now(), 'what', 'Customer rated ' || st || ' stars'))
+  where token = p_token and rating is null and status in ('accepted', 'done');
+  if not found then raise exception 'This job can''t be rated (already rated, or not booked yet).'; end if;
+end $$;
+
+revoke all on function public.get_business(text), public.submit_request(text, jsonb), public.get_quote(text), public.accept_quote(text), public.rate_job(text, jsonb) from public;
+grant execute on function public.get_business(text), public.submit_request(text, jsonb), public.get_quote(text), public.accept_quote(text), public.rate_job(text, jsonb) to anon, authenticated;
 
 -- ---------- Phone alerts (added 2026-10-31) ----------
 -- When a request comes in, send a short alert through ntfy.sh (free phone app, no account) to the

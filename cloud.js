@@ -1,7 +1,7 @@
 // Shared online store on Supabase. Same methods as LocalStore, plus owner sign-in.
 // Owners read and change only their own data (database rules in supabase/schema.sql).
 // Customers never sign in: they use the get_business / submit_request / get_quote / accept_quote functions.
-import { DEFAULT_SETTINGS } from './store.js?v=202611010339';
+import { DEFAULT_SETTINGS } from './store.js?v=202611010347';
 
 const PICK = 'shineslot:business';
 const SDK = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
@@ -9,10 +9,10 @@ const SDK = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 function fail(error) { if (error) throw new Error(error.message || 'Something went wrong. Please try again.'); }
 
 function fromRow(row) {
-  return { id: row.id, token: row.token, status: row.status, createdAt: row.created_at, quote: row.quote, history: row.history || [], ownerNote: row.owner_note || '', ...row.data };
+  return { id: row.id, token: row.token, status: row.status, createdAt: row.created_at, quote: row.quote, history: row.history || [], ownerNote: row.owner_note || '', ...row.data, ...(row.rating ? { rating: row.rating } : {}) };
 }
 
-const DATA_KEYS = ['name', 'phone', 'email', 'vehicle', 'services', 'times', 'address', 'notes', 'photos', 'details', 'size', 'sizePrice', 'paid'];
+const DATA_KEYS = ['name', 'phone', 'email', 'vehicle', 'services', 'times', 'address', 'notes', 'photos', 'details', 'size', 'sizePrice', 'paid', 'ref'];
 const pick = (obj, keys) => Object.fromEntries(keys.filter(k => k in obj).map(k => [k, obj[k]]));
 
 export function slugify(text) {
@@ -111,10 +111,14 @@ export class CloudStore {
     const { data, error } = await c.rpc('get_quote', { p_token: token }); fail(error);
     if (!data) return null;
     const settings = { ...DEFAULT_SETTINGS, ...Object.fromEntries(Object.entries(data.business || {}).filter(([, v]) => v != null)) };
-    return { request: { status: data.status, quote: data.quote, services: [], ...data.data }, settings };
+    return { request: { status: data.status, quote: data.quote, services: [], ...data.data, ...(data.rating ? { rating: data.rating } : {}) }, settings };
   }
   async acceptQuote(token) {
     const c = await this.client();
     fail((await c.rpc('accept_quote', { p_token: token })).error);
+  }
+  async rateJob(token, rating) {
+    const c = await this.client();
+    fail((await c.rpc('rate_job', { p_token: token, p_rating: rating })).error);
   }
 }

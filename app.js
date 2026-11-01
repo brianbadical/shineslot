@@ -1,11 +1,12 @@
 import {
   TRADES, tradeOf, MAX_PHOTOS, STATUS_LABEL, makeRequest, validateRequest, applyQuote, applyAccept,
-  applyDone, applyDecline, inboxOrder, WEEKDAYS, WEEKDAY_NAMES, hoursOf, validateBlock, blocksOn, isOpenDay, openDays, clashes, prettyTime, prettyDay, detailLines, parseSizes, sizesText, sizePrice, servicesOf, parseChoices, validatePay, payLinks, applyPaid, applyUnpaid, earnings, PAY_METHODS, jobsForDay, dayTotal, weekOf, shiftDay, money, prettyWhen, localDay, mapsLink,
-} from './logic.js?v=202611010339';
-import { LocalStore, newId } from './store.js?v=202611010339';
-import { CloudStore, slugify } from './cloud.js?v=202611010339';
-import { SUPABASE_URL, SUPABASE_KEY } from './config.js?v=202611010339';
-import { sampleRequests } from './sample.js?v=202611010339';
+  applyDone, applyDecline, inboxOrder, WEEKDAYS, WEEKDAY_NAMES, hoursOf, validateBlock, blocksOn, isOpenDay, openDays, clashes, prettyTime, prettyDay, detailLines, parseSizes, sizesText, sizePrice, servicesOf, parseChoices, validatePay, payLinks, applyPaid, applyUnpaid, earnings, PAY_METHODS, splitBookLink, RATING_GOOD, RATING_BAD, canRate, validateRating, ratingSummary, starsText, jobsForDay, dayTotal, weekOf, shiftDay, money, prettyWhen, localDay, mapsLink,
+} from './logic.js?v=202611010347';
+import { LocalStore, newId } from './store.js?v=202611010347';
+import { CloudStore, slugify } from './cloud.js?v=202611010347';
+import { SUPABASE_URL, SUPABASE_KEY } from './config.js?v=202611010347';
+import { sampleRequests } from './sample.js?v=202611010347';
+import qrcode from './qr.js?v=202611010347';
 
 // Falls back to memory (lost on reload) if the browser blocks storage.
 function safeStorage() {
@@ -48,6 +49,11 @@ async function shell(customer, settings) {
       ? `Demo: you're seeing what a customer sees. <button data-go="inbox">Switch to the business side</button>`
       : `Demo: everything is saved on this device only. <button data-go="request">See the customer form</button>`;
   } else demo.hidden = true;
+  // On customer pages, a small line invites other business owners to get their own free link.
+  let foot = document.getElementById('madewith');
+  if (!foot) { foot = document.createElement('p'); foot.id = 'madewith'; foot.className = 'madewith'; app.after(foot); }
+  foot.hidden = !customer;
+  foot.innerHTML = `Run a service business? <a href="${esc(baseLink())}#inbox">Get your own free booking link</a>`;
   if (customer) return;
   if (cloud && (await store.businesses()).length > 1)
     $('#top .sub').innerHTML = `ShineSlot · <a href="#settings">switch business</a>`;
@@ -65,7 +71,7 @@ function currentTab() { return (location.hash.slice(1) || 'inbox').split('-')[0]
 // ---------- customer: request form ----------
 let draftPhotos = [];
 
-async function viewRequest(slug) {
+async function viewRequest(slug, ref = '') {
   const s = await store.publicBusiness(slug);
   if (!s) { await shell(true, {}); app.innerHTML = `<div class="card empty">This booking link doesn't work. Ask for a new one.</div>`; return; }
   await shell(true, s);
@@ -108,7 +114,7 @@ async function viewRequest(slug) {
     const input = {
       name: f.get('name'), phone: f.get('phone'), email: f.get('email'), vehicle: f.get('vehicle'),
       services: f.getAll('services'), times: f.getAll('times'), address: f.get('address') || '', notes: f.get('notes'),
-      photos: draftPhotos,
+      photos: draftPhotos, ref,
       size: f.get('size') != null && f.get('size') !== 'other' ? s.sizes[+f.get('size')] : null,
       sizeOther: f.get('size') === 'other',
       details: Object.fromEntries((t.questions || []).filter(q => q.key).map(q => [q.key, q.type === 'multi' ? f.getAll('d_' + q.key) : f.get('d_' + q.key)])),
@@ -222,12 +228,51 @@ async function viewQuote(token) {
       <button class="btn block" id="accept">Accept and book</button>
       <p class="meta" style="text-align:center">${s.pay && s.pay.on ? 'After you book you can pay here, or' : 'Pay'} ${esc(s.owner || tradeOf(s.trade).worker)} on the day. Need a different time? Reply to their message.</p></div>`;
   else if (r.status === 'accepted' || r.status === 'done') body = `<div class="done-note"><div class="big">✅</div><h1>${r.status === 'done' ? 'All done. Thanks!' : "You're booked"}</h1><p class="lead">${esc(prettyWhen(r.quote.when))} · ${money(r.quote.price)}<br>${tradeOf(s.trade).atShop ? (s.shopAddress ? 'Bring it to ' + esc(s.shopAddress) : '') : esc(r.address)}</p></div>
-    ${r.paid ? receiptHtml(r, s) : payHtml(s, r.quote.price)}`;
+    ${r.paid ? receiptHtml(r, s) : payHtml(s, r.quote.price)}
+    ${rateHtml(r, s)}`;
   else body = `<div class="done-note"><h1>Not available</h1><p class="lead">${esc(s.business || tradeOf(s.trade).defaultBusiness)} can't take this job. Thanks for asking.</p></div>`;
   app.innerHTML = body;
+  bindRate(token);
   $('#accept')?.addEventListener('click', async () => {
     try { await store.acceptQuote(token, applyAccept); toast('Booked'); render(); }
     catch (e) { toast(e.message); }
+  });
+}
+
+// Two taps: stars, then a few quick choices. Shown once the job time has passed.
+function rateHtml(r, s) {
+  const who = esc(s.owner || s.business || tradeOf(s.trade).worker);
+  if (r.rating) return `<div class="card rate"><h2 style="margin-top:0">Thanks for your rating</h2><div class="stars-show">${starsText(r.rating.stars)}</div></div>`;
+  if (!canRate(r, nowWhen())) return '';
+  const chips = (list, cls) => `<div class="chips ${cls}" hidden>${list.map(x => `<label class="chip"><input type="checkbox" name="tags" value="${esc(x)}"><span>${esc(x)}</span></label>`).join('')}</div>`;
+  return `<form class="card rate" id="rate" novalidate><h2 style="margin-top:0">How did it go?</h2><p class="meta">Your rating goes to ${who} only.</p>
+    <div class="stars" role="radiogroup" aria-label="Stars">${[1, 2, 3, 4, 5].map(n => `<label><input type="radio" name="stars" value="${n}" aria-label="${n} star${n > 1 ? 's' : ''}"><span>★</span></label>`).join('')}</div>
+    <p class="meta good-q" hidden>What went well?</p>${chips(RATING_GOOD, 'good')}
+    <p class="meta bad-q" hidden>What went wrong?</p>${chips(RATING_BAD, 'bad')}
+    <div data-more hidden><label for="rc">Anything else? (optional)</label><textarea id="rc" name="comment" maxlength="500"></textarea>
+    <div class="errors" data-err></div><button class="btn block" type="submit">Send rating</button></div></form>`;
+}
+function nowWhen() { const d = new Date(); return localDay(d) + 'T' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0'); }
+function bindRate(token) {
+  const f = $('#rate'); if (!f) return;
+  const paint = () => {
+    const n = +(new FormData(f).get('stars') || 0);
+    f.querySelectorAll('.stars label').forEach((l, i) => l.classList.toggle('on', i < n));
+    const good = n >= 4;
+    f.querySelector('.good').hidden = f.querySelector('.good-q').hidden = !n || !good;
+    f.querySelector('.bad').hidden = f.querySelector('.bad-q').hidden = !n || good;
+    f.querySelector('[data-more]').hidden = !n;
+  };
+  f.addEventListener('change', paint);
+  f.addEventListener('submit', async e => {
+    e.preventDefault();
+    const d = new FormData(f), n = +(d.get('stars') || 0);
+    const allowed = n >= 4 ? RATING_GOOD : RATING_BAD;
+    try {
+      const rating = validateRating({ stars: n, tags: d.getAll('tags').filter(t => allowed.includes(t)), comment: d.get('comment') });
+      f.querySelector('button[type=submit]').disabled = true;
+      await store.rateJob(token, rating); toast('Thanks!'); render();
+    } catch (err) { f.querySelector('[data-err]').textContent = err.message; f.querySelector('button[type=submit]').disabled = false; }
   });
 }
 
@@ -297,6 +342,7 @@ function card(r, t) {
     <div class="req-head"><div><b>${esc(r.name)}</b><div class="meta">${esc(r.vehicle)}</div></div><span class="status ${r.status}">${STATUS_LABEL[r.status]}</span></div>
     <div class="meta">${contact}</div>
     ${r.address ? `<div class="meta">📍 ${esc(r.address)}</div>` : ''}
+    ${r.ref ? `<div class="meta">🤝 Sent by ${esc(r.ref)}</div>` : ''}
     <div class="tags">${r.size ? `<span>📏 ${esc(r.size)}</span>` : ''}${r.services.map(x => `<span>${esc(x)}</span>`).join('')}${r.times.map(x => `<span>🕑 ${esc(x)}</span>`).join('')}</div>
     ${r.notes ? `<p class="meta">“${esc(r.notes)}”</p>` : ''}
     ${detailsHtml(r, t)}
@@ -374,8 +420,11 @@ async function viewToday() {
       ${r.quote.note ? `<p class="meta">Note to customer: ${esc(r.quote.note)}</p>` : ''}
       ${detailsHtml(r, tradeOf(settings.trade))}
       ${r.ownerNote ? `<p class="meta">📝 ${esc(r.ownerNote)}</p>` : ''}
+      ${r.ref ? `<p class="meta">🤝 Sent by ${esc(r.ref)}</p>` : ''}
+      ${r.rating ? `<div class="quote-box"><span class="stars-show">${starsText(r.rating.stars)}</span>${(r.rating.tags || []).length ? ' · ' + esc(r.rating.tags.join(', ')) : ''}${r.rating.comment ? `<br>“${esc(r.rating.comment)}”` : ''}</div>` : ''}
       <div class="btns">${r.address ? `<a class="btn ghost small" href="${mapsLink(r.address)}" target="_blank" rel="noopener">Directions</a>` : ''}
-      ${r.status === 'accepted' ? `<button class="btn small" data-done="${esc(r.id)}">Mark done</button>` : `<span class="status done">Done</span>`}</div>
+      ${r.status === 'accepted' ? `<button class="btn small" data-done="${esc(r.id)}">Mark done</button>` : `<span class="status done">Done</span>`}
+      ${r.status === 'done' && !r.rating ? `<button class="btn ghost small" data-askrate="${esc(r.token)}">⭐ Copy rating link for ${esc(r.name.split(' ')[0])}</button>` : ''}</div>
       ${r.paid ? `<div class="quote-box">💵 Paid <b>${money(r.paid.amount + (r.paid.tip || 0))}</b>${r.paid.tip ? ` (incl. ${money(r.paid.tip)} tip)` : ''} · ${esc(r.paid.method)} <button class="btn ghost small" data-unpaid="${esc(r.id)}">Undo</button></div>`
         : `<details class="answers"><summary>💵 Mark paid</summary><form data-paid="${esc(r.id)}" novalidate>
           <div class="row"><div><label>Amount</label><input name="amount" inputmode="decimal" value="${r.quote.price}"></div><div><label>Tip (optional)</label><input name="tip" inputmode="decimal" placeholder="$0"></div></div>
@@ -418,6 +467,7 @@ async function viewToday() {
       toast('Payment saved'); render();
     } catch (err) { f.querySelector('[data-err]').textContent = err.message; }
   }));
+  app.querySelectorAll('[data-askrate]').forEach(b => b.onclick = () => copy(`${baseLink()}#q-${b.dataset.askrate}`));
   app.querySelectorAll('[data-unpaid]').forEach(b => b.onclick = async () => {
     const r = await store.getRequest(b.dataset.unpaid);
     await store.putRequest(applyUnpaid(r, { now: nowIso() })); toast('Payment removed'); render();
@@ -436,6 +486,14 @@ function earningsHtml(reqs) {
     ${e.owedCount ? `<p class="meta" style="grid-column:1/-1;margin:6px 0 0">Not marked paid yet: ${money(e.owed)} from ${e.owedCount} job${e.owedCount === 1 ? '' : 's'}${e.tips ? ` · Tips this year: ${money(e.tips)}` : ''}</p>` : e.tips ? `<p class="meta" style="grid-column:1/-1;margin:6px 0 0">Tips this year: ${money(e.tips)}</p>` : ''}</div>`;
 }
 
+// Average stars and the latest comments. Hidden until the first rating.
+function ratingsHtml(reqs) {
+  const r = ratingSummary(reqs);
+  if (!r.count) return '';
+  return `<details class="card answers"><summary>⭐ <b>${r.avg}</b> from ${r.count} rating${r.count === 1 ? '' : 's'}${r.flags ? ` · ⚠️ ${r.flags} damage or no-show` : ''}</summary>
+    ${r.recent.map(x => `<div class="block-row"><div><span class="stars-show">${starsText(x.rating.stars)}</span> <b>${esc(x.name.split(' ')[0])}</b>${(x.rating.tags || []).length ? ` · ${esc(x.rating.tags.join(', '))}` : ''}${x.rating.comment ? `<div class="meta">“${esc(x.rating.comment)}”</div>` : ''}</div></div>`).join('')}</details>`;
+}
+
 function viewWeek(reqs, settings) {
   const week = weekOf(reqs, viewDay);
   const today = localDay();
@@ -446,6 +504,7 @@ function viewWeek(reqs, settings) {
   <div class="daynav"><button class="btn ghost small" data-wk="-7" aria-label="Previous week">◀</button><strong>${esc(short(week[0].date))} – ${esc(short(week[6].date).split(', ')[1])}</strong><button class="btn ghost small" data-wk="7" aria-label="Next week">▶</button></div>
   <div class="big-total"><span>${count} job${count === 1 ? '' : 's'} this week</span><b>${money(Math.round(total * 100) / 100)}</b></div>
   ${earningsHtml(reqs)}
+  ${ratingsHtml(reqs)}
   ${week.map(d => `<div class="card day${d.date === today ? ' is-today' : ''}" data-open="${d.date}" role="button" tabindex="0">
       <div class="day-head"><b>${d.date === today ? 'Today · ' : ''}${esc(short(d.date))}</b><span>${d.jobs.length ? money(d.total) : ''}</span></div>
       ${d.jobs.map(r => `<div class="slot${r.status === 'done' ? ' done' : ''}"><span class="t">${esc(prettyWhen(r.quote.when).split(', ').pop())}</span><span class="w">${esc(r.name.split(' ')[0])} · ${esc(r.vehicle)}</span></div>`).join('')}
@@ -472,12 +531,54 @@ async function viewShare() {
   <div class="card"><div class="linkbox"><input readonly value="${esc(link)}" aria-label="Your booking link"><button class="btn small" id="cp">Copy</button></div>
   ${navigator.share ? '<button class="btn block" id="sh">📤 Send my link</button>' : ''}
   <div class="btns"><a class="btn ghost small" href="#${cloud ? 'book-' + esc(biz.slug) : 'request'}">See what customers see</a></div></div>
+  <h2>Post it on your socials</h2>
+  <div class="card"><p class="meta">A ready-made picture with your name and a QR code. Post it, put it in your story, or print it for your truck or a flyer. People scan it with their camera to book.</p>
+    <canvas id="postpic" width="1080" height="1350" class="postpic" aria-label="Picture to post"></canvas>
+    <div class="btns">${navigator.canShare ? '<button class="btn" id="sharepic">📤 Share picture</button>' : ''}<button class="btn ghost" id="savepic">⬇️ Save picture</button><button class="btn ghost" id="cpcap">Copy caption</button></div>
+    <p class="meta">Tip: on Instagram, also put your link in your bio. On Facebook, add a "Book now" button to your page with this link.</p></div>
   ${store.mode === 'demo' ? `<p class="meta">Demo note: right now requests only show up on this same device. The shared version comes next.</p>` : ''}`;
   const shared = () => store.getSettings().then(st => st.shared ? null : store.saveSettings({ shared: true })).catch(() => {});
   $('#cp').onclick = () => { copy(link); shared(); };
+  const st = await store.getSettings();
+  const r = ratingSummary(await store.listRequests());
+  const name = st.business || biz.settings?.business || tradeOf(st.trade).defaultBusiness;
+  drawPostPic($('#postpic'), { name, tagline: tradeOf(st.trade).tagline, area: st.area, link, stars: r.count >= 3 && r.avg >= 4 ? r : null });
+  const caption = `Book ${name} in 1 minute 👇\n${link}\nTell me what you need and I'll send you a price and a time.`;
+  $('#cpcap').onclick = () => { copy(caption); shared(); };
+  const file = () => new Promise(ok => $('#postpic').toBlob(b => ok(new File([b], 'book-' + (biz.slug || 'me') + '.png', { type: 'image/png' })), 'image/png'));
+  $('#savepic').onclick = async () => { const f = await file(); const a = document.createElement('a'); a.href = URL.createObjectURL(f); a.download = f.name; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 5000); shared(); };
+  $('#sharepic')?.addEventListener('click', async () => {
+    const f = await file();
+    try {
+      if (navigator.canShare({ files: [f] })) await navigator.share({ files: [f], text: caption });
+      else await navigator.share({ text: caption, url: link });
+      shared();
+    } catch {}
+  });
   $('#sh')?.addEventListener('click', async () => {
     try { await navigator.share({ title: biz.settings?.business || 'Book with me', text: 'Send me your request here:', url: link }); shared(); } catch {}
   });
+}
+
+// The social media picture: name, what they do, big QR code, stars once they have 3+ good ratings.
+function drawPostPic(cv, { name, tagline, area, link, stars }) {
+  const c = cv.getContext('2d'), W = cv.width, H = cv.height;
+  const font = (w, px) => `${w} ${px}px system-ui, -apple-system, "Segoe UI", Roboto, sans-serif`;
+  c.fillStyle = '#0f766e'; c.fillRect(0, 0, W, H);
+  c.fillStyle = '#ffffff'; c.textAlign = 'center';
+  const fit = (text, w, max, min) => { let px = max; do { c.font = font(800, px); px -= 4; } while (c.measureText(text).width > w && px > min); };
+  fit(name, W - 120, 96, 44); c.fillText(name, W / 2, 170);
+  c.font = font(500, 46); c.fillStyle = '#d7f0ec'; c.fillText([tagline, area].filter(Boolean).join(' · ').slice(0, 44), W / 2, 240);
+  let y = 300;
+  if (stars) { c.font = font(700, 56); c.fillStyle = '#fcd34d'; c.fillText(`★ ${stars.avg} from ${stars.count} customers`, W / 2, 330); y = 370; }
+  const q = qrcode(0, 'M'); q.addData(link); q.make();
+  const n = q.getModuleCount(), box = 640, cell = Math.floor(box / (n + 8)), size = cell * (n + 8), x0 = Math.round((W - size) / 2), y0 = y + 20;
+  c.fillStyle = '#ffffff'; c.beginPath(); c.roundRect ? c.roundRect(x0, y0, size, size, 36) : c.rect(x0, y0, size, size); c.fill();
+  c.fillStyle = '#14202b';
+  for (let r = 0; r < n; r++) for (let k = 0; k < n; k++) if (q.isDark(r, k)) c.fillRect(x0 + (k + 4) * cell, y0 + (r + 4) * cell, cell, cell);
+  c.fillStyle = '#ffffff'; c.font = font(800, 84); c.fillText('Book in 1 minute', W / 2, y0 + size + 120);
+  c.font = font(500, 44); c.fillStyle = '#d7f0ec'; c.fillText('Scan with your phone camera', W / 2, y0 + size + 190);
+  c.fillText('or tap the link in my bio', W / 2, y0 + size + 245);
 }
 
 // ---------- detailer: settings ----------
@@ -712,7 +813,7 @@ async function render() {
   lastHash = h;
   try {
     if (h === 'request' && !cloud) await viewRequest('demo');
-    else if (h.startsWith('book-')) await viewRequest(h.slice(5));
+    else if (h.startsWith('book-')) { const b = splitBookLink(h.slice(5)); await viewRequest(b.slug, b.ref); }
     else if (h.startsWith('q-')) await viewQuote(h.slice(2));
     else if (cloud && !(await store.session())) await viewLogin();
     else if (cloud && !(await store.business())) await viewSetup();

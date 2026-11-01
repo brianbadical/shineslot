@@ -229,3 +229,40 @@ test('every starter template works end to end', () => {
   assert.ok(Object.keys(TRADES).length >= 14);
   assert.match(validateRequest({ name: 'A', phone: '555-123-4567', vehicle: 'x', services: ['Mowing'] }, 'lawn').join(' '), /Add the address/);
 });
+
+import { splitBookLink, cleanRef, canRate, validateRating, ratingSummary } from '../logic.js';
+
+test('booking link can say who sent the customer', () => {
+  assert.deepEqual(splitBookLink('selenas-cleaning~brian'), { slug: 'selenas-cleaning', ref: 'Brian' });
+  assert.deepEqual(splitBookLink('sterl-shine'), { slug: 'sterl-shine', ref: '' });
+  assert.equal(cleanRef('<script>x'), 'Scriptx');
+  const r = makeRequest({ ...good, ref: 'brian' }, { id: 'a', now });
+  assert.equal(r.ref, 'Brian');
+  assert.equal(makeRequest(good, { id: 'b', now }).ref, undefined);
+});
+
+test('ratings: once, after the job, 1-5 stars, matching quick choices only', () => {
+  let r = makeRequest(good, { id: 'a', now });
+  assert.equal(canRate(r, '2026-11-08T00:00'), false);
+  r = applyAccept(applyQuote(r, { price: 100, when: '2026-11-07T09:00', now }), { now });
+  assert.equal(canRate(r, '2026-11-06T12:00'), false);
+  assert.equal(canRate(r, '2026-11-07T10:00'), true);
+  assert.equal(canRate(applyDone(r, { now }), '2026-11-01T00:00'), true);
+  assert.equal(canRate({ ...r, rating: { stars: 5 } }, '2026-11-08T00:00'), false);
+  assert.throws(() => validateRating({ stars: 0 }));
+  assert.throws(() => validateRating({ stars: 6 }));
+  assert.deepEqual(validateRating({ stars: 5, tags: ['On time', 'Late', 'On time'], comment: ' great ' }), { stars: 5, tags: ['On time'], comment: 'great' });
+  assert.deepEqual(validateRating({ stars: 2, tags: ['Late', 'Friendly'] }), { stars: 2, tags: ['Late'] });
+  const sum = ratingSummary([{ rating: { stars: 5, at: '2' } }, { rating: { stars: 4, at: '1' } }, { rating: { stars: 1, tags: ['No-show'], at: '3' } }, {}]);
+  assert.equal(sum.count, 3); assert.equal(sum.avg, 3.3); assert.equal(sum.flags, 1); assert.equal(sum.recent[0].rating.stars, 1);
+});
+
+test('demo store: a job can be rated once', async () => {
+  const mem = new Map(); const st = new LocalStore({ getItem: k => mem.get(k) ?? null, setItem: (k, v) => mem.set(k, v) });
+  let r = makeRequest(good, { id: 'z', now });
+  r = applyAccept(applyQuote(r, { price: 100, when: '2026-11-07T09:00', now }), { now });
+  await st.putRequest(r);
+  await st.rateJob('z', { stars: 5, tags: [] });
+  assert.equal((await st.getRequest('z')).rating.stars, 5);
+  await assert.rejects(st.rateJob('z', { stars: 1, tags: [] }));
+});

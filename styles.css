@@ -131,3 +131,16 @@ input,textarea,select{font-size:1rem;min-height:46px}
 .step.done{color:var(--muted);text-decoration:line-through}
 .step.done .num{background:#cfe9e5;color:var(--brand-dark)}
 .start .btn{margin-top:10px}
+
+/* ratings */
+.stars{display:flex;gap:6px;margin:6px 0 10px}
+.stars label{cursor:pointer}
+.stars input{position:absolute;opacity:0;width:1px;height:1px}
+.stars span{font-size:2.6rem;line-height:1;color:#cbd5e1}
+.stars label.on span{color:#f59e0b}
+.stars input:focus-visible+span{outline:2px solid var(--brand);outline-offset:2px;border-radius:6px}
+.stars-show{color:#f59e0b;letter-spacing:1px}
+.rate .stars-show{font-size:1.8rem}
+/* social picture */
+.postpic{width:100%;max-width:360px;height:auto;display:block;margin:10px auto;border-radius:12px;box-shadow:0 2px 10px rgba(0,0,0,.12)}
+.madewith{text-align:center;color:var(--muted);font-size:.85rem;margin:18px 12px 0}
