@@ -1,6 +1,6 @@
 import {
   TRADES, tradeOf, MAX_PHOTOS, STATUS_LABEL, makeRequest, validateRequest, applyQuote, applyAccept,
-  applyDone, applyDecline, inboxOrder, WEEKDAYS, WEEKDAY_NAMES, hoursOf, validateBlock, blocksOn, isOpenDay, openDays, clashes, prettyTime, prettyDay, detailLines, jobsForDay, dayTotal, weekOf, shiftDay, money, prettyWhen, localDay, mapsLink,
+  applyDone, applyDecline, inboxOrder, WEEKDAYS, WEEKDAY_NAMES, hoursOf, validateBlock, blocksOn, isOpenDay, openDays, clashes, prettyTime, prettyDay, detailLines, parseSizes, sizesText, sizePrice, jobsForDay, dayTotal, weekOf, shiftDay, money, prettyWhen, localDay, mapsLink,
 } from './logic.js';
 import { LocalStore, newId } from './store.js';
 import { CloudStore, slugify } from './cloud.js';
@@ -72,12 +72,16 @@ async function viewRequest(slug) {
   app.innerHTML = `
   <h1>Request a quote</h1>
   <p class="lead">${esc(s.intro || t.intro)}</p>
+  ${pkgHtml(s)}
   <form id="rq" class="card" novalidate>
     <label for="name">Your name</label><input id="name" name="name" autocomplete="name">
     <div class="row">
       <div><label for="phone">Phone</label><input id="phone" name="phone" type="tel" autocomplete="tel"></div>
       <div><label for="email">Email</label><input id="email" name="email" type="email" autocomplete="email"></div>
     </div>
+    ${(s.sizes || []).length ? `<label>${esc(t.sizesLabel || 'Size')}</label><div class="chips sizes">${s.sizes.map((z, i) =>
+      `<label class="chip"><input type="radio" name="size" value="${i}"><span>${esc(z.label)} <b>${esc(sizePrice(z))}</b></span></label>`).join('')}</div>
+      <p class="meta">Starting prices. Your final price depends on the job.</p>` : ''}
     ${t.questions ? questionsHtml(t, 0) : `<label for="vehicle">${esc(t.itemLabel)}</label><input id="vehicle" name="vehicle" placeholder="${esc(t.itemHint)}">`}
     <label>${esc(t.servicesLabel)}</label>
     <div class="chips">${t.services.map(x => `<label class="chip"><input type="checkbox" name="services" value="${esc(x)}"><span>${esc(x)}</span></label>`).join('')}</div>
@@ -102,9 +106,11 @@ async function viewRequest(slug) {
       name: f.get('name'), phone: f.get('phone'), email: f.get('email'), vehicle: f.get('vehicle'),
       services: f.getAll('services'), times: f.getAll('times'), address: f.get('address') || '', notes: f.get('notes'),
       photos: draftPhotos,
+      size: f.get('size') != null ? s.sizes[+f.get('size')] : null,
       details: Object.fromEntries((t.questions || []).filter(q => q.key).map(q => [q.key, q.type === 'multi' ? f.getAll('d_' + q.key) : f.get('d_' + q.key)])),
     };
     const errors = validateRequest(input, s.trade);
+    if ((s.sizes || []).length && !input.size) errors.unshift(`Pick your ${(t.sizesLabel || 'size').toLowerCase()}.`);
     if (errors.length) { $('#err').innerHTML = errors.map(esc).join('<br>'); $('#err').scrollIntoView({ block: 'center' }); return; }
     try {
       const req = makeRequest(input, { id: newId(), now: nowIso(), trade: s.trade });
@@ -113,6 +119,18 @@ async function viewRequest(slug) {
       location.hash = 'q-' + token;
     } catch (err) { $('#err').textContent = err.message; e.target.querySelector('button[type=submit]').disabled = false; }
   });
+}
+
+// The owner's main service, shown at the top of the customer form.
+// Lines ending in ":" become small headings (for example "Interior:").
+function pkgHtml(s) {
+  const p = s.pkg || {};
+  if (!p.name && !p.about) return '';
+  const lines = String(p.about || '').split('\n').map(x => x.trim());
+  const body = lines.map(x => !x ? '' : x.endsWith(':') ? `<div class="pkg-h">${esc(x.slice(0, -1))}</div>` : `<div>${esc(x)}</div>`).join('');
+  const sub = [(s.sizes || []).length ? 'From ' + sizePrice(s.sizes.reduce((a, b) => a.price <= b.price ? a : b)) : 'Price varies', p.time].filter(Boolean).join(' · ');
+  return `<div class="card pkg">${p.name ? `<h2>${esc(p.name)}</h2>` : ''}<div class="meta">${esc(sub)}</div>
+    <details open><summary>What's included</summary><div class="pkg-body">${body}</div></details></div>`;
 }
 
 // Intake questions, split into sections. part 0 = the first section (shown open, has the
@@ -237,7 +255,7 @@ function card(r, t) {
     <div class="req-head"><div><b>${esc(r.name)}</b><div class="meta">${esc(r.vehicle)}</div></div><span class="status ${r.status}">${STATUS_LABEL[r.status]}</span></div>
     <div class="meta">${contact}</div>
     ${r.address ? `<div class="meta">📍 ${esc(r.address)}</div>` : ''}
-    <div class="tags">${r.services.map(x => `<span>${esc(x)}</span>`).join('')}${r.times.map(x => `<span>🕑 ${esc(x)}</span>`).join('')}</div>
+    <div class="tags">${r.size ? `<span>🚗 ${esc(r.size)}</span>` : ''}${r.services.map(x => `<span>${esc(x)}</span>`).join('')}${r.times.map(x => `<span>🕑 ${esc(x)}</span>`).join('')}</div>
     ${r.notes ? `<p class="meta">“${esc(r.notes)}”</p>` : ''}
     ${detailsHtml(r, t)}
     ${ownerNoteHtml(r)}
@@ -246,7 +264,7 @@ function card(r, t) {
       ? `<div class="quote-box">Booked for <b>${esc(prettyWhen(r.quote.when))}</b> at <b>${money(r.quote.price)}</b>. It's on your <a href="#today">Calendar</a>.</div>`
       : `<form class="quote-box" data-quote>
           <div class="row">
-            <div><label>Price</label><input name="price" inputmode="decimal" placeholder="$" value="${r.quote ? r.quote.price : ''}"></div>
+            <div><label>Price</label><input name="price" inputmode="decimal" placeholder="$" value="${r.quote ? r.quote.price : (r.sizePrice || '')}"></div>
             <div><label>Day and time</label><input name="when" type="datetime-local" value="${r.quote ? r.quote.when : tomorrow}"></div>
           </div>
           <label>Note (optional)</label><input name="note" placeholder="${esc(t.noteHint)}" value="${esc(r.quote?.note || '')}">
@@ -403,6 +421,18 @@ async function viewSettings() {
     <label for="intro">Message at the top of your form</label><textarea id="intro" name="intro" placeholder="${esc(tradeOf(s.trade).intro)}">${esc(s.intro)}</textarea>
     <button class="btn block" type="submit">Save</button>
   </form>
+  <h2>Your service and prices</h2>
+  <form id="svc" class="card">
+    <p class="meta">Shown at the top of your customer form. All optional.</p>
+    <label for="pkgName">Service name</label><input id="pkgName" name="pkgName" maxlength="80" value="${esc(s.pkg?.name || '')}" placeholder="For example The Inside And Outside Detail">
+    <label for="pkgTime">How long it takes</label><input id="pkgTime" name="pkgTime" maxlength="40" value="${esc(s.pkg?.time || '')}" placeholder="For example 2 hr 30 min+">
+    <label for="pkgAbout">What's included</label><textarea id="pkgAbout" name="pkgAbout" maxlength="3000" rows="8" placeholder="One item per line. End a line with : to make a heading, like Interior:">${esc(s.pkg?.about || '')}</textarea>
+    <label for="sizes">${esc(tradeOf(s.trade).sizesLabel || 'Sizes')} and starting prices</label>
+    <textarea id="sizes" name="sizes" rows="4" placeholder="One per line, for example:&#10;Car = 120&#10;Small SUV = 140&#10;Large SUV / pickup = 170+">${esc(sizesText(s.sizes))}</textarea>
+    <p class="meta">Customers tap one. Add + after a price for "and up". The price fills in when you quote.</p>
+    <div class="errors" data-err></div>
+    <button class="btn block" type="submit">Save service and prices</button>
+  </form>
   <h2>Working hours</h2>
   <form id="hrs" class="card">
     <p class="meta">Customers only see open days. To take a single day or a few hours off, open that day in the Calendar.</p>
@@ -436,6 +466,14 @@ async function viewSettings() {
       hours[k] = [a, b];
     }
     await store.saveSettings({ hours }); toast('Hours saved'); render();
+  });
+  $('#svc').addEventListener('submit', async e => {
+    e.preventDefault();
+    const f = new FormData(e.target);
+    const { sizes, errors } = parseSizes(f.get('sizes'));
+    if (errors.length) { e.target.querySelector('[data-err]').innerHTML = errors.map(esc).join('<br>'); return; }
+    const pkg = { name: f.get('pkgName').trim(), time: f.get('pkgTime').trim(), about: f.get('pkgAbout').trim() };
+    await store.saveSettings({ sizes, pkg }); toast('Saved'); render();
   });
   $('#out')?.addEventListener('click', async () => { await store.signOut(); render(); });
   let armed = false;

@@ -163,3 +163,16 @@ test('cleaning intake answers: required home basics, answers kept clean, place l
   const studio = makeRequest({ ...base, details: { homeType: 'Apartment', beds: 'Studio', baths: '1' } }, { id: 'd', now, trade: 'cleaning' });
   assert.equal(studio.vehicle, 'Studio, 1 bath apartment');
 });
+
+test('sizes with starting prices', async () => {
+  const { parseSizes, sizesText, sizeTag } = await import('../logic.js');
+  const { sizes, errors } = parseSizes('Car = 120\nSmall SUV: $140\n\nLarge SUV / pickup - 170+');
+  assert.deepEqual(errors, []);
+  assert.equal(sizes.length, 3);
+  assert.equal(sizeTag(sizes[2]), 'Large SUV / pickup · $170+');
+  assert.deepEqual(parseSizes(sizesText(sizes)).sizes, sizes);
+  assert.equal(parseSizes('Car\nBoat = 0').errors.length, 2);
+  const r = makeRequest({ ...good, size: sizes[1] }, { id: 's', now });
+  assert.equal(r.size, 'Small SUV · $140');
+  assert.equal(r.sizePrice, 140);
+});

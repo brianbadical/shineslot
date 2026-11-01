@@ -11,7 +11,7 @@ function fromRow(row) {
   return { id: row.id, token: row.token, status: row.status, createdAt: row.created_at, quote: row.quote, history: row.history || [], ownerNote: row.owner_note || '', ...row.data };
 }
 
-const DATA_KEYS = ['name', 'phone', 'email', 'vehicle', 'services', 'times', 'address', 'notes', 'photos', 'details'];
+const DATA_KEYS = ['name', 'phone', 'email', 'vehicle', 'services', 'times', 'address', 'notes', 'photos', 'details', 'size', 'sizePrice'];
 const pick = (obj, keys) => Object.fromEntries(keys.filter(k => k in obj).map(k => [k, obj[k]]));
 
 export function slugify(text) {

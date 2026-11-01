@@ -11,6 +11,7 @@ export const TRADES = {
     itemHint: 'For example 2019 Honda CR-V',
     itemError: 'Add the vehicle (for example 2019 Honda CR-V).',
     addressLabel: 'Where will the car be?',
+    sizesLabel: 'Vehicle size',
     servicesLabel: 'What do you want done?',
     services: ['Interior', 'Exterior', 'Full detail', 'Pet hair', 'Stains or odor', 'Headlights', 'Engine bay'],
     notesLabel: 'Anything else?',
@@ -29,6 +30,7 @@ export const TRADES = {
     itemHint: 'For example 2019 Honda CR-V',
     itemError: 'Add the vehicle (for example 2019 Honda CR-V).',
     addressLabel: 'Where will the car be?',
+    sizesLabel: 'Vehicle size',
     servicesLabel: 'What does it need?',
     services: ['Oil change', 'Brakes', 'Check engine light', 'Battery or starting', 'Noise or vibration', 'AC or heat', 'Tune-up', 'Not sure'],
     notesLabel: "What's going on with it?",
@@ -47,6 +49,7 @@ export const TRADES = {
     itemHint: 'For example 3 bed, 2 bath house',
     itemError: 'Tell us about the place (for example 3 bed, 2 bath house).',
     addressLabel: 'Address',
+    sizesLabel: 'Home size',
     servicesLabel: 'What kind of clean?',
     services: ['Standard clean', 'Deep clean', 'Move-in or move-out', 'Kitchen', 'Bathrooms', 'Inside fridge or oven', 'Windows', 'Laundry', 'Office'],
     notesLabel: 'Anything else?',
@@ -98,6 +101,28 @@ export const TRADES = {
 };
 
 const MAX_ANSWER = 300;
+
+// ----- sizes with starting prices (owner sets them, for example "Car = 120") -----
+export const MAX_SIZES = 8;
+
+// One size per line: "Car = 120", "Small SUV: $140", "Large SUV / pickup = 170+".
+export function parseSizes(text) {
+  const out = [], errors = [];
+  for (const raw of String(text || '').split('\n')) {
+    const line = raw.trim();
+    if (!line) continue;
+    const m = line.match(/^(.*\S)\s*[=:\u2013-]\s*\$?\s*([\d,]+(?:\.\d{1,2})?)\s*(\+?)\s*$/);
+    if (!m) { errors.push(`"${line}" needs a price, like Car = 120`); continue; }
+    const price = Number(m[2].replace(/,/g, ''));
+    if (!(price > 0) || price > MAX_PRICE) { errors.push(`"${line}": price must be between $1 and $${MAX_PRICE.toLocaleString('en-US')}`); continue; }
+    out.push({ label: m[1].trim().slice(0, 40), price, plus: !!m[3] });
+  }
+  if (out.length > MAX_SIZES) errors.push(`Up to ${MAX_SIZES} sizes.`);
+  return { sizes: out.slice(0, MAX_SIZES), errors };
+}
+export const sizesText = sizes => (sizes || []).map(z => `${z.label} = ${z.price}${z.plus ? '+' : ''}`).join('\n');
+export const sizePrice = z => `$${z.price.toLocaleString('en-US')}${z.plus ? '+' : ''}`;
+export const sizeTag = z => `${z.label} · ${sizePrice(z)}`;
 
 // Keep only answers to the trade's own questions, trimmed and short.
 export function cleanDetails(raw, trade = 'detailing') {
@@ -177,6 +202,7 @@ export function makeRequest(input, { id, now, trade = 'detailing' }) {
     notes: clean(input.notes),
     photos: (input.photos || []).slice(0, MAX_PHOTOS),
     ...(Object.keys(details).length ? { details } : {}),
+    ...(input.size && input.size.label ? { size: sizeTag(input.size), sizePrice: input.size.price } : {}),
     quote: null,
     history: [{ at: now, what: 'Request sent' }],
   };
