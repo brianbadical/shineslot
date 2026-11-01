@@ -35,7 +35,7 @@ export class CloudStore {
   async signIn(email, password) { const c = await this.client(); fail((await c.auth.signInWithPassword({ email, password })).error); this._biz = undefined; }
   async signUp(email, password) {
     const c = await this.client();
-    const { data, error } = await c.auth.signUp({ email, password }); fail(error);
+    const { data, error } = await c.auth.signUp({ email, password, options: { emailRedirectTo: location.origin + location.pathname } }); fail(error);
     return { needsConfirm: !data.session };
   }
   async signOut() { const c = await this.client(); await c.auth.signOut(); this._biz = undefined; }

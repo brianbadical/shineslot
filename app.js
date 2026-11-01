@@ -1,6 +1,6 @@
 import {
-  TRADES, tradeOf, TIMES, MAX_PHOTOS, STATUS_LABEL, makeRequest, validateRequest, applyQuote, applyAccept,
-  applyDone, applyDecline, inboxOrder, jobsForDay, dayTotal, weekOf, shiftDay, money, prettyWhen, localDay, mapsLink,
+  TRADES, tradeOf, MAX_PHOTOS, STATUS_LABEL, makeRequest, validateRequest, applyQuote, applyAccept,
+  applyDone, applyDecline, inboxOrder, WEEKDAYS, WEEKDAY_NAMES, hoursOf, validateBlock, blocksOn, isOpenDay, openDays, clashes, prettyTime, prettyDay, jobsForDay, dayTotal, weekOf, shiftDay, money, prettyWhen, localDay, mapsLink,
 } from './logic.js';
 import { LocalStore, newId } from './store.js';
 import { CloudStore, slugify } from './cloud.js';
@@ -83,8 +83,11 @@ async function viewRequest(slug) {
     <div class="chips">${t.services.map(x => `<label class="chip"><input type="checkbox" name="services" value="${esc(x)}"><span>${esc(x)}</span></label>`).join('')}</div>
     <label>${esc(t.photosLabel)} (optional, up to ${MAX_PHOTOS})</label>
     <div class="photos" id="ph"></div>
-    <label>When are you free?</label>
-    <div class="chips">${TIMES.map(x => `<label class="chip"><input type="checkbox" name="times" value="${esc(x)}"><span>${esc(x)}</span></label>`).join('')}</div>
+    <label>When are you free? (pick any)</label>
+    ${(() => { const days = openDays(s, localDay(), 14); return days.length
+      ? `<div class="chips">${days.map(d => `<label class="chip"><input type="checkbox" name="times" value="${esc(prettyDay(d))}"><span>${esc(prettyDay(d))}</span></label>`).join('')}</div>`
+      : `<p class="meta">No open days in the next two weeks. Send your request anyway and we'll find a time.</p>`; })()}
+    <div class="chips" style="margin-top:8px">${['Morning', 'Afternoon', 'Evening'].map(x => `<label class="chip"><input type="checkbox" name="times" value="${x}"><span>${x}</span></label>`).join('')}</div>
     ${t.atShop ? '' : `<label for="address">${esc(t.addressLabel)}</label><input id="address" name="address" placeholder="Street address or area" autocomplete="street-address">`}
     <label for="notes">${esc(t.notesLabel)}</label><textarea id="notes" name="notes" placeholder="${esc(t.notesHint)}"></textarea>
     <div class="errors" id="err"></div>
@@ -174,9 +177,11 @@ async function viewInbox() {
     app.innerHTML = `<h1>Requests</h1><div class="card empty">No open requests yet.<br><br><a class="btn" href="#share">Share your link</a></div>`;
     return;
   }
-  const t = tradeOf((await store.getSettings()).trade);
+  const settings = await store.getSettings();
+  const t = tradeOf(settings.trade);
   app.innerHTML = `<h1>Requests</h1>` + reqs.map(r => card(r, t)).join('');
-  bindCards();
+  const all = await store.listRequests();
+  bindCards(settings, all);
 }
 
 function card(r, t) {
@@ -197,6 +202,7 @@ function card(r, t) {
             <div><label>Day and time</label><input name="when" type="datetime-local" value="${r.quote ? r.quote.when : tomorrow}"></div>
           </div>
           <label>Note (optional)</label><input name="note" placeholder="${esc(t.noteHint)}" value="${esc(r.quote?.note || '')}">
+          <div class="warn" data-warn></div>
           <div class="errors" data-err></div>
           <div class="btns"><button class="btn" type="submit">${r.status === 'quoted' ? 'Update price' : 'Send price'}</button>
           <button class="btn danger small" type="button" data-decline>Decline</button></div>
@@ -205,9 +211,12 @@ function card(r, t) {
   </div>`;
 }
 
-function bindCards() {
+function bindCards(settings, all) {
   app.querySelectorAll('[data-id]').forEach(el => {
     const id = el.dataset.id;
+    const whenEl = el.querySelector('[name=when]'), warnEl = el.querySelector('[data-warn]');
+    const check = () => { if (!whenEl || !warnEl) return; const w = whenEl.value; warnEl.innerHTML = /T\d\d:\d\d/.test(w) ? clashes(settings, all, w.slice(0, 16), id).map(x => '⚠️ ' + esc(x)).join('<br>') : ''; };
+    whenEl?.addEventListener('input', check); whenEl?.addEventListener('change', check); check();
     el.querySelector('[data-quote]')?.addEventListener('submit', async e => {
       e.preventDefault();
       const f = new FormData(e.target);
@@ -230,9 +239,12 @@ function bindCards() {
 async function viewToday() {
   await shell(false);
   const reqs = await store.listRequests();
-  if (calMode === 'week') return viewWeek(reqs);
+  if (calMode === 'week') return viewWeek(reqs, await store.getSettings());
   const jobs = jobsForDay(reqs, viewDay);
+  const settings = await store.getSettings();
   const isToday = viewDay === localDay();
+  const hrs = hoursOf(settings)[WEEKDAYS[new Date(viewDay + 'T12:00').getDay()]];
+  const blocks = blocksOn(settings, viewDay);
   const label = prettyWhen(viewDay + 'T00:00').split(',').slice(0, 2).join(',');
   app.innerHTML = `
   <div class="btns" style="margin:0 0 10px"><button class="btn ghost small" data-week>◀ Week</button></div>
@@ -247,7 +259,33 @@ async function viewToday() {
       ${r.quote.note ? `<p class="meta">Your note: ${esc(r.quote.note)}</p>` : ''}
       <div class="btns">${r.address ? `<a class="btn ghost small" href="${mapsLink(r.address)}" target="_blank" rel="noopener">Directions</a>` : ''}
       ${r.status === 'accepted' ? `<button class="btn small" data-done="${esc(r.id)}">Mark done</button>` : `<span class="status done">Done</span>`}</div>
-    </div>`).join('') : `<div class="card empty">Nothing booked${isToday ? ' today' : ' this day'}.</div>`}`;
+    </div>`).join('') : `<div class="card empty">Nothing booked${isToday ? ' today' : ' this day'}.</div>`}
+  <h2>Availability</h2>
+  <div class="card">
+    <p class="meta">${hrs ? `Your hours: ${esc(prettyTime(hrs[0]))} to ${esc(prettyTime(hrs[1]))}` : 'Closed on this day of the week'} · <a href="#settings">change</a></p>
+    ${blocks.map(b => `<div class="block-row"><span>⛔ ${b.start ? `${esc(prettyTime(b.start))} to ${esc(prettyTime(b.end))}` : 'Whole day off'}${b.note ? ` · ${esc(b.note)}` : ''}</span><button class="btn ghost small" data-unblock="${esc(b.id)}">Remove</button></div>`).join('')}
+    <form id="blk" novalidate>
+      <label class="chip" style="margin-top:8px"><input type="checkbox" name="whole" checked><span>Whole day</span></label>
+      <div class="row" data-times hidden><div><label>From</label><input type="time" name="start" value="12:00"></div><div><label>To</label><input type="time" name="end" value="14:00"></div></div>
+      <label>Note (only you see it)</label><input name="note" placeholder="For example: vacation, dentist">
+      <div class="errors" data-err></div>
+      <button class="btn ghost small" type="submit" style="margin-top:10px">Block this time off</button>
+    </form>
+  </div>`;
+  const blk = $('#blk');
+  blk.whole.onchange = () => { blk.querySelector('[data-times]').hidden = blk.whole.checked; };
+  blk.addEventListener('submit', async e => {
+    e.preventDefault();
+    try {
+      const b = validateBlock({ id: newId(), date: viewDay, ...(blk.whole.checked ? {} : { start: blk.start.value, end: blk.end.value }), note: blk.note.value });
+      await store.saveSettings({ blocks: [...(settings.blocks || []).filter(x => x.date >= localDay()), b] });
+      toast('Blocked off'); render();
+    } catch (err) { blk.querySelector('[data-err]').textContent = err.message; }
+  });
+  app.querySelectorAll('[data-unblock]').forEach(b => b.onclick = async () => {
+    await store.saveSettings({ blocks: (settings.blocks || []).filter(x => x.id !== b.dataset.unblock) });
+    toast('Removed'); render();
+  });
   app.querySelector('[data-week]').onclick = () => { calMode = 'week'; render(); };
   app.querySelectorAll('[data-day]').forEach(b => b.onclick = () => { viewDay = shiftDay(viewDay, Number(b.dataset.day)); render(); });
   app.querySelectorAll('[data-done]').forEach(b => b.onclick = async () => {
@@ -256,7 +294,7 @@ async function viewToday() {
   });
 }
 
-function viewWeek(reqs) {
+function viewWeek(reqs, settings) {
   const week = weekOf(reqs, viewDay);
   const today = localDay();
   const total = week.reduce((t, d) => t + d.total, 0);
@@ -267,7 +305,9 @@ function viewWeek(reqs) {
   <div class="big-total"><span>${count} job${count === 1 ? '' : 's'} this week</span><b>${money(Math.round(total * 100) / 100)}</b></div>
   ${week.map(d => `<div class="card day${d.date === today ? ' is-today' : ''}" data-open="${d.date}" role="button" tabindex="0">
       <div class="day-head"><b>${d.date === today ? 'Today · ' : ''}${esc(short(d.date))}</b><span>${d.jobs.length ? money(d.total) : ''}</span></div>
-      ${d.jobs.length ? d.jobs.map(r => `<div class="slot${r.status === 'done' ? ' done' : ''}"><span class="t">${esc(prettyWhen(r.quote.when).split(', ').pop())}</span><span class="w">${esc(r.name.split(' ')[0])} · ${esc(r.vehicle)}</span></div>`).join('') : '<div class="free">Open</div>'}
+      ${d.jobs.map(r => `<div class="slot${r.status === 'done' ? ' done' : ''}"><span class="t">${esc(prettyWhen(r.quote.when).split(', ').pop())}</span><span class="w">${esc(r.name.split(' ')[0])} · ${esc(r.vehicle)}</span></div>`).join('')}
+      ${blocksOn(settings, d.date).map(b => `<div class="slot blocked"><span class="t">${b.start ? esc(prettyTime(b.start)) : 'All day'}</span><span class="w">Blocked${b.note ? ' · ' + esc(b.note) : ''}</span></div>`).join('')}
+      ${!d.jobs.length && !blocksOn(settings, d.date).length ? `<div class="free">${isOpenDay(settings, d.date) ? 'Open' : 'Closed'}</div>` : ''}
     </div>`).join('')}
   ${week.some(d => d.date === today) ? '' : `<div class="btns"><button class="btn ghost small" data-this>Back to this week</button></div>`}`;
   app.querySelectorAll('[data-wk]').forEach(b => b.onclick = () => { viewDay = shiftDay(viewDay, Number(b.dataset.wk)); render(); });
@@ -306,6 +346,14 @@ async function viewSettings() {
     <label for="intro">Message at the top of your form</label><textarea id="intro" name="intro" placeholder="${esc(tradeOf(s.trade).intro)}">${esc(s.intro)}</textarea>
     <button class="btn block" type="submit">Save</button>
   </form>
+  <h2>Working hours</h2>
+  <form id="hrs" class="card">
+    <p class="meta">Customers only see open days. To take a single day or a few hours off, open that day in the Calendar.</p>
+    ${['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'].map(k => { const h = hoursOf(s)[k]; return `<div class="hours-row"><label class="chip"><input type="checkbox" name="open-${k}"${h ? ' checked' : ''}><span>${WEEKDAY_NAMES[k].slice(0, 3)}</span></label>
+      <input type="time" name="start-${k}" value="${h ? h[0] : '09:00'}" aria-label="${WEEKDAY_NAMES[k]} start"><span>to</span><input type="time" name="end-${k}" value="${h ? h[1] : '17:00'}" aria-label="${WEEKDAY_NAMES[k]} end"></div>`; }).join('')}
+    <div class="errors" data-err></div>
+    <button class="btn block" type="submit">Save hours</button>
+  </form>
   ${cloud ? alertsCard(s) : ''}
   ${cloud ? `<div class="card"><p class="meta">Your link name: <b>${esc((await store.business()).slug)}</b></p><button class="btn ghost small" id="out">Sign out</button></div>` : ''}
   ${store.mode === 'demo' ? `<h2>Demo tools</h2><div class="card"><p class="meta">Fill the app with a few made-up requests to try it out, or start over.</p>
@@ -321,6 +369,17 @@ async function viewSettings() {
     toast('Sample requests added'); location.hash = 'inbox';
   });
   bindAlerts(s);
+  $('#hrs').addEventListener('submit', async e => {
+    e.preventDefault();
+    const f = new FormData(e.target), hours = {};
+    for (const k of WEEKDAYS) {
+      if (!f.get('open-' + k)) { hours[k] = null; continue; }
+      const a = f.get('start-' + k), b = f.get('end-' + k);
+      if (!a || !b || b <= a) { e.target.querySelector('[data-err]').textContent = `${WEEKDAY_NAMES[k]}: the end time must be after the start time.`; return; }
+      hours[k] = [a, b];
+    }
+    await store.saveSettings({ hours }); toast('Hours saved'); render();
+  });
   $('#out')?.addEventListener('click', async () => { await store.signOut(); render(); });
   let armed = false;
   $('#wipe')?.addEventListener('click', async e => {

@@ -78,4 +78,11 @@ textarea{min-height:80px;resize:vertical}
 .slot .w{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .slot.done{background:#eef1f3;color:var(--muted);text-decoration:line-through}
 .free{color:#9aa5ae;font-size:.9rem}
+.warn{color:#8a5300;background:#fff7e6;border-radius:9px;font-size:.88rem;margin-top:8px}
+.warn:not(:empty){padding:8px 10px}
+.block-row{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--line)}
+.slot.blocked{background:#f3f0ee;color:#8a5a44}
+.hours-row{display:grid;grid-template-columns:62px minmax(0,1fr) auto minmax(0,1fr);gap:6px;align-items:center;margin:8px 0}
+.hours-row input[type=time]{padding:8px 6px;min-width:0;font-size:.9rem}
+.hours-row .chip span{width:100%;text-align:center}
 @media (max-width:420px){.row{grid-template-columns:1fr}}

@@ -125,3 +125,26 @@ test('cleaning trade asks about the home and needs an address', async () => {
   assert.equal(rows.length, 3);
   assert.match(rows[0].vehicle, /bath/);
 });
+
+test('availability: hours, blocks, open days and clashes', async () => {
+  const { openDays, isOpenDay, clashes, validateBlock, prettyTime } = await import('../logic.js');
+  const s = { hours: { sun: null, sat: null }, blocks: [validateBlock({ id: 'b1', date: '2026-11-04' }), validateBlock({ id: 'b2', date: '2026-11-05', start: '12:00', end: '14:00', note: 'Dentist' })] };
+  // 2026-11-02 is a Monday
+  assert.equal(isOpenDay(s, '2026-11-02'), true);
+  assert.equal(isOpenDay(s, '2026-11-04'), false); // whole day blocked
+  assert.equal(isOpenDay(s, '2026-11-05'), true);  // only part blocked
+  assert.equal(isOpenDay(s, '2026-11-07'), false); // Saturday closed
+  assert.deepEqual(openDays(s, '2026-11-02', 7), ['2026-11-02', '2026-11-03', '2026-11-05', '2026-11-06']);
+  assert.deepEqual(clashes(s, [], '2026-11-02T09:00'), []);
+  assert.match(clashes(s, [], '2026-11-02T18:00')[0], /outside your hours/);
+  assert.match(clashes(s, [], '2026-11-08T10:00')[0], /closed on Sundays/);
+  assert.match(clashes(s, [], '2026-11-05T12:30')[0], /blocked off \(Dentist\)/);
+  assert.match(clashes(s, [], '2026-11-04T10:00').join(), /day is blocked/);
+  const other = { id: 'x', name: 'Ann Lee', status: 'accepted', quote: { when: '2026-11-03T10:00', price: 1 } };
+  assert.match(clashes(s, [other], '2026-11-03T10:30')[0], /Ann's job at 10:00 AM/);
+  assert.deepEqual(clashes(s, [other], '2026-11-03T11:00'), []);
+  assert.deepEqual(clashes(s, [other], '2026-11-03T10:00', 'x'), []); // itself
+  assert.throws(() => validateBlock({ date: '2026-11-05', start: '14:00', end: '12:00' }));
+  assert.throws(() => validateBlock({ date: 'soon' }));
+  assert.equal(prettyTime('13:05'), '1:05 PM');
+});

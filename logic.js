@@ -195,3 +195,64 @@ export function shiftDay(day, n) {
   const [y, m, d] = day.split('-').map(Number);
   return localDay(new Date(y, m - 1, d + n));
 }
+
+// ---------- Availability ----------
+// hours: { mon: ['08:00', '17:00'] | null, ... }  null = closed that day.
+// blocks: [{ id, date: 'YYYY-MM-DD', start?: 'HH:MM', end?: 'HH:MM', note? }]  no start/end = whole day off.
+export const WEEKDAYS = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+export const WEEKDAY_NAMES = { sun: 'Sunday', mon: 'Monday', tue: 'Tuesday', wed: 'Wednesday', thu: 'Thursday', fri: 'Friday', sat: 'Saturday' };
+export const DEFAULT_HOURS = { sun: null, mon: ['08:00', '17:00'], tue: ['08:00', '17:00'], wed: ['08:00', '17:00'], thu: ['08:00', '17:00'], fri: ['08:00', '17:00'], sat: ['09:00', '14:00'] };
+export const JOB_MINUTES = 60; // two jobs closer than this count as a clash
+
+const isTime = t => /^\d{2}:\d{2}$/.test(t || '');
+const mins = t => { const [h, m] = t.split(':').map(Number); return h * 60 + m; };
+function weekdayOf(day) { const [y, m, d] = day.split('-').map(Number); return WEEKDAYS[new Date(Date.UTC(y, m - 1, d)).getUTCDay()]; }
+
+export function hoursOf(settings) { return { ...DEFAULT_HOURS, ...(settings && settings.hours) }; }
+
+export function validateBlock(b) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(b.date || '')) throw new Error('Pick a day to block.');
+  const whole = !b.start && !b.end;
+  if (!whole) {
+    if (!isTime(b.start) || !isTime(b.end)) throw new Error('Pick a start and end time, or block the whole day.');
+    if (mins(b.end) <= mins(b.start)) throw new Error('The end time must be after the start time.');
+  }
+  return { id: b.id, date: b.date, ...(whole ? {} : { start: b.start, end: b.end }), ...(b.note ? { note: String(b.note).trim().slice(0, 80) } : {}) };
+}
+
+export function blocksOn(settings, day) { return ((settings && settings.blocks) || []).filter(b => b.date === day); }
+
+// Is this day open for work at all (has hours and is not blocked all day)?
+export function isOpenDay(settings, day) {
+  if (!hoursOf(settings)[weekdayOf(day)]) return false;
+  return !blocksOn(settings, day).some(b => !b.start);
+}
+
+// The next `n` days from `from` (inclusive) that are open.
+export function openDays(settings, from, n = 14) {
+  const out = [];
+  for (let i = 0; i < n; i++) { const d = shiftDay(from, i); if (isOpenDay(settings, d)) out.push(d); }
+  return out;
+}
+
+// Problems with putting a job at `when` (YYYY-MM-DDTHH:MM). Empty list = fine.
+export function clashes(settings, reqs, when, selfId) {
+  const day = when.slice(0, 10), t = mins(when.slice(11, 16));
+  const out = [];
+  const h = hoursOf(settings)[weekdayOf(day)];
+  if (!h) out.push(`You're closed on ${WEEKDAY_NAMES[weekdayOf(day)]}s.`);
+  else if (t < mins(h[0]) || t >= mins(h[1])) out.push(`That's outside your hours (${prettyTime(h[0])} to ${prettyTime(h[1])}).`);
+  for (const b of blocksOn(settings, day)) {
+    if (!b.start) out.push(`That day is blocked off${b.note ? ` (${b.note})` : ''}.`);
+    else if (t >= mins(b.start) && t < mins(b.end)) out.push(`That time is blocked off${b.note ? ` (${b.note})` : ''}.`);
+  }
+  for (const r of reqs) {
+    if (r.id === selfId || !r.quote || (r.status !== 'accepted' && r.status !== 'quoted')) continue;
+    if (r.quote.when.slice(0, 10) !== day) continue;
+    if (Math.abs(mins(r.quote.when.slice(11, 16)) - t) < JOB_MINUTES) out.push(`Close to ${r.name.split(' ')[0]}'s job at ${prettyTime(r.quote.when.slice(11, 16))}.`);
+  }
+  return out;
+}
+
+export function prettyTime(t) { const [h, m] = t.split(':').map(Number); return `${((h + 11) % 12) + 1}:${String(m).padStart(2, '0')} ${h < 12 ? 'AM' : 'PM'}`; }
+export function prettyDay(day) { return prettyWhen(day + 'T00:00').split(', ').slice(0, 2).join(', '); }
