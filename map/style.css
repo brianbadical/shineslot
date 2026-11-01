@@ -1,0 +1,21 @@
+:root{--ink:#1b2430;--muted:#5b6675;--brand:#0f7b5f;--brand2:#e8f5f0;--warn:#b3261e;--line:#e3e7ec}
+*{box-sizing:border-box}body{margin:0;font:17px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:var(--ink);background:#fafbfc}
+.wrap{max-width:680px;margin:0 auto;padding:20px 18px 40px}
+header{display:flex;align-items:center;gap:10px;font-weight:700;font-size:20px}
+header .pin{width:30px;height:30px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);background:var(--brand);display:inline-block}
+h1{font-size:30px;line-height:1.2;margin:22px 0 10px}h2{font-size:22px;margin:28px 0 10px}
+p{margin:8px 0}.muted{color:var(--muted)}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px;margin:16px 0}
+.btn{display:block;width:100%;text-align:center;background:var(--brand);color:#fff;border:0;border-radius:12px;padding:16px;font-size:18px;font-weight:700;text-decoration:none;cursor:pointer}
+.btn.alt{background:#fff;color:var(--brand);border:2px solid var(--brand)}
+.score{font-size:56px;font-weight:800;line-height:1}.score small{font-size:20px;color:var(--muted);font-weight:600}
+.bar{height:12px;background:var(--line);border-radius:6px;overflow:hidden;margin:10px 0}.bar i{display:block;height:100%;background:var(--brand)}
+.bad{color:var(--warn)}ul.fix{padding-left:0;list-style:none}ul.fix li{padding:10px 0;border-bottom:1px solid var(--line)}
+ul.fix li:before{content:"\2717  ";color:var(--warn);font-weight:700}
+label.chk{display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-bottom:1px solid var(--line);cursor:pointer}
+label.chk input{width:24px;height:24px;flex:none;margin-top:2px}
+.steps li{margin:8px 0}
+form label{display:block;font-weight:600;margin:14px 0 4px}
+input[type=text],input[type=email],input[type=tel],input[type=url],textarea{width:100%;padding:12px;font-size:17px;border:1px solid #c9d1da;border-radius:10px}
+textarea{min-height:80px}.ok{background:var(--brand2);padding:14px;border-radius:10px}
+footer{margin-top:36px;font-size:13px;color:var(--muted)}

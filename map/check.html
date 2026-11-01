@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Your Google Maps listing check</title>
+<link rel="stylesheet" href="style.css">
+</head><body><div class="wrap">
+<header><span class="pin"></span> Put You on the Map</header>
+
+<div id="report">
+  <h1>Your Google Maps listing check</h1>
+  <p class="muted">This link is missing its details. <a href="index.html">Do the free 1-minute check instead.</a></p>
+</div>
+
+<a class="btn" id="go" href="signup.html">Fix it for me for $<span class="price">49</span></a>
+<p class="muted" style="text-align:center;margin:6px 0 0">Nothing up front. Pay only after it's done.</p>
+<p style="margin-top:12px"><a class="btn alt" href="index.html#tips">I'll do it myself (free tips)</a></p>
+
+<footer>
+  Put You on the Map is not affiliated with Google or Apple. Google and Apple listings are free; you'd only pay for our time.
+  <span id="addr"></span> Don't want to hear from us? Reply "stop" to our email.
+</footer>
+</div>
+<script src="config.js"></script>
+<script src="common.js"></script>
+<script>
+const lead = decodeLead();
+if (lead && lead.n) {
+  const missing = !lead.s && (lead.g || []).includes('not on Google Maps');
+  const gaps = (lead.g || []).map((g) => `<li>${esc(g)}</li>`).join('');
+  document.getElementById('report').innerHTML = `
+    <h1>${esc(lead.n)}</h1>
+    <div class="card">
+      ${missing
+        ? `<p class="bad"><b>We couldn't find you on Google Maps.</b></p><p>People nearby who search for what you do are finding someone else.</p>`
+        : `<div class="score">${esc(lead.s)}<small> / 100</small></div>
+           <div class="bar"><i style="width:${Number(lead.s) || 0}%"></i></div>
+           <p>Your listing is on Google Maps, but it's missing things that help people pick you:</p>`}
+      <ul class="fix">${gaps}</ul>
+      <p class="muted">Checked ${esc(lead.d || '')}.</p>
+    </div>`;
+  document.title = lead.n + ': Google Maps listing check';
+  document.getElementById('go').href = 'signup.html#b=' + encodeURIComponent(lead.n);
+}
+</script>
+</body></html>

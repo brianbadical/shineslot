@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Fix my listing: Put You on the Map</title>
+<link rel="stylesheet" href="style.css">
+</head><body><div class="wrap">
+<header><span class="pin"></span> Put You on the Map</header>
+<h1>Tell us about your business</h1>
+<p class="muted">About 3 minutes. We use this to fill in your Google listing.</p>
+
+<form id="f" class="card">
+  <label for="business">Business name (exactly as on your truck or sign)</label>
+  <input type="text" id="business" required maxlength="120">
+  <label for="owner">Your name</label>
+  <input type="text" id="owner" required maxlength="80">
+  <label for="phone">Business phone</label>
+  <input type="tel" id="phone" required maxlength="30">
+  <label for="email">Email (for your receipt and next steps)</label>
+  <input type="email" id="email" required maxlength="120">
+  <label for="what">What do you do?</label>
+  <textarea id="what" maxlength="600" placeholder="For example: mobile car detailing, interior and exterior, ceramic coating"></textarea>
+  <label for="area">Where do you work? (towns or ZIP codes)</label>
+  <input type="text" id="area" maxlength="200">
+  <label for="hours">Your hours</label>
+  <input type="text" id="hours" maxlength="200" placeholder="For example: Mon-Sat 8am-6pm">
+  <label for="link">Website or booking link (if you have one)</label>
+  <input type="url" id="link" maxlength="300" placeholder="https://">
+  <label class="chk" style="font-weight:400"><input type="checkbox" id="agree" required>
+    <span>I own or run this business. I'll stay the owner of my Google listing and add Put You on the Map as a helper. I understand the listing is free and the $<span class="price">49</span> is for setup, paid only after it's done, and nobody can promise a #1 spot.</span></label>
+  <button class="btn" type="submit" style="margin-top:16px">Send</button>
+</form>
+
+<div id="done" class="ok" hidden>
+  <h2 style="margin-top:0">Got it, thank you!</h2>
+  <p id="next"></p>
+</div>
+
+<footer>
+  Put You on the Map is not affiliated with Google or Apple. We never ask for your password.
+  <span id="addr"></span>
+</footer>
+</div>
+<script src="config.js"></script>
+<script src="common.js"></script>
+<script>
+const c = window.PYOTM;
+const pre = location.hash.match(/b=([^&]+)/);
+if (pre) document.getElementById('business').value = decodeURIComponent(pre[1]);
+
+document.getElementById('f').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const v = (id) => document.getElementById(id).value.trim();
+  const row = {
+    business: v('business'), owner: v('owner'), phone: v('phone'), email: v('email'),
+    what: v('what'), area: v('area'), hours: v('hours'), link: v('link'),
+    agreed: document.getElementById('agree').checked, source: pre ? 'check-link' : 'site',
+  };
+  const btn = e.target.querySelector('button');
+  btn.disabled = true; btn.textContent = 'Sending...';
+  try {
+    if (c.online) {
+      const res = await fetch(c.supabaseUrl + '/rest/v1/map_signups', {
+        method: 'POST',
+        headers: { apikey: c.supabaseKey, Authorization: 'Bearer ' + c.supabaseKey, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
+        body: JSON.stringify(row),
+      });
+      if (!res.ok) throw new Error('save failed');
+    } else {
+      const all = JSON.parse(localStorage.getItem('pyotm-test-signups') || '[]');
+      all.push({ ...row, at: new Date().toISOString() });
+      localStorage.setItem('pyotm-test-signups', JSON.stringify(all));
+    }
+    e.target.hidden = true;
+    document.getElementById('done').hidden = false;
+    document.getElementById('next').innerHTML = (c.payLink && !c.payAfterDone)
+      ? `Last step: <a href="${esc(c.payLink)}">pay $${esc(c.price)} with PayPal</a>. Then we'll email you a short video showing how to prove the listing is yours.`
+      : `Nothing to pay yet. We'll email you within a day with a short video showing how to prove the listing is yours. You pay $${esc(c.price)} with PayPal only after your listing is fixed.`;
+  } catch (_) {
+    btn.disabled = false; btn.textContent = 'Send';
+    alert('That did not go through. Please try again in a minute.');
+  }
+});
+</script>
+</body></html>

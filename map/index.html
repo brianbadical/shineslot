@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Put You on the Map: get found on Google Maps</title>
+<meta name="description" content="Free 1-minute check of your Google Maps listing. We fix it for you for one low price. You stay the owner.">
+<link rel="stylesheet" href="style.css">
+</head><body><div class="wrap">
+<header><span class="pin"></span> Put You on the Map</header>
+
+<h1>People are searching the map for you. Can they find you?</h1>
+<p class="muted">Most customers pick a local business right from Google Maps. A complete listing gets more calls. We fix yours for you, one time, for one low price. You stay the owner.</p>
+
+<div class="card">
+  <h2 style="margin-top:0">Free 1-minute check</h2>
+  <p class="muted">Search your business on Google Maps, then tick what you see.</p>
+  <div id="checks"></div>
+  <div style="margin-top:16px">
+    <div class="score"><span id="sc">0</span><small> / 100</small></div>
+    <div class="bar"><i id="bar" style="width:0"></i></div>
+    <p id="verdict" class="muted">Tick the boxes above.</p>
+  </div>
+</div>
+
+<a class="btn" href="signup.html">Fix my listing for $<span class="price">49</span></a>
+
+<h2>How it works</h2>
+<ol class="steps">
+  <li><b>Tell us about your business.</b> Hours, what you do, where you work. 3 minutes on your phone.</li>
+  <li><b>Prove it's yours.</b> Google asks the owner for a short phone video or a code. We show you exactly what to do.</li>
+  <li><b>Add us as a helper.</b> Two taps. You stay the owner and can remove us anytime.</li>
+  <li><b>We do the rest.</b> Hours, services, photos, description, booking link. Done in about a week.</li>
+  <li><b>Pay only when it's done.</b> $<span class="price">49</span> with PayPal, with a receipt. Nothing up front.</li>
+</ol>
+
+<h2>Good to know</h2>
+<ul>
+  <li>Your Google listing itself is free. You pay only for our time setting it up.</li>
+  <li>Nobody can honestly promise a #1 spot. A complete, verified listing is the first step to showing up.</li>
+  <li>We never ask for your password and never post fake reviews.</li>
+  <li>Google explains how outside helpers must work: <a href="https://support.google.com/business/answer/7353941">Google's rules for helpers</a>. We follow them.</li>
+</ul>
+
+<h2>Who we are</h2>
+<div class="card">
+  <p>Put You on the Map is a small US business run by Brian. We help local service pros (detailers, cleaners, mechanics, lawn care and more) get found on Google Maps and Apple Maps.</p>
+  <p>Questions before you start? <a class="mailto" href="#">Email us</a> and a real person will answer.</p>
+  <p class="muted">We will never call you pretending to be Google, ask for your password, or ask you to pay before the work is done. If anyone does, it isn't us.</p>
+</div>
+
+<h2 id="tips">Rather do it yourself?</h2>
+<ol class="steps">
+  <li>Go to business.google.com on your phone and search your business name. Claim it, or add it if it's not there.</li>
+  <li>Use your real business name only. No extra words like "best" or your city.</li>
+  <li>If you work at customers' homes, choose "I deliver to customers" and hide your home address.</li>
+  <li>Google will ask for a short video: show your truck or sign, your tools, and a business paper.</li>
+  <li>Add hours, what you do, the towns you serve, 5+ photos of your work, and your booking link.</li>
+  <li>Ask every customer for a review after each job.</li>
+</ol>
+
+<a class="btn" href="signup.html">Or let us do it: get started</a>
+
+<footer>
+  Put You on the Map is not affiliated with Google or Apple. Google and Apple listings are free.
+  <span id="addr"></span> Questions: <a id="mail" href="#">email us</a>.
+</footer>
+</div>
+<script src="config.js"></script>
+<script src="common.js"></script>
+<script>
+const CHECKS = [
+  ['found', 'My business shows up when I search its name on Google Maps', 25],
+  ['hours', 'It shows my opening hours', 15],
+  ['photos', 'It has 5 or more photos', 15],
+  ['site', 'It has a website or booking link', 15],
+  ['reviews', 'It has 10 or more reviews', 15],
+  ['phone', 'It shows the right phone number', 10],
+  ['desc', 'It says what I do and where I work', 5],
+];
+const box = document.getElementById('checks');
+box.innerHTML = CHECKS.map(([id, text]) => `<label class="chk"><input type="checkbox" id="c-${id}"> <span>${text}</span></label>`).join('');
+function update() {
+  let s = 0;
+  for (const [id, , pts] of CHECKS) if (document.getElementById('c-' + id).checked) s += pts;
+  document.getElementById('sc').textContent = s;
+  document.getElementById('bar').style.width = s + '%';
+  document.getElementById('verdict').textContent =
+    s === 100 ? 'Nice, your listing looks complete.' :
+    s >= 70 ? 'Close. A few fixes will help people pick you.' :
+    'Customers may be picking someone else. This is worth fixing.';
+}
+box.addEventListener('change', update);
+</script>
+</body></html>
