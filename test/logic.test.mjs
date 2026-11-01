@@ -209,3 +209,12 @@ test('getting paid: pay settings, links, mark paid, earnings', async () => {
   assert.equal(earnings([r], '2026-11-12').week, 0);
   assert.equal(applyUnpaid(r, { now }).paid, null);
 });
+
+test('owners can set their own tick-box choices', async () => {
+  const { servicesOf, parseChoices } = await import('../logic.js');
+  assert.deepEqual(servicesOf({ trade: 'detailing' }), TRADES.detailing.services);
+  assert.deepEqual(servicesOf({ trade: 'detailing', services: ['Interior', 'Exterior'] }), ['Interior', 'Exterior']);
+  assert.deepEqual(servicesOf({ trade: 'detailing', services: [] }), TRADES.detailing.services);
+  assert.deepEqual(parseChoices(' Interior \n\nInterior\nExterior').choices, ['Interior', 'Exterior']);
+  assert.equal(parseChoices('').errors.length, 1);
+});

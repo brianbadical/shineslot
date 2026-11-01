@@ -1,7 +1,7 @@
 // Shared online store on Supabase. Same methods as LocalStore, plus owner sign-in.
 // Owners read and change only their own data (database rules in supabase/schema.sql).
 // Customers never sign in: they use the get_business / submit_request / get_quote / accept_quote functions.
-import { DEFAULT_SETTINGS } from './store.js?v=202611010312';
+import { DEFAULT_SETTINGS } from './store.js?v=202611010321';
 
 const PICK = 'shineslot:business';
 const SDK = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';

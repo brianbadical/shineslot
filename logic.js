@@ -459,3 +459,14 @@ export function earnings(reqs, today = localDay(), nowWhen = today + 'T23:59') {
   for (const k of ['week', 'month', 'year', 'tips', 'owed']) sum[k] = Math.round(sum[k] * 100) / 100;
   return sum;
 }
+
+// The tick-box choices on the customer form: the owner's own list, or the trade's starter list.
+export const MAX_CHOICES = 15;
+export function servicesOf(settings) {
+  const own = Array.isArray(settings && settings.services) ? settings.services.filter(x => typeof x === 'string' && x.trim()) : [];
+  return own.length ? own : tradeOf(settings && settings.trade).services;
+}
+export function parseChoices(text) {
+  const list = [...new Set(String(text || '').split('\n').map(x => x.trim().slice(0, 50)).filter(Boolean))];
+  return { choices: list.slice(0, MAX_CHOICES), errors: list.length > MAX_CHOICES ? [`Up to ${MAX_CHOICES} choices.`] : list.length ? [] : ['Add at least one choice.'] };
+}

@@ -1,11 +1,11 @@
 import {
   TRADES, tradeOf, MAX_PHOTOS, STATUS_LABEL, makeRequest, validateRequest, applyQuote, applyAccept,
-  applyDone, applyDecline, inboxOrder, WEEKDAYS, WEEKDAY_NAMES, hoursOf, validateBlock, blocksOn, isOpenDay, openDays, clashes, prettyTime, prettyDay, detailLines, parseSizes, sizesText, sizePrice, validatePay, payLinks, applyPaid, applyUnpaid, earnings, PAY_METHODS, jobsForDay, dayTotal, weekOf, shiftDay, money, prettyWhen, localDay, mapsLink,
-} from './logic.js?v=202611010312';
-import { LocalStore, newId } from './store.js?v=202611010312';
-import { CloudStore, slugify } from './cloud.js?v=202611010312';
-import { SUPABASE_URL, SUPABASE_KEY } from './config.js?v=202611010312';
-import { sampleRequests } from './sample.js?v=202611010312';
+  applyDone, applyDecline, inboxOrder, WEEKDAYS, WEEKDAY_NAMES, hoursOf, validateBlock, blocksOn, isOpenDay, openDays, clashes, prettyTime, prettyDay, detailLines, parseSizes, sizesText, sizePrice, servicesOf, parseChoices, validatePay, payLinks, applyPaid, applyUnpaid, earnings, PAY_METHODS, jobsForDay, dayTotal, weekOf, shiftDay, money, prettyWhen, localDay, mapsLink,
+} from './logic.js?v=202611010321';
+import { LocalStore, newId } from './store.js?v=202611010321';
+import { CloudStore, slugify } from './cloud.js?v=202611010321';
+import { SUPABASE_URL, SUPABASE_KEY } from './config.js?v=202611010321';
+import { sampleRequests } from './sample.js?v=202611010321';
 
 // Falls back to memory (lost on reload) if the browser blocks storage.
 function safeStorage() {
@@ -87,7 +87,7 @@ async function viewRequest(slug) {
     ${t.composeItem ? '' : `<label for="vehicle">${esc(t.itemLabel)}</label><input id="vehicle" name="vehicle" placeholder="${esc(t.itemHint)}">`}
     ${t.questions ? questionsHtml(t, 0) : ''}
     <label>${esc(t.servicesLabel)}</label>
-    <div class="chips">${t.services.map(x => `<label class="chip"><input type="checkbox" name="services" value="${esc(x)}"><span>${esc(x)}</span></label>`).join('')}</div>
+    <div class="chips">${servicesOf(s).map(x => `<label class="chip"><input type="checkbox" name="services" value="${esc(x)}"><span>${esc(x)}</span></label>`).join('')}</div>
     <label>${esc(t.photosLabel)} (optional, up to ${MAX_PHOTOS})</label>
     <div class="photos" id="ph"></div>
     <label>When are you free? (pick any)</label>
@@ -474,6 +474,9 @@ async function viewSettings() {
     <label for="pkgName">Service name</label><input id="pkgName" name="pkgName" maxlength="80" value="${esc(s.pkg?.name || '')}" placeholder="For example The Inside And Outside Detail">
     <label for="pkgTime">How long it takes</label><input id="pkgTime" name="pkgTime" maxlength="40" value="${esc(s.pkg?.time || '')}" placeholder="For example 2 hr 30 min+">
     <label for="pkgAbout">What's included</label><textarea id="pkgAbout" name="pkgAbout" maxlength="3000" rows="8" placeholder="One item per line. End a line with : to make a heading, like Interior:">${esc(s.pkg?.about || '')}</textarea>
+    <label for="choices">Choices customers can tick</label>
+    <textarea id="choices" name="choices" rows="6" maxlength="1000">${esc(servicesOf(s).join('\n'))}</textarea>
+    <p class="meta">One per line. Delete the ones you don't offer, add your own.</p>
     <label for="sizes">${esc(tradeOf(s.trade).sizesLabel || 'Sizes')} and starting prices</label>
     <textarea id="sizes" name="sizes" rows="4" placeholder="One per line, for example:&#10;Car = 120&#10;Small SUV = 140&#10;Large SUV / pickup = 170+">${esc(sizesText(s.sizes))}</textarea>
     <p class="meta">Customers tap one. Add + after a price for "and up". The price fills in when you quote.</p>
@@ -537,10 +540,13 @@ async function viewSettings() {
   $('#svc').addEventListener('submit', async e => {
     e.preventDefault();
     const f = new FormData(e.target);
-    const { sizes, errors } = parseSizes(f.get('sizes'));
+    const { sizes, errors: e1 } = parseSizes(f.get('sizes'));
+    const { choices, errors: e2 } = parseChoices(f.get('choices'));
+    const errors = [...e2, ...e1];
     if (errors.length) { e.target.querySelector('[data-err]').innerHTML = errors.map(esc).join('<br>'); return; }
     const pkg = { name: f.get('pkgName').trim(), time: f.get('pkgTime').trim(), about: f.get('pkgAbout').trim() };
-    await store.saveSettings({ sizes, pkg }); toast('Saved'); render();
+    const same = choices.join('\n') === tradeOf((await store.getSettings()).trade).services.join('\n');
+    await store.saveSettings({ sizes, pkg, services: same ? null : choices }); toast('Saved'); render();
   });
   $('#out')?.addEventListener('click', async () => { await store.signOut(); render(); });
   let armed = false;
