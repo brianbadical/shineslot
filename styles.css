@@ -105,3 +105,13 @@ details.answers .btn{margin-top:8px}
 .earn b{font-size:1.1rem}
 .receipt .row-line{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--line)}
 .receipt .row-line.total{border-bottom:0;font-size:1.1rem}
+details.sec{margin-bottom:10px}
+details.sec>summary{list-style:none;display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;cursor:pointer;min-height:64px}
+details.sec>summary::-webkit-details-marker{display:none}
+details.sec>summary::after{content:'›';margin-left:auto;font-size:1.6rem;color:var(--muted);transition:transform .15s}
+details.sec[open]>summary::after{transform:rotate(90deg)}
+details.sec[open]>summary{border-radius:14px 14px 0 0;border-bottom:0}
+details.sec>.card{border-radius:0 0 14px 14px;margin-top:0}
+.sec-i{font-size:1.4rem}
+.sec-t{font-weight:700;font-size:1.05rem;display:flex;flex-direction:column}
+.sec-t small{font-weight:400;color:var(--muted);font-size:.85rem}

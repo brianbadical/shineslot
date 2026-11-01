@@ -1,11 +1,11 @@
 import {
   TRADES, tradeOf, MAX_PHOTOS, STATUS_LABEL, makeRequest, validateRequest, applyQuote, applyAccept,
   applyDone, applyDecline, inboxOrder, WEEKDAYS, WEEKDAY_NAMES, hoursOf, validateBlock, blocksOn, isOpenDay, openDays, clashes, prettyTime, prettyDay, detailLines, parseSizes, sizesText, sizePrice, servicesOf, parseChoices, validatePay, payLinks, applyPaid, applyUnpaid, earnings, PAY_METHODS, jobsForDay, dayTotal, weekOf, shiftDay, money, prettyWhen, localDay, mapsLink,
-} from './logic.js?v=202611010321';
-import { LocalStore, newId } from './store.js?v=202611010321';
-import { CloudStore, slugify } from './cloud.js?v=202611010321';
-import { SUPABASE_URL, SUPABASE_KEY } from './config.js?v=202611010321';
-import { sampleRequests } from './sample.js?v=202611010321';
+} from './logic.js?v=202611010324';
+import { LocalStore, newId } from './store.js?v=202611010324';
+import { CloudStore, slugify } from './cloud.js?v=202611010324';
+import { SUPABASE_URL, SUPABASE_KEY } from './config.js?v=202611010324';
+import { sampleRequests } from './sample.js?v=202611010324';
 
 // Falls back to memory (lost on reload) if the browser blocks storage.
 function safeStorage() {
@@ -455,10 +455,15 @@ async function viewShare() {
 }
 
 // ---------- detailer: settings ----------
+let lastOpenSec = -1;
 async function viewSettings() {
   await shell(false);
   const s = await store.getSettings();
+  const openDays = WEEKDAYS.filter(k => hoursOf(s)[k]).length;
+  const sec = (icon, title, status) => `<summary><span class="sec-i">${icon}</span><span class="sec-t">${title}<small>${esc(status)}</small></span></summary>`;
   app.innerHTML = `<h1>Settings</h1>
+  <p class="meta">Tap a section to open it.</p>
+  <details class="sec">${sec('🏷️', 'Your business', s.business || 'Name, area, message')}
   <form id="st" class="card">
     <label for="trade">Type of work</label><select id="trade" name="trade">${Object.entries(TRADES).map(([k, v]) => `<option value="${k}"${k === (s.trade || 'detailing') ? ' selected' : ''}>${esc(v.name)}</option>`).join('')}</select>
     <label for="business">Business name</label><input id="business" name="business" value="${esc(s.business)}" placeholder="${esc(tradeOf(s.trade).defaultBusiness)}">
@@ -467,8 +472,8 @@ async function viewSettings() {
     <label for="shopAddress">Shop address (shown to customers once booked; for garages)</label><input id="shopAddress" name="shopAddress" value="${esc(s.shopAddress || '')}">
     <label for="intro">Message at the top of your form</label><textarea id="intro" name="intro" placeholder="${esc(tradeOf(s.trade).intro)}">${esc(s.intro)}</textarea>
     <button class="btn block" type="submit">Save</button>
-  </form>
-  <h2>Your service and prices</h2>
+  </form></details>
+  <details class="sec">${sec('💲', 'Services and prices', `${servicesOf(s).length} choices${(s.sizes || []).length ? ' · prices set' : ''}`)}
   <form id="svc" class="card">
     <p class="meta">Shown at the top of your customer form. All optional.</p>
     <label for="pkgName">Service name</label><input id="pkgName" name="pkgName" maxlength="80" value="${esc(s.pkg?.name || '')}" placeholder="For example The Inside And Outside Detail">
@@ -482,8 +487,8 @@ async function viewSettings() {
     <p class="meta">Customers tap one. Add + after a price for "and up". The price fills in when you quote.</p>
     <div class="errors" data-err></div>
     <button class="btn block" type="submit">Save service and prices</button>
-  </form>
-  <h2>Getting paid <span class="opt">(optional)</span></h2>
+  </form></details>
+  <details class="sec">${sec('💵', 'Getting paid', s.pay?.on ? 'Pay buttons on' : 'Off (optional)')}
   <form id="pay" class="card" novalidate>
     <label class="chip"><input type="checkbox" name="on"${s.pay?.on ? ' checked' : ''}><span>Show pay buttons to customers after they book</span></label>
     <p class="meta">Money goes straight to you. ShineSlot never touches it and takes nothing. Fill in only the ones you use.</p>
@@ -495,19 +500,21 @@ async function viewSettings() {
     <p class="meta">Mark jobs paid from the Calendar to see your earnings by week, month and year. That works even with pay buttons off.</p>
     <div class="errors" data-err></div>
     <button class="btn block" type="submit">Save payment settings</button>
-  </form>
-  <h2>Working hours</h2>
+  </form></details>
+  <details class="sec">${sec('🕘', 'Working hours', `Open ${openDays} day${openDays === 1 ? '' : 's'} a week`)}
   <form id="hrs" class="card">
     <p class="meta">Customers only see open days. To take a single day or a few hours off, open that day in the Calendar.</p>
     ${['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'].map(k => { const h = hoursOf(s)[k]; return `<div class="hours-row"><label class="chip"><input type="checkbox" name="open-${k}"${h ? ' checked' : ''}><span>${WEEKDAY_NAMES[k].slice(0, 3)}</span></label>
       <input type="time" name="start-${k}" value="${h ? h[0] : '09:00'}" aria-label="${WEEKDAY_NAMES[k]} start"><span>to</span><input type="time" name="end-${k}" value="${h ? h[1] : '17:00'}" aria-label="${WEEKDAY_NAMES[k]} end"></div>`; }).join('')}
     <div class="errors" data-err></div>
     <button class="btn block" type="submit">Save hours</button>
-  </form>
-  ${cloud ? alertsCard(s) : ''}
+  </form></details>
+  ${cloud ? `<details class="sec">${sec('🔔', 'Phone alerts', s.ntfyTopic ? 'On' : 'Off (optional)')}${alertsCard(s)}</details>` : ''}
   ${cloud ? await businessesCard() : ''}
   ${store.mode === 'demo' ? `<h2>Demo tools</h2><div class="card"><p class="meta">Fill the app with a few made-up requests to try it out, or start over.</p>
     <div class="btns"><button class="btn ghost small" id="seed">Add sample requests</button><button class="btn danger small" id="wipe">Clear everything</button></div></div>` : ''}`;
+  // Keep the section you were working in open after saving.
+  app.querySelectorAll('details.sec').forEach((d, i) => { if (i === lastOpenSec) d.open = true; d.addEventListener('toggle', () => { if (d.open) lastOpenSec = i; }); });
   $('#st').addEventListener('submit', async e => {
     e.preventDefault();
     const f = new FormData(e.target);
@@ -559,10 +566,10 @@ async function viewSettings() {
 // One login can run more than one business (for example detailing and window tint).
 async function businessesCard() {
   const all = await store.businesses(), cur = await store.business();
-  return `<h2>Your businesses</h2><div class="card">
+  return `<details class="sec">${'<summary><span class="sec-i">🏢</span><span class="sec-t">Your businesses<small>' + all.length + ' · add another or sign out</small></span></summary>'}<div class="card">
     ${all.map(b => `<div class="block-row"><div><b>${esc(b.settings.business || b.slug)}</b><div class="meta">${esc(tradeOf(b.settings.trade).name)} · #book-${esc(b.slug)}</div></div>
       ${b.id === cur.id ? '<span class="status accepted">Open now</span>' : `<button class="btn ghost small" data-switch="${esc(b.id)}">Switch</button>`}</div>`).join('')}
-    <div class="btns"><a class="btn ghost small" href="#new">+ Add another business</a><button class="btn ghost small" id="out">Sign out</button></div></div>`;
+    <div class="btns"><a class="btn ghost small" href="#new">+ Add another business</a><button class="btn ghost small" id="out">Sign out</button></div></div></details>`;
 }
 
 document.addEventListener('click', async e => {
@@ -580,9 +587,9 @@ function newTopic() {
 }
 
 function alertsCard(s) {
-  if (!s.ntfyTopic) return `<h2>Phone alerts</h2><div class="card"><p class="meta">Get a buzz on your phone for every new request. Free, through the ntfy app. Alerts show the car and the job only.</p>
+  if (!s.ntfyTopic) return `<div class="card"><p class="meta">Get a buzz on your phone for every new request. Free, through the ntfy app. Alerts show the car and the job only.</p>
     <button class="btn small" id="alerts-on">Turn on phone alerts</button></div>`;
-  return `<h2>Phone alerts</h2><div class="card">
+  return `<div class="card">
     <p class="meta"><b>1.</b> Install the free <b>ntfy</b> app (App Store or Google Play).<br>
     <b>2.</b> In ntfy tap <b>+</b>, then paste this name and tap Subscribe:</p>
     <div class="linkbox"><input readonly value="${esc(s.ntfyTopic)}" aria-label="Alert name"><button class="btn small" id="alerts-copy">Copy</button></div>
