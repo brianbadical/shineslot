@@ -78,14 +78,14 @@ async function viewRequest(slug) {
       <div><label for="phone">Phone</label><input id="phone" name="phone" type="tel" autocomplete="tel"></div>
       <div><label for="email">Email</label><input id="email" name="email" type="email" autocomplete="email"></div>
     </div>
-    <label for="vehicle">Vehicle</label><input id="vehicle" name="vehicle" placeholder="For example 2019 Honda CR-V">
+    <label for="vehicle">${esc(t.itemLabel)}</label><input id="vehicle" name="vehicle" placeholder="${esc(t.itemHint)}">
     <label>${esc(t.servicesLabel)}</label>
     <div class="chips">${t.services.map(x => `<label class="chip"><input type="checkbox" name="services" value="${esc(x)}"><span>${esc(x)}</span></label>`).join('')}</div>
     <label>${esc(t.photosLabel)} (optional, up to ${MAX_PHOTOS})</label>
     <div class="photos" id="ph"></div>
     <label>When are you free?</label>
     <div class="chips">${TIMES.map(x => `<label class="chip"><input type="checkbox" name="times" value="${esc(x)}"><span>${esc(x)}</span></label>`).join('')}</div>
-    ${t.atShop ? '' : `<label for="address">Where will the car be?</label><input id="address" name="address" placeholder="Street address or area" autocomplete="street-address">`}
+    ${t.atShop ? '' : `<label for="address">${esc(t.addressLabel)}</label><input id="address" name="address" placeholder="Street address or area" autocomplete="street-address">`}
     <label for="notes">${esc(t.notesLabel)}</label><textarea id="notes" name="notes" placeholder="${esc(t.notesHint)}"></textarea>
     <div class="errors" id="err"></div>
     <button class="btn block" type="submit">Send request</button>
@@ -112,7 +112,7 @@ async function viewRequest(slug) {
 
 function drawPhotos() {
   const box = $('#ph'); if (!box) return;
-  box.innerHTML = draftPhotos.map((p, i) => `<div class="rm"><img src="${p}" alt="Car photo ${i + 1}"><button type="button" data-rm="${i}" aria-label="Remove photo">✕</button></div>`).join('')
+  box.innerHTML = draftPhotos.map((p, i) => `<div class="rm"><img src="${p}" alt="Photo ${i + 1}"><button type="button" data-rm="${i}" aria-label="Remove photo">✕</button></div>`).join('')
     + (draftPhotos.length < MAX_PHOTOS ? `<label class="addphoto">+ Add<br>photo<input type="file" accept="image/*" multiple id="file"></label>` : '');
   box.querySelectorAll('[data-rm]').forEach(b => b.onclick = () => { draftPhotos.splice(+b.dataset.rm, 1); drawPhotos(); });
   const file = $('#file');
@@ -285,7 +285,7 @@ async function viewShare() {
   const biz = await store.business();
   const link = `${baseLink()}#${cloud ? 'book-' + biz.slug : 'request'}`;
   app.innerHTML = `<h1>Your booking link</h1>
-  <p class="lead">Text this to customers, or put it in your Instagram or Facebook bio. They fill in their car and what they need, and it shows up in Requests.</p>
+  <p class="lead">Text this to customers, or put it in your Instagram or Facebook bio. They describe what they need, and it shows up in Requests.</p>
   <div class="card"><div class="linkbox"><input readonly value="${esc(link)}" aria-label="Your booking link"><button class="btn small" id="cp">Copy</button></div>
   <div class="btns"><a class="btn ghost small" href="#${cloud ? 'book-' + esc(biz.slug) : 'request'}">Open the form</a></div></div>
   ${store.mode === 'demo' ? `<p class="meta">Demo note: right now requests only show up on this same device. The shared version comes next.</p>` : ''}`;

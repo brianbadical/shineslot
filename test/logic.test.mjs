@@ -113,3 +113,15 @@ test('demo store hands customers a token and accepts by token', async () => {
   assert.equal((await store.getQuote(token)).request.status, 'accepted');
   assert.equal(await store.getQuote('nope'), null);
 });
+
+test('cleaning trade asks about the home and needs an address', async () => {
+  const home = { name: 'Ann', phone: '555-123-4567', vehicle: '', services: ['Deep clean'], address: '' };
+  const errs = validateRequest(home, 'cleaning').join(' ');
+  assert.match(errs, /place/);
+  assert.match(errs, /address/);
+  assert.deepEqual(validateRequest({ ...home, vehicle: '3 bed house', address: '1 Main' }, 'cleaning'), []);
+  assert.equal(TRADES.cleaning.atShop, false);
+  const rows = sampleRequests(new Date('2026-11-01T15:00:00'), 'cleaning');
+  assert.equal(rows.length, 3);
+  assert.match(rows[0].vehicle, /bath/);
+});

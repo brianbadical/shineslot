@@ -7,6 +7,10 @@ export const TRADES = {
     defaultBusiness: 'Your Detailing',
     tagline: 'Mobile detailing',
     worker: 'the detailer',
+    itemLabel: 'Vehicle',
+    itemHint: 'For example 2019 Honda CR-V',
+    itemError: 'Add the vehicle (for example 2019 Honda CR-V).',
+    addressLabel: 'Where will the car be?',
     servicesLabel: 'What do you want done?',
     services: ['Interior', 'Exterior', 'Full detail', 'Pet hair', 'Stains or odor', 'Headlights', 'Engine bay'],
     notesLabel: 'Anything else?',
@@ -21,6 +25,10 @@ export const TRADES = {
     defaultBusiness: 'Your Garage',
     tagline: 'Auto repair',
     worker: 'the mechanic',
+    itemLabel: 'Vehicle',
+    itemHint: 'For example 2019 Honda CR-V',
+    itemError: 'Add the vehicle (for example 2019 Honda CR-V).',
+    addressLabel: 'Where will the car be?',
     servicesLabel: 'What does it need?',
     services: ['Oil change', 'Brakes', 'Check engine light', 'Battery or starting', 'Noise or vibration', 'AC or heat', 'Tune-up', 'Not sure'],
     notesLabel: "What's going on with it?",
@@ -30,6 +38,24 @@ export const TRADES = {
     noteHint: 'For example: parts and labor, about 2 hours',
     atShop: true, // customers bring the car to the garage, so no address is asked
   },
+  cleaning: {
+    name: 'Cleaning',
+    defaultBusiness: 'Your Cleaning',
+    tagline: 'Home cleaning',
+    worker: 'your cleaner',
+    itemLabel: 'Your place',
+    itemHint: 'For example 3 bed, 2 bath house',
+    itemError: 'Tell us about the place (for example 3 bed, 2 bath house).',
+    addressLabel: 'Address',
+    servicesLabel: 'What kind of clean?',
+    services: ['Standard clean', 'Deep clean', 'Move-in or move-out', 'Kitchen', 'Bathrooms', 'Inside fridge or oven', 'Windows', 'Laundry', 'Office'],
+    notesLabel: 'Anything else?',
+    notesHint: 'Pets, how often (weekly, every 2 weeks, one time), how to get in, parking...',
+    photosLabel: 'Photos of the rooms',
+    intro: 'Tell me about your place and what you need. I will send you a price and a time.',
+    noteHint: 'For example: deep clean, about 4 hours, supplies included',
+    atShop: false,
+  },
 };
 export const tradeOf = key => TRADES[key] || TRADES.detailing;
 export const SERVICES = TRADES.detailing.services;
@@ -37,7 +63,7 @@ export const TIMES = ['Weekday mornings', 'Weekday afternoons', 'Weekday evening
 export const MAX_PRICE = 10000;
 export const MAX_PHOTOS = 4;
 
-// new -> quoted -> accepted -> done. The detailer can decline a new or quoted request.
+// new -> quoted -> accepted -> done. The owner can decline a new or quoted request.
 export const STATUS_LABEL = { new: 'New request', quoted: 'Price sent', accepted: 'Booked', done: 'Done', declined: 'Declined' };
 
 const clean = v => String(v ?? '').trim();
@@ -49,7 +75,7 @@ export function validateRequest(input, trade = 'detailing') {
   if (!phone && !email) errors.push('Add a phone number or email so we can reply.');
   if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) errors.push('That email does not look right.');
   if (phone && phone.replace(/\D/g, '').length < 7) errors.push('That phone number looks too short.');
-  if (!clean(input.vehicle)) errors.push('Add the vehicle (for example 2019 Honda CR-V).');
+  if (!clean(input.vehicle)) errors.push(tradeOf(trade).itemError); // 'vehicle' holds the car, or the home for cleaning
   if (!Array.isArray(input.services) || input.services.length === 0) errors.push('Pick at least one thing you want done.');
   if (!tradeOf(trade).atShop && !clean(input.address)) errors.push('Add the address or area where the car will be.');
   if ((input.photos || []).length > MAX_PHOTOS) errors.push(`Up to ${MAX_PHOTOS} photos.`);
