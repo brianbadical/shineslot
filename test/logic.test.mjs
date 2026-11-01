@@ -338,3 +338,13 @@ test('bakery: pickup orders need no address', () => {
   assert.match(validateRequest(o, 'cleaning').join(' '), /Add the address/);
   assert.equal(TRADES.bakery.noRepeat, true);
 });
+
+import { MAP_CATEGORY, hoursLines, mapDescription } from '../logic.js';
+test('Get on the map: every trade has a category, hours and description read well', () => {
+  for (const k of Object.keys(TRADES)) assert.ok(MAP_CATEGORY[k], 'category for ' + k);
+  assert.deepEqual(hoursLines({ hours: { mon: ['08:00', '17:30'], sun: null } }).slice(0, 1), ['Monday: 8 AM to 5:30 PM']);
+  assert.equal(hoursLines({ hours: { sun: null } }).at(-1), 'Sunday: Closed');
+  const d = mapDescription({ trade: 'cleaning', business: 'Fresh Space', owner: 'Selena', area: 'Tampa' });
+  assert.match(d, /^Fresh Space offers home cleaning in Tampa\./);
+  assert.ok(d.length <= 750 && !/https?:/.test(d));
+});

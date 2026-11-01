@@ -725,3 +725,29 @@ export function pickPro(pros, opts) {
   const week = shiftDay(opts.today, 7);
   return rankPros(pros, opts).find(p => p.gap <= 20 && p.next && p.next <= week) || null;
 }
+
+// ---------- Get on the map (Google Business Profile, Apple Business Connect) ----------
+// The category name to search for when setting up the listing.
+export const MAP_CATEGORY = {
+  detailing: 'Car detailing service', mechanic: 'Auto repair shop', tint: 'Window tinting service', cleaning: 'House cleaning service',
+  pressure: 'Pressure washing service', lawn: 'Lawn care service', handyman: 'Handyman', junk: 'Junk removal service',
+  grooming: 'Pet groomer', painting: 'Painter', pool: 'Pool cleaning service', carpet: 'Carpet cleaning service',
+  windows: 'Window cleaning service', moving: 'Moving company', bakery: 'Bakery',
+};
+const ampm = t => { const [h, m] = t.split(':').map(Number); return `${h % 12 || 12}${m ? ':' + String(m).padStart(2, '0') : ''} ${h < 12 ? 'AM' : 'PM'}`; };
+export function hoursLines(settings) {
+  const h = hoursOf(settings);
+  return ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'].map(k => `${WEEKDAY_NAMES[k]}: ${h[k] ? ampm(h[k][0]) + ' to ' + ampm(h[k][1]) : 'Closed'}`);
+}
+// A ready-to-paste description, under Google's 750 characters. No links or prices (Google doesn't allow them there).
+export function mapDescription(settings) {
+  const t = tradeOf(settings.trade), name = settings.business || t.defaultBusiness;
+  const what = (settings.services && settings.services.length ? settings.services : t.services || []).slice(0, 6).map(x => /^(Airbnb|AC|UV)\b/.test(x) ? x : x[0].toLowerCase() + x.slice(1)).join(', ');
+  const parts = [
+    `${name} offers ${t.tagline.toLowerCase()}${settings.area ? ' in ' + settings.area : ''}.`,
+    what ? `Services include ${what}.` : '',
+    settings.owner ? `Owned and run by ${settings.owner}, so you deal with the same person from first message to finished job.` : '',
+    'Send a request online with what you need and when you are free, and get a price and a time back.',
+  ];
+  return parts.filter(Boolean).join(' ').slice(0, 750);
+}

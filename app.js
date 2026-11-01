@@ -1,12 +1,12 @@
 import {
   TRADES, tradeOf, MAX_PHOTOS, STATUS_LABEL, makeRequest, validateRequest, applyQuote, applyAccept,
-  applyDone, applyDecline, inboxOrder, WEEKDAYS, WEEKDAY_NAMES, hoursOf, validateBlock, blocksOn, isOpenDay, openDays, clashes, prettyTime, prettyDay, detailLines, parseSizes, sizesText, sizePrice, servicesOf, parseChoices, tradeFor, parseQuestions, validatePay, payLinks, applyPaid, applyUnpaid, earnings, PAY_METHODS, splitBookLink, RATING_GOOD, RATING_BAD, canRate, validateRating, ratingSummary, starsText, REPEAT_CHOICES, repeatLabel, dueForRebook, againFields, parseZips, startingPrice, rankPros, pickPro, jobsForDay, dayTotal, weekOf, shiftDay, money, prettyWhen, localDay, mapsLink,
-} from './logic.js?v=202611010416';
-import { LocalStore, newId } from './store.js?v=202611010416';
-import { CloudStore, slugify } from './cloud.js?v=202611010416';
-import { SUPABASE_URL, SUPABASE_KEY } from './config.js?v=202611010416';
-import { sampleRequests } from './sample.js?v=202611010416';
-import qrcode from './qr.js?v=202611010416';
+  applyDone, applyDecline, inboxOrder, WEEKDAYS, WEEKDAY_NAMES, hoursOf, validateBlock, blocksOn, isOpenDay, openDays, clashes, prettyTime, prettyDay, detailLines, parseSizes, sizesText, sizePrice, servicesOf, parseChoices, tradeFor, parseQuestions, validatePay, payLinks, applyPaid, applyUnpaid, earnings, PAY_METHODS, splitBookLink, RATING_GOOD, RATING_BAD, canRate, validateRating, ratingSummary, starsText, REPEAT_CHOICES, repeatLabel, dueForRebook, againFields, parseZips, startingPrice, rankPros, pickPro, MAP_CATEGORY, hoursLines, mapDescription, jobsForDay, dayTotal, weekOf, shiftDay, money, prettyWhen, localDay, mapsLink,
+} from './logic.js?v=202611010422';
+import { LocalStore, newId } from './store.js?v=202611010422';
+import { CloudStore, slugify } from './cloud.js?v=202611010422';
+import { SUPABASE_URL, SUPABASE_KEY } from './config.js?v=202611010422';
+import { sampleRequests } from './sample.js?v=202611010422';
+import qrcode from './qr.js?v=202611010422';
 
 // Falls back to memory (lost on reload) if the browser blocks storage.
 function safeStorage() {
@@ -649,6 +649,7 @@ async function viewShare() {
   <div class="card"><div class="linkbox"><input readonly value="${esc(link)}" aria-label="Your booking link"><button class="btn small" id="cp">Copy</button></div>
   ${navigator.share ? '<button class="btn block" id="sh">📤 Send my link</button>' : ''}
   <div class="btns"><a class="btn ghost small" href="#${cloud ? 'book-' + esc(biz.slug) : 'request'}">See what customers see</a></div></div>
+  <a class="card maplink" href="#map"><b>📍 Get on Google and Apple Maps</b><span class="meta">Free. Most customers search on the map. We walk you through it.</span></a>
   <h2>Post it on your socials</h2>
   <div class="card"><p class="meta">A ready-made picture with your name and a QR code. Post it, put it in your story, or print it for your truck or a flyer. People scan it with their camera to book.</p>
     <canvas id="postpic" width="1080" height="1350" class="postpic" aria-label="Picture to post"></canvas>
@@ -697,6 +698,46 @@ function drawPostPic(cv, { name, tagline, area, link, stars }) {
   c.fillStyle = '#ffffff'; c.font = font(800, 84); c.fillText('Book in 1 minute', W / 2, y0 + size + 120);
   c.font = font(500, 44); c.fillStyle = '#d7f0ec'; c.fillText('Scan with your phone camera', W / 2, y0 + size + 190);
   c.fillText('or tap the link in my bio', W / 2, y0 + size + 245);
+}
+
+// ---------- owner: get on the map ----------
+async function viewMap() {
+  await shell(false);
+  const s = await store.getSettings(), biz = await store.business(), t = tradeOf(s.trade);
+  const link = `${baseLink()}#${cloud ? 'book-' + biz.slug : 'request'}`;
+  const atShop = !!t.atShop;
+  const rows = [
+    ['Business name', s.business || t.defaultBusiness],
+    ['Category (type this and pick it)', MAP_CATEGORY[s.trade] || t.name],
+    ['Areas you serve', [s.area, (s.zips || []).join(', ')].filter(Boolean).join(' · ') || 'Add your towns or ZIP codes'],
+    ['Website and booking link', link],
+    ['Description', mapDescription(s)],
+    ['Hours', hoursLines(s).join('\n')],
+  ];
+  app.innerHTML = `<h1>Get on the map</h1>
+  <p class="lead">Most people look for a ${esc(t.name.toLowerCase())} pro on Google Maps or Apple Maps. Both are free. It takes about 20 minutes, then they check it's really you.</p>
+  <h2>Your details</h2>
+  <div class="card">${rows.map(([l, v], i) => `<div class="copyrow"><div><div class="meta">${esc(l)}</div><div class="val">${esc(v).replace(/\n/g, '<br>')}</div></div><button class="btn ghost small" data-cpy="${i}">Copy</button></div>`).join('')}</div>
+  <h2>1. Google Maps</h2>
+  <div class="card"><ol class="steps">
+    <li>Open <a href="https://business.google.com/create" target="_blank" rel="noopener">business.google.com</a> and sign in with your Google account.</li>
+    <li>Type your business name, then pick the category above.</li>
+    <li>${atShop ? 'Add your shop address so customers can find you.' : 'When it asks about a location customers can visit, tap <b>No</b>. Then add the areas you serve. Your home address stays hidden.'}</li>
+    <li>Add your phone number, and paste your <b>booking link</b> as the website.</li>
+    <li>Google checks it's you: a code by text or mail, or a short video of your truck, tools or work. This can take a few days.</li>
+    <li>Once you're in: paste the <b>description</b>, set your <b>hours</b>, then tap <b>Bookings</b> > <b>Add link</b> and paste your booking link.</li>
+    <li>Tap <b>Ask for reviews</b>, copy that link, and paste it in <a href="#settings">Settings</a> > Find a pro and Google. Every customer who rates you will get a "Review on Google" button.</li>
+  </ol></div>
+  <h2>2. Apple Maps</h2>
+  <div class="card"><ol class="steps">
+    <li>Open <a href="https://businessconnect.apple.com" target="_blank" rel="noopener">businessconnect.apple.com</a> and sign in with your Apple ID.</li>
+    <li>Add your business: name, category, phone, and your booking link as the website.</li>
+    <li>Apple checks it's yours, usually with a phone call or a business document.</li>
+    <li>Add your hours, then add a <b>Book</b> button with your booking link.</li>
+  </ol>
+  <p class="meta">Apple works best for businesses with a shop address. If you only go to customers, start with Google.</p></div>
+  <p class="meta">You always stay the owner of your listing. If someone helps you, add them as a manager, never give them your password.</p>`;
+  app.querySelectorAll('[data-cpy]').forEach(b => b.onclick = () => copy(rows[+b.dataset.cpy][1]));
 }
 
 // ---------- detailer: settings ----------
@@ -960,6 +1001,7 @@ async function render() {
     else if (h === 'new') await viewSetup(true);
     else if (h === 'today') await viewToday();
     else if (h === 'share') await viewShare();
+    else if (h === 'map') await viewMap();
     else if (h === 'settings') await viewSettings();
     else await viewInbox();
   } catch (e) {
