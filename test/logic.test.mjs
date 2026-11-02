@@ -348,3 +348,9 @@ test('Get on the map: every trade has a category, hours and description read wel
   assert.match(d, /^Fresh Space offers home cleaning in Tampa\./);
   assert.ok(d.length <= 750 && !/https?:/.test(d));
 });
+
+test('photographer: needs a place, no repeat', () => {
+  const o = { name: 'A', phone: '555-123-4567', vehicle: 'Family photos', services: ['Family'] };
+  assert.match(validateRequest(o, 'photo').join(' '), /where the shoot/);
+  assert.deepEqual(validateRequest({ ...o, address: 'Lake Eola' }, 'photo'), []);
+});

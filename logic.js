@@ -292,6 +292,23 @@ Object.assign(TRADES, {
     ],
     samples: [['Birthday cake for 20', 'Custom cake', 'Chocolate, purple and gold'], ['2 dozen cupcakes', 'Cupcakes', 'Baby shower, blue and white'], ['3 dozen sugar cookies', 'Cookies', 'Christmas shapes, pickup']],
   }),
+  photo: starter({
+    name: 'Photographer', defaultBusiness: 'Your Photography', tagline: 'Photos for people and events', worker: 'your photographer',
+    itemLabel: 'What kind of shoot?', itemHint: 'For example family photos, 5 people, at the park', itemAsk: 'what kind of shoot you want',
+    services: ['Family', 'Couples or engagement', 'Wedding', 'Senior or graduation', 'Newborn or maternity', 'Headshots', 'Event or party', 'Real estate', 'Product or business'],
+    servicesLabel: 'What are the photos for?', sizesLabel: 'Session length', timesLabel: 'When do you want the shoot? (pick any)',
+    addressLabel: 'Where? (address, park, or "your studio")', addressError: 'Tell us where the shoot will be.', noRepeat: true,
+    photosLabel: 'Example photos you like', notesHint: 'Outfits, colors, pets, must-have shots...',
+    intro: 'Tell me about the photos you want. I will send you a price and a time.',
+    noteHint: 'For example: 1 hour, 25 edited photos, online gallery',
+    questions: [
+      { section: 'About the shoot' },
+      { key: 'people', label: 'How many people?', hint: 'For example 4 adults and 2 kids' },
+      { key: 'place', label: 'Indoor or outdoor?', type: 'choice', options: ['Outdoor', 'Indoor', 'Studio', 'Not sure'] },
+      { key: 'delivery', label: 'What do you want back?', type: 'multi', options: ['Online gallery', 'Prints', 'Video clips'] },
+    ],
+    samples: [['Family of 5 at the park', 'Family', 'Golden hour if possible'], ['Senior photos', 'Senior or graduation', 'Bringing 2 outfits'], ['Birthday party, 3 hours', 'Event or party', '30 kids, backyard']],
+  }),
 });
 
 export const tradeOf = key => (key && typeof key === 'object') ? key : (TRADES[key] || TRADES.detailing);
@@ -732,7 +749,7 @@ export const MAP_CATEGORY = {
   detailing: 'Car detailing service', mechanic: 'Auto repair shop', tint: 'Window tinting service', cleaning: 'House cleaning service',
   pressure: 'Pressure washing service', lawn: 'Lawn care service', handyman: 'Handyman', junk: 'Junk removal service',
   grooming: 'Pet groomer', painting: 'Painter', pool: 'Pool cleaning service', carpet: 'Carpet cleaning service',
-  windows: 'Window cleaning service', moving: 'Moving company', bakery: 'Bakery',
+  windows: 'Window cleaning service', moving: 'Moving company', bakery: 'Bakery', photo: 'Photographer',
 };
 const ampm = t => { const [h, m] = t.split(':').map(Number); return `${h % 12 || 12}${m ? ':' + String(m).padStart(2, '0') : ''} ${h < 12 ? 'AM' : 'PM'}`; };
 export function hoursLines(settings) {
