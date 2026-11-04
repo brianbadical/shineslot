@@ -161,3 +161,7 @@ input,textarea,select{font-size:1rem;min-height:46px}
 .copyrow .val{word-break:break-word}
 ol.steps{padding-left:22px;margin:0}
 ol.steps li{margin:0 0 10px}
+/* Brian's stats page */
+.stats4{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.stats4 b.big{font-size:1.6rem;display:block}
+.card.muted{opacity:.6}

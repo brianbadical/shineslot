@@ -1,12 +1,12 @@
 import {
   TRADES, tradeOf, MAX_PHOTOS, STATUS_LABEL, makeRequest, validateRequest, applyQuote, applyAccept,
   applyDone, applyDecline, inboxOrder, WEEKDAYS, WEEKDAY_NAMES, hoursOf, validateBlock, blocksOn, isOpenDay, openDays, clashes, prettyTime, prettyDay, detailLines, parseSizes, sizesText, sizePrice, servicesOf, parseChoices, tradeFor, parseQuestions, validatePay, payLinks, applyPaid, applyUnpaid, earnings, PAY_METHODS, splitBookLink, RATING_GOOD, RATING_BAD, canRate, validateRating, ratingSummary, starsText, REPEAT_CHOICES, repeatLabel, dueForRebook, againFields, parseZips, startingPrice, rankPros, pickPro, MAP_CATEGORY, hoursLines, mapDescription, jobsForDay, dayTotal, weekOf, shiftDay, money, prettyWhen, localDay, mapsLink,
-} from './logic.js?v=202611020122';
-import { LocalStore, newId } from './store.js?v=202611020122';
-import { CloudStore, slugify } from './cloud.js?v=202611020122';
-import { SUPABASE_URL, SUPABASE_KEY } from './config.js?v=202611020122';
-import { sampleRequests } from './sample.js?v=202611020122';
-import qrcode from './qr.js?v=202611020122';
+} from './logic.js?v=202611040345';
+import { LocalStore, newId } from './store.js?v=202611040345';
+import { CloudStore, slugify } from './cloud.js?v=202611040345';
+import { SUPABASE_URL, SUPABASE_KEY } from './config.js?v=202611040345';
+import { sampleRequests } from './sample.js?v=202611040345';
+import qrcode from './qr.js?v=202611040345';
 
 // Falls back to memory (lost on reload) if the browser blocks storage.
 function safeStorage() {
@@ -985,6 +985,32 @@ async function viewSetup(another = false) {
   });
 }
 
+// ---------- Brian's stats page (#admin): counts only, no customer details ----------
+async function viewAdmin() {
+  if (!store.adminStats) { app.innerHTML = '<div class="card"><p>Stats only work on the live site.</p></div>'; return; }
+  let rows;
+  try { rows = await store.adminStats(); } catch { app.innerHTML = '<div class="card"><h1>Stats</h1><p>This page is only for the app owner.</p></div>'; return; }
+  const ago = t => { if (!t) return 'never'; const d = Math.floor((Date.now() - new Date(t)) / 86400000); return d <= 0 ? 'today' : d === 1 ? 'yesterday' : d + ' days ago'; };
+  const real = rows.filter(r => r.slug !== 'thangs');
+  const sum = k => real.reduce((a, r) => a + Number(r[k] || 0), 0);
+  const nextStep = r => r.waiting ? `⚠️ ${r.waiting} waiting for a price` : !r.total ? (r.has_prices ? 'Ready, no requests yet' : 'Not set up yet (no prices)') : r.done ? 'Has finished jobs: ask how it went' : 'Getting requests';
+  app.innerHTML = `<h1>ShineSlot stats</h1>
+    <div class="card"><div class="stats4">
+      <div><div class="meta">Businesses</div><b class="big">${real.length}</b></div>
+      <div><div class="meta">Requests this week</div><b class="big">${sum('requests_7d')}</b></div>
+      <div><div class="meta">Booked jobs</div><b class="big">${sum('booked')}</b></div>
+      <div><div class="meta">Marked paid</div><b class="big">${money(sum('paid_total'))}</b></div>
+    </div></div>
+    ${rows.map(r => `<div class="card${r.slug === 'thangs' ? ' muted' : ''}">
+      <div class="req-head"><div><b>${esc(r.business || r.slug)}</b><div class="meta">${esc([r.owner, TRADES[r.trade]?.name].filter(Boolean).join(' · '))}${r.slug === 'thangs' ? ' · your test' : ''}</div></div></div>
+      <p><b>${esc(nextStep(r))}</b></p>
+      <div class="meta">Requests: ${r.requests_7d} this week · ${r.total} total · last ${ago(r.last_request_at)}<br>
+      Priced ${r.quoted} · booked ${r.booked} · done ${r.done}${Number(r.booked_value) ? ' · ' + money(r.booked_value) + ' booked' : ''}${Number(r.paid_total) ? ' · ' + money(r.paid_total) + ' paid' : ''}${r.ratings ? ` · ${r.avg_stars}★ (${r.ratings})` : ''}<br>
+      Set up: ${r.has_prices ? 'prices ✓' : 'no prices'} · ${r.pay_on ? 'pay buttons ✓' : 'no pay buttons'} · signed in ${ago(r.last_sign_in)} · joined ${ago(r.joined)}</div>
+    </div>`).join('')}
+    <p class="meta" style="text-align:center">Counts only. Customer names and details stay private to each business.</p>`;
+}
+
 // ---------- router ----------
 let lastHash = null;
 async function render() {
@@ -997,6 +1023,7 @@ async function render() {
     else if (h.startsWith('q-')) await viewQuote(h.slice(2));
     else if (h === 'find') await viewFind();
     else if (cloud && !(await store.session())) await viewLogin();
+    else if (h === 'admin') await viewAdmin();
     else if (cloud && !(await store.business())) await viewSetup();
     else if (h === 'new') await viewSetup(true);
     else if (h === 'today') await viewToday();
