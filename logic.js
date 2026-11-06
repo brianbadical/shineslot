@@ -223,6 +223,21 @@ Object.assign(TRADES, {
     services: ['Furniture', 'Mattress', 'Appliances', 'Yard waste', 'Garage or attic cleanout', 'Construction debris', 'Hot tub or shed', 'Whole house cleanout'],
     sizesLabel: 'Load size', notesHint: 'Stairs? Is it inside or at the curb? Heavy items...',
     noteHint: 'For example: about a half truck load',
+    noRepeat: true, // junk jobs are almost always one time
+    // Short intake, based on common junk removal quote forms: how much, where it sits,
+    // stairs, and the items that cost extra or can't be taken. Price is by truck space.
+    questions: [
+      { section: 'About the junk' },
+      { key: 'amount', label: 'About how much?', type: 'choice', options: ['1 or 2 items', 'Pickup truck load', 'Half a big truck', 'Full big truck', 'More than 1 truck', 'Not sure'] },
+      { key: 'where', label: 'Where is it?', type: 'choice', options: ['Curb or driveway', 'Garage', 'Inside the house', 'Basement or attic', 'Yard', 'Other'] },
+      { key: 'stairs', label: 'Stairs to carry it?', type: 'choice', options: ['No stairs', '1 flight', '2 or more flights', 'Elevator'] },
+      { section: 'Special items' },
+      { key: 'special', label: 'Any of these?', type: 'multi', options: ['Fridge or freezer', 'TV or computer', 'Tires', 'Piano or safe', 'Dirt, concrete or bricks'], hint: 'These can cost a little extra.' },
+      { key: 'hazard', label: 'Any paint, chemicals, oil or gas cans?', type: 'choice', options: ['Yes', 'No', 'Not sure'], hint: 'We may not be able to take these.' },
+      { section: 'On the day' },
+      { key: 'home', label: 'Will you be there?', type: 'choice', options: ['Yes', "No, it's outside for you"] },
+      { key: 'truck', label: 'Can a truck park close by?', type: 'choice', options: ['Yes, driveway', 'Street parking', 'Hard to reach'] },
+    ],
     samples: [['Old couch and recliner', 'Furniture', 'Second floor, narrow stairs'], ['Garage full of boxes', 'Garage or attic cleanout', ''], ['Broken fridge', 'Appliances', 'At the curb']],
   }),
   grooming: starter({

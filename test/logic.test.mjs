@@ -188,6 +188,22 @@ test('window tint trade: free-text item plus optional questions', async () => {
   assert.deepEqual(cleanDetails({ shade: '15%' }, 'tint'), {});
 });
 
+test('junk removal trade: short optional intake, no repeat question', async () => {
+  const { cleanDetails, detailLines } = await import('../logic.js');
+  const t = TRADES.junk;
+  assert.equal(t.name, 'Junk removal');
+  assert.ok(t.noRepeat);
+  assert.ok(t.questions.filter(q => q.key).length <= 8, 'keep the form short');
+  assert.ok(t.questions.every(q => !q.required), 'all extra questions optional');
+  const req = { name: 'Ray', phone: '555-123-4567', vehicle: 'Old couch and a fridge', services: ['Furniture'], address: '12 Elm' };
+  assert.deepEqual(validateRequest(req, 'junk'), []);
+  assert.match(validateRequest({ ...req, vehicle: '' }, 'junk').join(' '), /what needs to go/);
+  const r = makeRequest({ ...req, details: { amount: 'Pickup truck load', stairs: '1 flight', special: ['Fridge or freezer', 'Boat'], hazard: 'Maybe' } }, { id: 'j', now, trade: 'junk' });
+  assert.deepEqual(r.details, { amount: 'Pickup truck load', stairs: '1 flight', special: ['Fridge or freezer'] });
+  assert.deepEqual(detailLines(r.details, 'junk')[0], ['About how much?', 'Pickup truck load']);
+  assert.deepEqual(cleanDetails({ where: 'Moon' }, 'junk'), {});
+});
+
 test('getting paid: pay settings, links, mark paid, earnings', async () => {
   const { validatePay, payLinks, applyPaid, applyUnpaid, earnings } = await import('../logic.js');
   let { pay, errors } = validatePay({ on: true, cashapp: '$SterlShine', venmo: '@sterl-shine', paypal: 'https://paypal.me/sterl/20', cardLink: 'https://square.link/u/abc' });
