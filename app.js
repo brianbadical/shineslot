@@ -1,12 +1,12 @@
 import {
   TRADES, tradeOf, MAX_PHOTOS, STATUS_LABEL, makeRequest, validateRequest, applyQuote, applyAccept,
   applyDone, applyDecline, inboxOrder, WEEKDAYS, WEEKDAY_NAMES, hoursOf, validateBlock, blocksOn, isOpenDay, openDays, clashes, prettyTime, prettyDay, detailLines, parseSizes, sizesText, sizePrice, servicesOf, parseChoices, tradeFor, parseQuestions, validatePay, payLinks, applyPaid, applyUnpaid, earnings, PAY_METHODS, splitBookLink, RATING_GOOD, RATING_BAD, canRate, validateRating, ratingSummary, starsText, REPEAT_CHOICES, repeatLabel, dueForRebook, againFields, parseZips, startingPrice, rankPros, pickPro, MAP_CATEGORY, hoursLines, mapDescription, jobsForDay, dayTotal, weekOf, shiftDay, money, prettyWhen, localDay, mapsLink,
-} from './logic.js?v=202611040345';
-import { LocalStore, newId } from './store.js?v=202611040345';
-import { CloudStore, slugify } from './cloud.js?v=202611040345';
-import { SUPABASE_URL, SUPABASE_KEY } from './config.js?v=202611040345';
-import { sampleRequests } from './sample.js?v=202611040345';
-import qrcode from './qr.js?v=202611040345';
+} from './logic.js?v=202611052000';
+import { LocalStore, newId } from './store.js?v=202611052000';
+import { CloudStore, slugify } from './cloud.js?v=202611052000';
+import { SUPABASE_URL, SUPABASE_KEY } from './config.js?v=202611052000';
+import { sampleRequests } from './sample.js?v=202611052000';
+import qrcode from './qr.js?v=202611052000';
 
 // Falls back to memory (lost on reload) if the browser blocks storage.
 function safeStorage() {
