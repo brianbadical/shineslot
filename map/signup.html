@@ -27,7 +27,7 @@
   <label for="link">Website or booking link (if you have one)</label>
   <input type="url" id="link" maxlength="300" placeholder="https://">
   <label class="chk" style="font-weight:400"><input type="checkbox" id="agree" required>
-    <span>I own or run this business. I'll stay the owner of my Google listing and add Put You on the Map as a helper. I understand the listing is free and the $<span class="price">49</span> is for setup, paid only after it's done, and nobody can promise a #1 spot.</span></label>
+    <span>I own or run this business. I'll stay the owner of my Google listing and add Put You on the Map as a helper. I understand the listing is free and <span class="paid">the $<span class="price">49</span> is for setup, paid only after it's done,</span><span class="free" hidden>setup is free for now,</span> and nobody can promise a #1 spot.</span></label>
   <button class="btn" type="submit" style="margin-top:16px">Send</button>
 </form>
 
@@ -47,6 +47,7 @@
 const c = window.PYOTM;
 const pre = location.hash.match(/b=([^&]+)/);
 if (pre) document.getElementById('business').value = decodeURIComponent(pre[1]);
+if (pre) countVisit(decodeURIComponent(pre[1]), '', 'signup');
 
 document.getElementById('f').addEventListener('submit', async (e) => {
   e.preventDefault();
@@ -73,7 +74,9 @@ document.getElementById('f').addEventListener('submit', async (e) => {
     }
     e.target.hidden = true;
     document.getElementById('done').hidden = false;
-    document.getElementById('next').innerHTML = (c.payLink && !c.payAfterDone)
+    document.getElementById('next').innerHTML = Number(c.price) === 0
+      ? `Nothing to pay. We'll email you within a day with a short video showing how to prove the listing is yours.`
+      : (c.payLink && !c.payAfterDone)
       ? `Last step: <a href="${esc(c.payLink)}">pay $${esc(c.price)} with PayPal</a>. Then we'll email you a short video showing how to prove the listing is yours.`
       : `Nothing to pay yet. We'll email you within a day with a short video showing how to prove the listing is yours. You pay $${esc(c.price)} with PayPal only after your listing is fixed.`;
   } catch (_) {

@@ -1,7 +1,11 @@
 // Shared bits: price, footer address and contact link.
 (function () {
   const c = window.PYOTM || {};
-  document.querySelectorAll('.price').forEach((el) => { el.textContent = c.price || 99; });
+  // price 0 means setup is free: show the .free wording and hide the .paid wording.
+  const price = c.price == null ? 49 : Number(c.price);
+  document.querySelectorAll('.price').forEach((el) => { el.textContent = price; });
+  document.querySelectorAll('.paid').forEach((el) => { el.hidden = price === 0; });
+  document.querySelectorAll('.free').forEach((el) => { el.hidden = price !== 0; });
   const addr = document.getElementById('addr');
   if (addr && c.postalAddress) addr.textContent = c.postalAddress + '.';
   const mail = document.getElementById('mail');
@@ -22,4 +26,18 @@ function decodeLead() {
 
 function esc(s) {
   return String(s == null ? '' : s).replace(/[&<>"]/g, (ch) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[ch]));
+}
+
+// Count that someone opened their free check (business name + day only). Never blocks the page.
+function countVisit(business, checkedDay, page) {
+  const c = window.PYOTM || {};
+  if (!c.online || !c.countVisits || !business) return;
+  try {
+    fetch(c.supabaseUrl + '/rest/v1/map_visits', {
+      method: 'POST',
+      keepalive: true,
+      headers: { apikey: c.supabaseKey, Authorization: 'Bearer ' + c.supabaseKey, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
+      body: JSON.stringify({ business: String(business).slice(0, 120), checked_day: String(checkedDay || '').slice(0, 20), page }),
+    }).catch(() => {});
+  } catch (_) { /* counting is optional */ }
 }

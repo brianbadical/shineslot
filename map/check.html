@@ -12,12 +12,12 @@
   <p class="muted">This link is missing its details. <a href="index.html">Do the free 1-minute check instead.</a></p>
 </div>
 
-<a class="btn" id="go" href="signup.html">Fix it for me for $<span class="price">49</span></a>
-<p class="muted" style="text-align:center;margin:6px 0 0">Nothing up front. Pay only after it's done.</p>
+<a class="btn" id="go" href="signup.html"><span class="paid">Fix it for me for $<span class="price">49</span></span><span class="free" hidden>Fix it for me, free</span></a>
+<p class="muted" style="text-align:center;margin:6px 0 0"><span class="paid">Nothing up front. Pay only after it's done.</span><span class="free" hidden>Free for now. Nothing to pay.</span></p>
 <p style="margin-top:12px"><a class="btn alt" href="index.html#tips">I'll do it myself (free tips)</a></p>
 
 <footer>
-  Put You on the Map is not affiliated with Google or Apple. Google and Apple listings are free; you'd only pay for our time.
+  Put You on the Map is not affiliated with Google or Apple. Google and Apple listings are free<span class="paid">; you'd only pay for our time</span><span class="free" hidden></span>.
   <span id="addr"></span> Don't want to hear from us? Reply "stop" to our email.
 </footer>
 </div>
@@ -41,6 +41,7 @@ if (lead && lead.n) {
     </div>`;
   document.title = lead.n + ': Google Maps listing check';
   document.getElementById('go').href = 'signup.html#b=' + encodeURIComponent(lead.n);
+  countVisit(lead.n, lead.d, 'check');
 }
 </script>
 </body></html>
