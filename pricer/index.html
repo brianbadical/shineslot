@@ -38,6 +38,13 @@ textarea{min-height:170px}label{display:block;font-weight:600;margin:12px 0 6px}
 .picks{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.picks div{background:var(--card);border-radius:8px;padding:4px;font-size:12px;text-align:center;cursor:pointer}.picks img{width:100%;border-radius:6px}
 .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#2b3245;padding:12px 18px;border-radius:12px;z-index:30;display:none;font-weight:600}
 .empty{text-align:center;color:var(--dim);padding:30px 10px}
+.quick{background:var(--card);border-radius:14px;padding:12px;margin-bottom:16px}
+.seg{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.seg button{font:inherit;font-weight:700;font-size:15px;padding:12px 4px;border-radius:10px;border:1px solid var(--line);background:#0f1116;color:var(--dim)}
+.seg button.on{background:var(--gold);color:#14161c;border-color:var(--gold)}.seg button.on.expense{background:var(--red);border-color:var(--red)}
+button.add{background:var(--green)}button.spend{background:var(--red)}
+.totals.day{grid-template-columns:1fr 1fr}.tot.wide{grid-column:1/-1}
+.xrow{cursor:default;min-height:56px}.xdel{background:none;border:1px solid var(--line);color:var(--dim);border-radius:8px;padding:8px 10px;font:inherit;font-size:14px}.xdel.sure{color:var(--red);border-color:var(--red)}
+h3{margin:18px 0 8px}
 </style></head><body>
 <header><h1><img src="icon.svg" alt="">Card Show Pricer <span id="net" class="net">Online</span></h1>
 <nav><button data-tab="cards" class="on">My cards</button><button data-tab="add">Add cards</button><button data-tab="sales">Sales</button></nav></header>
