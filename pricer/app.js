@@ -10,6 +10,8 @@ const LOOKUP = 999999;   // means "look this one up yourself"
 let cards = load();
 let extras = loadX();
 let tab = 'cards', filter = '', qkind = 'binder';
+const SORTS = {value:'Value: high to low', low:'Value: low to high', name:'Name A to Z', grade:'Grade: high to low', profit:'Profit: most first', newest:'Newest added', check:'Needs a look first'};
+let sortBy = 'value'; try{ sortBy = localStorage.getItem('pricer-sort') || 'value'; }catch(e){}
 
 function load(){ try{ return JSON.parse(localStorage.getItem(KEY)) || []; }catch(e){ return []; } }
 function loadX(){ try{ return JSON.parse(localStorage.getItem(XKEY)) || []; }catch(e){ return []; } }
@@ -139,7 +141,21 @@ function cardsView(){
   if(!cards.length) return `<div class="empty"><p>No cards yet.</p><button class="big" id="mylist">Load my card list</button><button class="big ghost" id="mypsa">Load my PSA slabs</button><button class="big ghost" data-go="add">Add your own cards</button></div>`;
   const f=filter.toLowerCase();
   const list=cards.filter(c=>!f||(c.name+' '+c.setName+' '+c.number+' '+c.grade+' '+(c.cert||'')+' '+(c.from||'')).toLowerCase().includes(f));
+  const v=c=>{ const x=value(c); return x==null||x>=LOOKUP ? null : x; };
+  const gnum=c=>{ const m=String(c.grade||'').match(/(\d+(\.\d)?)/); return m?+m[1]:(c.grade?0:-1); };
+  const need=c=>(value(c)==null||value(c)>=LOOKUP)?2:(c.src&&c.src.check&&!(c.solds||[]).length&&c.override==null)?1:0;
+  const by={
+    value:(a,b)=>(v(b)??-1)-(v(a)??-1),
+    low:(a,b)=>(v(a)??1e9)-(v(b)??1e9),
+    name:(a,b)=>a.name.localeCompare(b.name),
+    grade:(a,b)=>gnum(b)-gnum(a)||(v(b)??-1)-(v(a)??-1),
+    profit:(a,b)=>((v(b)??0)-(b.paid??v(b)??0))-((v(a)??0)-(a.paid??v(a)??0)),
+    newest:(a,b)=>String(b.added||'').localeCompare(String(a.added||'')),
+    check:(a,b)=>need(b)-need(a)||(v(b)??-1)-(v(a)??-1)
+  }[sortBy]||(()=>0);
+  list.sort((a,b)=>(!!a.sold-!!b.sold)||by(a,b));
   return totalsHtml(cards)+`<input class="search" id="q" placeholder="Search your cards" value="${esc(filter)}">`
+    +`<div class="sortrow"><label for="sortby">Sort</label><select id="sortby">${Object.entries(SORTS).map(([k,t])=>`<option value="${k}" ${k===sortBy?'selected':''}>${t}</option>`).join('')}</select><span class="sub">${list.length} cards</span></div>`
     +list.map(rowHtml).join('')
     +`<button class="big ghost" id="refresh">Update all prices</button><p class="hint">Raw prices come from TCGplayer. Graded prices come from the sold prices you add to each card.</p>`;
 }
@@ -345,6 +361,7 @@ document.addEventListener('click',async e=>{
     .concat(extras.map(x=>[localDay(x.at),KINDS[x.kind],xLabel(x),'','','',x.qty||'','',xAmt(x).toFixed(2),''])).sort((a,b)=>a[0].localeCompare(b[0]));
     const rows=[['Date','Type','Item','Set','Number','Grade','Qty','Paid','Amount','Profit']].concat(data); download('card-sales-'+today()+'.csv', rows.map(r=>r.map(x=>'"'+String(x).replace(/"/g,'""')+'"').join(',')).join('\n'), 'text/csv'); }
 });
+document.addEventListener('change',e=>{ if(e.target.id==='sortby'){ sortBy=e.target.value; try{ localStorage.setItem('pricer-sort',sortBy); }catch(err){} render(); } });
 document.addEventListener('input',e=>{ if(e.target.id==='q'){ filter=e.target.value; const pos=e.target.selectionStart; render(); const q=$('#q'); q.focus(); q.setSelectionRange(pos,pos);} });
 document.addEventListener('change',async e=>{ if(e.target.id==='psatoken'){ try{ localStorage.setItem(TOKEN_KEY,e.target.value.trim()); toast('PSA key saved'); }catch(err){} return; } if(e.target.id==='restore'){ try{ const d=JSON.parse(await e.target.files[0].text()); if(Array.isArray(d)){ cards=d; } else if(d&&Array.isArray(d.cards)){ cards=d.cards; extras=Array.isArray(d.extras)?d.extras:[]; } else throw 0; save(); tab='cards'; render(); toast('Backup loaded'); }catch(err){ toast('That file did not work'); } } });
 function download(name, text, type){ const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([text],{type})); a.download=name; a.click(); setTimeout(()=>URL.revokeObjectURL(a.href),1000); }

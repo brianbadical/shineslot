@@ -17,3 +17,4 @@
 - The blend takes the median of 3 sources and the average of 2 that agree. When 2 sources are more than 2x apart, it takes the lower one and tags the card "Check price". The earlier name-only eBay look-up only counts when nothing else is there and it agrees; on slabs it is replaced by this price.
 - Tapping "Load my PSA slabs" again refreshes the prices on slabs already loaded.
 - Each slab shows PSA's own photo of that slab, taken from the order data. The photos are loaded from PSA's image server.
+- My cards has a Sort menu: value high or low, name, grade, profit, newest added, or needs a look first. The phone remembers the choice. Sold cards stay at the bottom.
