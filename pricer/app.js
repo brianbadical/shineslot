@@ -34,7 +34,7 @@ function rawPrice(c){ const p=c.prices&&c.prices[c.variant]; return p ? (p.marke
 function value(c){ if(c.override!=null) return c.override; return c.grade ? (avgSolds(c) ?? c.est ?? null) : rawPrice(c); }
 function valueSource(c){
   if(c.override!=null) return 'Your price';
-  if(c.grade) return soldsUsed(c).length ? 'Avg of last '+soldsUsed(c).length+' sold' : c.est!=null ? 'PSA estimate (Card Ladder)' : 'No solds yet';
+  if(c.grade) return soldsUsed(c).length ? 'Avg of last '+soldsUsed(c).length+' sold' : c.est!=null ? 'Slab price (PSA, PriceCharting, Card Ladder)' : 'No solds yet';
   return rawPrice(c)!=null ? 'TCGplayer market' : 'No price yet';
 }
 
@@ -65,6 +65,7 @@ async function lookup(c){
   }catch(e){ c.pending=true; }
 }
 async function refreshOne(c){
+  if(c.psaLabel) return; // slab: the PSA label says which card it is, so no name guessing
   if(!c.apiId) return lookup(c);
   const r = await fetch(API+'/'+c.apiId); if(!r.ok) throw new Error('x');
   applyApi(c, (await r.json()).data); c.pending=false;
@@ -127,7 +128,7 @@ function rowHtml(c){
   const v=c.sold?c.sold.price:value(c), p=c.paid;
   const tags=(c.grade?`<span class="tag g">${esc(c.grade)}</span>`:`<span class="tag">Raw</span>`)
     +(c.sold?`<span class="tag s">Sold ${money(c.sold.price)}</span>`:'')
-    +(c.check?`<span class="tag w">Check card</span>`:'')+(c.pending?`<span class="tag w">Look up when online</span>`:'');
+    +(c.check?`<span class="tag w">Check card</span>`:'')+(c.src&&c.src.check&&!(c.solds||[]).length&&c.override==null?`<span class="tag w">Check price</span>`:'')+(c.pending?`<span class="tag w">Look up when online</span>`:'');
   const pl = (v!=null&&p!=null)?`<span class="${v-p>=0?'up':'down'}">${v-p>=0?'+':''}${money(v-p)}</span>`:'';
   return `<div class="row" data-open="${c.id}">
     ${c.img?`<img src="${esc(c.img)}" alt="" loading="lazy">`:'<img alt="">'}
@@ -216,7 +217,7 @@ function detail(c){
    <div class="three"><div><input id="cert" inputmode="numeric" value="${esc(c.cert||'')}" placeholder="From the slab label"></div><div></div><button id="psa">Look up</button></div>
    ${c.psa?`<p class="hint">PSA says: <b>${esc([c.psa.year,c.psa.brand,c.psa.subject,c.psa.number?'#'+c.psa.number:'',c.psa.variety].filter(Boolean).join(' '))}</b>, ${esc(c.psa.grade)}. Population ${esc(c.psa.pop??'—')}, ${esc(c.psa.popHigher??'—')} graded higher.</p>`:''}
    ${c.cert?`<p class="hint"><a style="color:var(--blue)" target="_blank" rel="noopener" href="https://www.psacard.com/cert/${esc(c.cert)}">Open this cert on PSA</a></p>`:''}
-   ${c.psaLabel?`<p class="hint">PSA label: ${esc(c.psaLabel)}${c.est!=null?'<br>PSA estimate (Card Ladder): '+money(c.est)+'. Sold prices you add count first.':''}</p>`:''}
+   ${c.psaLabel?`<p class="hint">PSA label: ${esc(c.psaLabel)}${c.est!=null?'<br>Slab price: <b>'+money(c.est)+'</b>'+(c.src?' from Card Ladder '+money(c.src.cl)+', PriceCharting '+money(c.src.pc)+', PSA auction sales '+money(c.src.apr)+(c.src.aprN?' (last '+c.src.aprN+')':'')+(c.src.ebay?', earlier eBay look-up '+money(c.src.ebay):''):'')+(c.src&&c.src.check?'. The sources disagree a lot, so give this one a look':'')+'. Sold prices you add count first.':''}</p>`:''}
    <label>Recent sold prices</label>
    <p class="hint">Add the last few sold prices for this card and grade (from eBay "Sold items" or 130point). The value is the average of the newest <b>${c.useLast||3}</b> you keep switched on. Tap a sale to leave it out.</p>
    <table class="solds">${solds.map(s=>`<tr class="${s.off?'off':''}" data-soldtoggle="${s.id}"><td>${esc(s.date)}</td><td><b>${money(s.price)}</b></td><td>${esc(s.note||'')}</td><td>${used.has(s)?'✓ used':s.off?'left out':''}</td><td><span data-solddel="${s.id}" style="color:var(--red);padding:6px">✕</span></td></tr>`).join('')||'<tr><td class="sub">No sold prices yet.</td></tr>'}</table>
@@ -247,7 +248,7 @@ function confirmDel(c){ const b=$('#del'); if(b.dataset.sure) return true; b.dat
 function close(){ $('#sheet').classList.remove('on'); render(); }
 
 // Sealed product and One Piece cards are not in the Pokemon price list, so skip looking them up.
-function needsLookup(c){ return !/^sealed$/i.test(c.grade||'') && !/one piece/i.test(c.name||''); }
+function needsLookup(c){ return !c.psaLabel && !/^sealed$/i.test(c.grade||'') && !/one piece/i.test(c.name||''); }
 
 // Researched eBay solds for graded, sealed and One Piece cards. Only fills cards you have not priced yourself.
 // 999999 means "look this one up yourself": the solds were too mixed to trust.
@@ -263,22 +264,34 @@ function applyPrices(list){
 }
 // Slabs from your PSA orders. A slab already on your list just gets its cert and PSA estimate.
 // Any other slab is added as a new card. A cert that is already in the app is never added twice.
+// Earlier automatic eBay look-ups went by card name only, so for a slab with a cert the blended price replaces them.
+// Sold prices you typed in yourself always stay.
+// The PSA label is the truth for a slab: use its set and number, and drop any picture or raw price guessed from the name.
+const fromLabel=(c,p)=>{ c.setName=p.setName; c.number=p.number; c.psaLabel=p.spec; for(const k of ['img','imgBig','tcgUrl','apiId','prices','variant','pending']) delete c[k]; };
+const dropAuto=c=>{ c.solds=(c.solds||[]).filter(s=>!/Claude look-up/i.test(s.note||'')); };
 function applyPsa(list){
-  let linked=0, added=[]; const have=new Set(cards.map(c=>String(c.cert||'')).filter(Boolean));
+  let linked=0, refreshed=0, added=[]; const have=new Set(cards.map(c=>String(c.cert||'')).filter(Boolean));
   const same=(a,b)=>String(a||'').toLowerCase()===String(b||'').toLowerCase();
   for(const p of list){
-    if(have.has(p.cert)) continue; have.add(p.cert);
+    if(have.has(p.cert)){ // already in: refresh its blended price
+      const c=cards.find(c=>String(c.cert)===p.cert);
+      if(c && (c.est!==p.est || JSON.stringify(c.src)!==JSON.stringify(p.src))){ c.est=p.est; c.src=p.src; if(c.override===LOOKUP&&p.est!=null) c.override=null; refreshed++; }
+      if(c && (c.img || c.setName!==p.setName)){ fromLabel(c,p); refreshed++; }
+      if(c && p.est!=null && (c.solds||[]).some(s=>/Claude look-up/i.test(s.note||''))){ dropAuto(c); refreshed++; }
+      continue;
+    }
+    have.add(p.cert);
     const c=p.match && cards.find(c=>!c.cert && same(c.name,p.match) && same(c.grade,p.grade));
     if(c){
-      c.cert=p.cert; c.psaLabel=p.spec; if(p.est!=null){ c.est=p.est; if(c.override===LOOKUP) c.override=null; }
+      c.cert=p.cert; fromLabel(c,p); c.src=p.src; if(p.est!=null){ c.est=p.est; dropAuto(c); if(c.override===LOOKUP) c.override=null; }
       linked++;
     } else {
       added.push({id:uid(),name:p.name,setName:p.setName,number:p.number,grade:p.grade,paid:null,cert:p.cert,psaLabel:p.spec,
-        est:p.est,solds:[],useLast:5,override:p.est==null?LOOKUP:null,sold:null,added:today(),from:'PSA order '+p.done});
+        est:p.est,src:p.src,solds:[],useLast:5,override:p.est==null?LOOKUP:null,sold:null,added:today(),from:'PSA order '+p.done});
     }
   }
   cards.push(...added);
-  return {linked, added:added.length};
+  return {linked, refreshed, added:added.length};
 }
 // Background lookups only redraw the card list, so they never wipe what you are typing.
 function softRender(){ if(tab==='cards' && !$('#sheet').classList.contains('on') && document.activeElement?.id!=='q') render(); }
@@ -321,7 +334,7 @@ document.addEventListener('click',async e=>{
     try{
       const r=await fetch('my-psa.json',{cache:'no-store'}); if(!r.ok) throw 0;
       const n=applyPsa(await r.json()); save(); tab='cards'; render();
-      toast(n.linked||n.added ? n.linked+' slabs matched your list. '+n.added+' new slabs added' : 'All your PSA slabs are already in');
+      toast(n.linked||n.added ? n.linked+' slabs matched your list. '+n.added+' new slabs added' : n.refreshed ? n.refreshed+' slab prices updated' : 'All your PSA slabs are already in');
     }catch(err){ toast('Could not load your PSA slabs. Try again with signal'); }
     return;
   }

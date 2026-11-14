@@ -5,11 +5,20 @@
 "name": "Ditto-Holo",
 "setName": "2018 Lost Thunder",
 "number": "154",
-"est": 315,
+"est": 35,
 "conf": 4,
 "done": "08/06/26",
 "spec": "2018 LOST THUNDER 154 DITTO-HOLO",
-"match": "Ditto"
+"match": "Ditto",
+"src": {
+"cl": 315,
+"pc": 34.75,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": "Ditto #154 Pokemon Lost Thunder",
+"check": true
+}
 },
 {
 "cert": "167335962",
@@ -17,11 +26,20 @@
 "name": "FA Mew V",
 "setName": "2021 Fusion Strike",
 "number": "250",
-"est": 70,
+"est": 45,
 "conf": 5,
 "done": "08/06/26",
 "spec": "2021 FUSION STRIKE 250 FA MEW V",
-"match": "Mew V"
+"match": "Mew V",
+"src": {
+"cl": 70,
+"pc": 45.0,
+"apr": 23.25,
+"aprN": 2,
+"ebay": null,
+"pcTitle": "Mew V #250 Pokemon Fusion Strike",
+"check": false
+}
 },
 {
 "cert": "167335963",
@@ -33,7 +51,16 @@
 "conf": 5,
 "done": "08/06/26",
 "spec": "2022 BRILLIANT STARS 153 FA CHARIZARD V",
-"match": "Charizard V (sleeping)"
+"match": "Charizard V (sleeping)",
+"src": {
+"cl": 38,
+"pc": 45.72,
+"apr": 32.0,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Charizard V #153 Pokemon Brilliant Stars",
+"check": false
+}
 },
 {
 "cert": "167335964",
@@ -41,10 +68,19 @@
 "name": "Dark Sylveon V Celebrations Collection",
 "setName": "2021 Promo",
 "number": "134",
-"est": 30,
+"est": 28,
 "conf": 5,
 "done": "08/06/26",
-"spec": "2021 PROMO 134 DARK SYLVEON V CELEBRATIONS COLLECTION"
+"spec": "2021 PROMO 134 DARK SYLVEON V CELEBRATIONS COLLECTION",
+"src": {
+"cl": 30,
+"pc": 28.23,
+"apr": 18.5,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Dark Sylveon V #SWSH134 Pokemon Celebrations",
+"check": false
+}
 },
 {
 "cert": "167335965",
@@ -56,7 +92,16 @@
 "conf": 5,
 "done": "08/06/26",
 "spec": "2021 PROMO 102 FA VENUSAUR VMAX VENUSAUR VMAX BATTLE BOX",
-"match": "Venusaur VMAX"
+"match": "Venusaur VMAX",
+"src": {
+"cl": 32,
+"pc": null,
+"apr": null,
+"aprN": 0,
+"ebay": 499.99,
+"pcTitle": null,
+"check": true
+}
 },
 {
 "cert": "167335966",
@@ -64,10 +109,19 @@
 "name": "Dialga",
 "setName": "2021 Celebrations",
 "number": "020",
-"est": 6,
+"est": 7.85,
 "conf": 5,
 "done": "08/06/26",
-"spec": "2021 CELEBRATIONS 020 DIALGA"
+"spec": "2021 CELEBRATIONS 020 DIALGA",
+"src": {
+"cl": 6,
+"pc": 9.7,
+"apr": null,
+"aprN": 1,
+"ebay": null,
+"pcTitle": "Dialga #20 Pokemon Celebrations",
+"check": false
+}
 },
 {
 "cert": "167335967",
@@ -75,10 +129,19 @@
 "name": "Galarian Moltres Crown Zenith Tin",
 "setName": "2023 Promo",
 "number": "284",
-"est": 24,
+"est": 20,
 "conf": 5,
 "done": "08/06/26",
-"spec": "2023 PROMO 284 GALARIAN MOLTRES CROWN ZENITH TIN"
+"spec": "2023 PROMO 284 GALARIAN MOLTRES CROWN ZENITH TIN",
+"src": {
+"cl": 24,
+"pc": null,
+"apr": 16.5,
+"aprN": 5,
+"ebay": null,
+"pcTitle": null,
+"check": false
+}
 },
 {
 "cert": "167335968",
@@ -86,22 +149,40 @@
 "name": "FA Dragonite V",
 "setName": "2021 Evolving Skies",
 "number": "191",
-"est": 100,
+"est": 51,
 "conf": 5,
 "done": "08/06/26",
 "spec": "2021 EVOLVING SKIES 191 FA DRAGONITE V",
-"match": "Dragonite V"
+"match": "Dragonite V",
+"src": {
+"cl": 100,
+"pc": 51.0,
+"apr": 26.25,
+"aprN": 2,
+"ebay": null,
+"pcTitle": "Dragonite V #191 Pokemon Evolving Skies",
+"check": false
+}
 },
 {
 "cert": "167335969",
 "grade": "PSA 9",
 "name": "Dragonite ex",
-"setName": "2016 Xy Evolutions",
+"setName": "2016 XY Evolutions",
 "number": "72",
-"est": 43,
+"est": 41,
 "conf": 5,
 "done": "08/06/26",
-"spec": "2016 XY EVOLUTIONS 72 DRAGONITE EX"
+"spec": "2016 XY EVOLUTIONS 72 DRAGONITE EX",
+"src": {
+"cl": 43,
+"pc": 40.75,
+"apr": 20.5,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Dragonite EX #72 Pokemon Evolutions",
+"check": false
+}
 },
 {
 "cert": "167335970",
@@ -112,64 +193,118 @@
 "est": 19,
 "conf": 3,
 "done": "08/06/26",
-"spec": "2021 PROMO 154 DRAGONITE V DRAGONITE V BOX"
+"spec": "2021 PROMO 154 DRAGONITE V DRAGONITE V BOX",
+"src": {
+"cl": 19,
+"pc": null,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": null,
+"check": false
+}
 },
 {
 "cert": "167335971",
 "grade": "PSA 9",
 "name": "Piplup IR",
-"setName": "2025 Pfl En-Phantasmal Flames",
+"setName": "2025 Phantasmal Flames",
 "number": "098",
-"est": 20,
+"est": 23,
 "conf": 5,
 "done": "08/06/26",
 "spec": "2025 PFL EN-PHANTASMAL FLAMES 098 PIPLUP IR",
-"match": "Piplup IR"
+"match": "Piplup IR",
+"src": {
+"cl": 20,
+"pc": 23.04,
+"apr": 25.9,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Piplup #98 Pokemon Phantasmal Flames",
+"check": false
+}
 },
 {
 "cert": "167335972",
 "grade": "PSA 8",
 "name": "Snorlax V",
-"setName": "2020",
+"setName": "2020 Sword & Shield",
 "number": "141",
-"est": 42,
+"est": 32,
 "conf": 2,
 "done": "08/06/26",
-"spec": "2020 141 SNORLAX V"
+"spec": "2020 141 SNORLAX V",
+"src": {
+"cl": 42,
+"pc": 21.61,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": "Snorlax V #141 Pokemon Sword & Shield",
+"check": false
+}
 },
 {
 "cert": "167335973",
 "grade": "PSA 8",
 "name": "Roaring Moon ex SIR",
-"setName": "2023 Par En-Paradox Rift",
+"setName": "2023 Paradox Rift",
 "number": "251",
-"est": 50,
+"est": 40,
 "conf": 5,
 "done": "08/06/26",
-"spec": "2023 PAR EN-PARADOX RIFT 251 ROARING MOON EX SIR"
+"spec": "2023 PAR EN-PARADOX RIFT 251 ROARING MOON EX SIR",
+"src": {
+"cl": 50,
+"pc": 40.0,
+"apr": 32.0,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Roaring Moon ex #251 Pokemon Paradox Rift",
+"check": false
+}
 },
 {
 "cert": "167335974",
 "grade": "PSA 9",
 "name": "Terapagos ex SIR",
-"setName": "2024 Scr En-Stellar Crown",
+"setName": "2024 Stellar Crown",
 "number": "170",
-"est": 30,
+"est": 35,
 "conf": 5,
 "done": "08/06/26",
-"spec": "2024 SCR EN-STELLAR CROWN 170 TERAPAGOS EX SIR"
+"spec": "2024 SCR EN-STELLAR CROWN 170 TERAPAGOS EX SIR",
+"src": {
+"cl": 30,
+"pc": 35.48,
+"apr": 41.0,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Terapagos ex #170 Pokemon Stellar Crown",
+"check": false
+}
 },
 {
 "cert": "167335975",
 "grade": "PSA 9",
 "name": "Pikachu Gym Event Campaign",
-"setName": "2023 Japanese Sv-P Promo",
+"setName": "2023 Japanese SV-P Promo",
 "number": "120",
-"est": 23,
+"est": 26,
 "conf": 5,
 "done": "08/06/26",
 "spec": "2023 JAPANESE SV-P PROMO 120 PIKACHU GYM EVENT CAMPAIGN",
-"match": "Pikachu Gym Event"
+"match": "Pikachu Gym Event",
+"src": {
+"cl": 23,
+"pc": 25.5,
+"apr": 36.63,
+"aprN": 4,
+"ebay": null,
+"pcTitle": "Pikachu #120/SV-P Pokemon Japanese Promo",
+"check": false
+}
 },
 {
 "cert": "167335976",
@@ -177,11 +312,20 @@
 "name": "Scizor Pokemon Tcg League-Season 6",
 "setName": "2001 Wizards Of The Coast Promo",
 "number": "33",
-"est": 36,
+"est": 33,
 "conf": 5,
 "done": "08/06/26",
 "spec": "2001 WIZARDS OF THE COAST PROMO 33 SCIZOR POKEMON TCG LEAGUE-SEASON 6",
-"match": "Scizor Promo"
+"match": "Scizor Promo",
+"src": {
+"cl": 36,
+"pc": 30.5,
+"apr": 33.0,
+"aprN": 2,
+"ebay": null,
+"pcTitle": "Scizor #33 Pokemon Promo",
+"check": false
+}
 },
 {
 "cert": "167335977",
@@ -189,10 +333,19 @@
 "name": "Feraligatr-Holo",
 "setName": "2006 ex Dragon Frontiers",
 "number": "2",
-"est": 120,
+"est": 131,
 "conf": 5,
 "done": "08/06/26",
-"spec": "2006 EX DRAGON FRONTIERS 2 FERALIGATR-HOLO"
+"spec": "2006 EX DRAGON FRONTIERS 2 FERALIGATR-HOLO",
+"src": {
+"cl": 120,
+"pc": 141.06,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": "Feraligatr #2 Pokemon Dragon Frontiers",
+"check": false
+}
 },
 {
 "cert": "167335978",
@@ -200,23 +353,41 @@
 "name": "Wigglytuff Series 1",
 "setName": "1998 Japanese Vending",
 "number": "40",
-"est": 97,
+"est": 74,
 "conf": 4,
 "done": "08/06/26",
 "spec": "1998 JAPANESE VENDING 40 WIGGLYTUFF SERIES 1",
-"match": "Wigglytuff Vending"
+"match": "Wigglytuff Vending",
+"src": {
+"cl": 97,
+"pc": 50.0,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": "Wigglytuff [Series 1] #40 Pokemon Japanese Vending",
+"check": false
+}
 },
 {
 "cert": "167335979",
 "grade": "PSA 7",
 "name": "Ninetales-Holo",
-"setName": "1999 Game",
+"setName": "1999 Base Set",
 "number": "12",
-"est": 50,
+"est": 49,
 "conf": 5,
 "done": "08/06/26",
 "spec": "1999 GAME 12 NINETALES-HOLO",
-"match": "Ninetales"
+"match": "Ninetales",
+"src": {
+"cl": 50,
+"pc": 49.0,
+"apr": 43.9,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Ninetales #12 | Pokemon Base Set",
+"check": false
+}
 },
 {
 "cert": "167335980",
@@ -224,10 +395,19 @@
 "name": "Venomoth-Holo",
 "setName": "1999 Jungle",
 "number": "13",
-"est": 45,
+"est": 39,
 "conf": 4,
 "done": "08/06/26",
-"spec": "1999 JUNGLE 13 VENOMOTH-HOLO"
+"spec": "1999 JUNGLE 13 VENOMOTH-HOLO",
+"src": {
+"cl": 45,
+"pc": 39.38,
+"apr": 24.6,
+"aprN": 3,
+"ebay": null,
+"pcTitle": "Venomoth #13 Pokemon Jungle",
+"check": false
+}
 },
 {
 "cert": "167381684",
@@ -235,21 +415,39 @@
 "name": "Pikachu-Holo Team Up Single Pack Blisters",
 "setName": "2019 Promo",
 "number": "SM162",
-"est": 128,
+"est": 127,
 "conf": 5,
 "done": "08/13/26",
-"spec": "2019 PROMO SM162 PIKACHU-HOLO TEAM UP SINGLE PACK BLISTERS"
+"spec": "2019 PROMO SM162 PIKACHU-HOLO TEAM UP SINGLE PACK BLISTERS",
+"src": {
+"cl": 128,
+"pc": 126.13,
+"apr": null,
+"aprN": 1,
+"ebay": null,
+"pcTitle": "Pikachu #SM162 Pokemon Promo",
+"check": false
+}
 },
 {
 "cert": "167381685",
 "grade": "PSA 7",
 "name": "Full Heal",
-"setName": "1999 Game",
+"setName": "1999 Base Set",
 "number": "82",
-"est": 30,
+"est": 24,
 "conf": 5,
 "done": "08/13/26",
-"spec": "1999 GAME 82 FULL HEAL"
+"spec": "1999 GAME 82 FULL HEAL",
+"src": {
+"cl": 30,
+"pc": 17.01,
+"apr": null,
+"aprN": 1,
+"ebay": null,
+"pcTitle": "Full Heal [1st Edition] #82 Pokemon Base Set",
+"check": false
+}
 },
 {
 "cert": "167381686",
@@ -257,10 +455,19 @@
 "name": "Arceus & Dialga & Palkia GX",
 "setName": "2019 Cosmic Eclipse",
 "number": "156",
-"est": 55,
+"est": 53,
 "conf": 5,
 "done": "08/13/26",
-"spec": "2019 COSMIC ECLIPSE 156 ARCEUS & DIALGA & PALKIA GX"
+"spec": "2019 COSMIC ECLIPSE 156 ARCEUS & DIALGA & PALKIA GX",
+"src": {
+"cl": 55,
+"pc": 52.69,
+"apr": 44.0,
+"aprN": 2,
+"ebay": null,
+"pcTitle": "Arceus & Dialga & Palkia GX #156 Pokemon Cosmic Eclipse",
+"check": false
+}
 },
 {
 "cert": "167381687",
@@ -271,7 +478,16 @@
 "est": 26,
 "conf": 3,
 "done": "08/13/26",
-"spec": "2018 FORBIDDEN LIGHT 136 FA ZYGARDE GX SECRET"
+"spec": "2018 FORBIDDEN LIGHT 136 FA ZYGARDE GX SECRET",
+"src": {
+"cl": 26,
+"pc": 26.0,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": "Zygarde-GX #136 Pokemon Forbidden Light",
+"check": false
+}
 },
 {
 "cert": "167381688",
@@ -279,21 +495,39 @@
 "name": "Pikachu & Zekrom GX",
 "setName": "2019 Team Up",
 "number": "33",
-"est": 92,
+"est": 95,
 "conf": 5,
 "done": "08/13/26",
-"spec": "2019 TEAM UP 33 PIKACHU & ZEKROM GX"
+"spec": "2019 TEAM UP 33 PIKACHU & ZEKROM GX",
+"src": {
+"cl": 92,
+"pc": 95.0,
+"apr": 123.5,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Pikachu & Zekrom GX #33 Pokemon Team Up",
+"check": false
+}
 },
 {
 "cert": "167381689",
 "grade": "PSA 6",
 "name": "M Pidgeot ex",
-"setName": "2016 Xy Evolutions",
+"setName": "2016 XY Evolutions",
 "number": "65",
-"est": 8,
+"est": 9.69,
 "conf": 4,
 "done": "08/13/26",
-"spec": "2016 XY EVOLUTIONS 65 M PIDGEOT EX"
+"spec": "2016 XY EVOLUTIONS 65 M PIDGEOT EX",
+"src": {
+"cl": 8,
+"pc": 11.38,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": "M Pidgeot EX #65 Pokemon Evolutions",
+"check": false
+}
 },
 {
 "cert": "167381690",
@@ -301,10 +535,19 @@
 "name": "Pikachu",
 "setName": "2004 ex Team Magma Vs Team Aqua",
 "number": "43",
-"est": 38,
+"est": 35,
 "conf": 5,
 "done": "08/13/26",
-"spec": "2004 EX TEAM MAGMA VS TEAM AQUA 43 PIKACHU"
+"spec": "2004 EX TEAM MAGMA VS TEAM AQUA 43 PIKACHU",
+"src": {
+"cl": 38,
+"pc": 35.25,
+"apr": 14.47,
+"aprN": 2,
+"ebay": null,
+"pcTitle": "Pikachu #43 Pokemon Team Magma & Team Aqua",
+"check": false
+}
 },
 {
 "cert": "167381691",
@@ -315,7 +558,16 @@
 "est": 186,
 "conf": 3,
 "done": "08/13/26",
-"spec": "2003 NINTENDO PROMO 014 LATIAS POKEMON HEROES HOME VIDEO"
+"spec": "2003 NINTENDO PROMO 014 LATIAS POKEMON HEROES HOME VIDEO",
+"src": {
+"cl": 186,
+"pc": null,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": null,
+"check": false
+}
 },
 {
 "cert": "167381692",
@@ -326,7 +578,16 @@
 "est": 157,
 "conf": 4,
 "done": "08/13/26",
-"spec": "2003 NINTENDO PROMO 015 LATIOS POKEMON HEROES HOME VIDEO"
+"spec": "2003 NINTENDO PROMO 015 LATIOS POKEMON HEROES HOME VIDEO",
+"src": {
+"cl": 157,
+"pc": null,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": null,
+"check": false
+}
 },
 {
 "cert": "167381693",
@@ -334,10 +595,19 @@
 "name": "Dark Dragonair",
 "setName": "1997 Japanese Rocket",
 "number": "148",
-"est": 14,
+"est": 16.0,
 "conf": 4,
 "done": "08/13/26",
-"spec": "1997 JAPANESE ROCKET 148 DARK DRAGONAIR"
+"spec": "1997 JAPANESE ROCKET 148 DARK DRAGONAIR",
+"src": {
+"cl": 14,
+"pc": 18.0,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": "Dark Dragonair #148 Pokemon Japanese Rocket Gang",
+"check": false
+}
 },
 {
 "cert": "167381694",
@@ -345,10 +615,19 @@
 "name": "Blastoise V Blastoise V Battle Deck",
 "setName": "2021 Promo",
 "number": "101",
-"est": 315,
+"est": 248,
 "conf": 5,
 "done": "08/13/26",
-"spec": "2021 PROMO 101 BLASTOISE V BLASTOISE V BATTLE DECK"
+"spec": "2021 PROMO 101 BLASTOISE V BLASTOISE V BATTLE DECK",
+"src": {
+"cl": 315,
+"pc": 180.0,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": "Blastoise V #SWSH101 Pokemon Promo",
+"check": false
+}
 },
 {
 "cert": "167381695",
@@ -356,10 +635,19 @@
 "name": "FA Pikachu VMAX",
 "setName": "2020 Vivid Voltage",
 "number": "044",
-"est": 100,
+"est": 95,
 "conf": 5,
 "done": "08/13/26",
-"spec": "2020 VIVID VOLTAGE 044 FA PIKACHU VMAX"
+"spec": "2020 VIVID VOLTAGE 044 FA PIKACHU VMAX",
+"src": {
+"cl": 100,
+"pc": 95.0,
+"apr": 73.0,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Pikachu VMAX #44 Pokemon Vivid Voltage",
+"check": false
+}
 },
 {
 "cert": "167381696",
@@ -370,7 +658,16 @@
 "est": 20,
 "conf": 3,
 "done": "08/13/26",
-"spec": "2021 PROMO 107 RAPID STRIKE URSHIFU V RAPID STRIKE URSHIFU V BOX"
+"spec": "2021 PROMO 107 RAPID STRIKE URSHIFU V RAPID STRIKE URSHIFU V BOX",
+"src": {
+"cl": 20,
+"pc": null,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": null,
+"check": false
+}
 },
 {
 "cert": "167381697",
@@ -381,18 +678,36 @@
 "est": 21,
 "conf": 5,
 "done": "08/13/26",
-"spec": "2021 CELEBRATIONS 008 SURFING PIKACHU V"
+"spec": "2021 CELEBRATIONS 008 SURFING PIKACHU V",
+"src": {
+"cl": 21,
+"pc": 20.25,
+"apr": 27.69,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Surfing Pikachu V #8 Pokemon Celebrations",
+"check": false
+}
 },
 {
 "cert": "167381698",
 "grade": "PSA 9",
 "name": "Mega Venusaur ex SIR",
-"setName": "2025 Meg En-Mega Evolution",
+"setName": "2025 Mega Evolution",
 "number": "177",
 "est": 110,
 "conf": 5,
 "done": "08/13/26",
-"spec": "2025 MEG EN-MEGA EVOLUTION 177 MEGA VENUSAUR EX SIR"
+"spec": "2025 MEG EN-MEGA EVOLUTION 177 MEGA VENUSAUR EX SIR",
+"src": {
+"cl": 110,
+"pc": 101.99,
+"apr": 142.5,
+"aprN": 3,
+"ebay": null,
+"pcTitle": "Mega Venusaur Ex #177 Pokemon Mega Evolution",
+"check": false
+}
 },
 {
 "cert": "167381699",
@@ -400,10 +715,19 @@
 "name": "FA Rayquaza VMAX",
 "setName": "2021 Evolving Skies",
 "number": "111",
-"est": 65,
+"est": 52,
 "conf": 5,
 "done": "08/13/26",
-"spec": "2021 EVOLVING SKIES 111 FA RAYQUAZA VMAX"
+"spec": "2021 EVOLVING SKIES 111 FA RAYQUAZA VMAX",
+"src": {
+"cl": 65,
+"pc": 38.0,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": "Rayquaza VMAX #111 Pokemon Evolving Skies",
+"check": false
+}
 },
 {
 "cert": "167381700",
@@ -411,10 +735,19 @@
 "name": "FA Pikachu V",
 "setName": "2020 Vivid Voltage",
 "number": "170",
-"est": 49,
+"est": 40,
 "conf": 5,
 "done": "08/13/26",
-"spec": "2020 VIVID VOLTAGE 170 FA PIKACHU V"
+"spec": "2020 VIVID VOLTAGE 170 FA PIKACHU V",
+"src": {
+"cl": 49,
+"pc": null,
+"apr": 30.0,
+"aprN": 5,
+"ebay": null,
+"pcTitle": null,
+"check": false
+}
 },
 {
 "cert": "167381701",
@@ -422,21 +755,39 @@
 "name": "FA Pikachu VMAX Crown Zenith Collections-Pikachu VMAX",
 "setName": "2023 Promo",
 "number": "286",
-"est": 14,
+"est": 16.96,
 "conf": 5,
 "done": "08/13/26",
-"spec": "2023 PROMO 286 FA PIKACHU VMAX CROWN ZENITH COLLECTIONS-PIKACHU VMAX"
+"spec": "2023 PROMO 286 FA PIKACHU VMAX CROWN ZENITH COLLECTIONS-PIKACHU VMAX",
+"src": {
+"cl": 14,
+"pc": 19.92,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": "Pikachu VMax #SWSH286 Pokemon Promo",
+"check": false
+}
 },
 {
 "cert": "167381702",
 "grade": "PSA 8",
 "name": "Espeon ex SIR",
-"setName": "2025 Pre En-Prismatic Evolutions",
+"setName": "2025 Prismatic Evolutions",
 "number": "155",
-"est": 208,
+"est": 207,
 "conf": 5,
 "done": "08/13/26",
-"spec": "2025 PRE EN-PRISMATIC EVOLUTIONS 155 ESPEON EX SIR"
+"spec": "2025 PRE EN-PRISMATIC EVOLUTIONS 155 ESPEON EX SIR",
+"src": {
+"cl": 208,
+"pc": 206.25,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": "Espeon ex #155 Pokemon Prismatic Evolutions",
+"check": false
+}
 },
 {
 "cert": "167381703",
@@ -444,10 +795,19 @@
 "name": "Arceus V Arceus V Figure Collection",
 "setName": "2022 Promo",
 "number": "204",
-"est": 26,
+"est": 22,
 "conf": 5,
 "done": "08/13/26",
-"spec": "2022 PROMO 204 ARCEUS V ARCEUS V FIGURE COLLECTION"
+"spec": "2022 PROMO 204 ARCEUS V ARCEUS V FIGURE COLLECTION",
+"src": {
+"cl": 26,
+"pc": 22.5,
+"apr": 20.5,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Arceus V #SWSH204 Pokemon Promo",
+"check": false
+}
 },
 {
 "cert": "167644894",
@@ -455,10 +815,19 @@
 "name": "FA Rayquaza VMAX",
 "setName": "2021 Evolving Skies",
 "number": "111",
-"est": 198,
+"est": 164,
 "conf": 5,
 "done": "07/30/26",
-"spec": "2021 EVOLVING SKIES 111 FA RAYQUAZA VMAX"
+"spec": "2021 EVOLVING SKIES 111 FA RAYQUAZA VMAX",
+"src": {
+"cl": 198,
+"pc": 164.14,
+"apr": 127.5,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Rayquaza VMAX #111 Pokemon Evolving Skies",
+"check": false
+}
 },
 {
 "cert": "167644895",
@@ -470,29 +839,56 @@
 "conf": 4,
 "done": "07/30/26",
 "spec": "2019 PROMO SM174 EEVEE GX FLAREON GX SPECIAL COLLECTION",
-"match": "Eevee GX"
+"match": "Eevee GX",
+"src": {
+"cl": 88,
+"pc": 88.65,
+"apr": null,
+"aprN": 1,
+"ebay": null,
+"pcTitle": "Eevee GX #SM174 Pokemon Promo",
+"check": false
+}
 },
 {
 "cert": "167644896",
 "grade": "PSA 9",
 "name": "Chien-Pao Surging Sparks Prerelease-Staff",
-"setName": "2024 Svp En-Promo",
+"setName": "2024 SV Black Star Promo",
 "number": "152",
 "est": 32,
 "conf": 5,
 "done": "07/30/26",
-"spec": "2024 SVP EN-PROMO 152 CHIEN-PAO SURGING SPARKS PRERELEASE-STAFF"
+"spec": "2024 SVP EN-PROMO 152 CHIEN-PAO SURGING SPARKS PRERELEASE-STAFF",
+"src": {
+"cl": 32,
+"pc": null,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": null,
+"check": false
+}
 },
 {
 "cert": "167644897",
 "grade": "PSA 9",
 "name": "Indeedee Surging Sparks Prerelease-Staff",
-"setName": "2024 Svp En-Promo",
+"setName": "2024 SV Black Star Promo",
 "number": "154",
 "est": 85,
 "conf": 3,
 "done": "07/30/26",
-"spec": "2024 SVP EN-PROMO 154 INDEEDEE SURGING SPARKS PRERELEASE-STAFF"
+"spec": "2024 SVP EN-PROMO 154 INDEEDEE SURGING SPARKS PRERELEASE-STAFF",
+"src": {
+"cl": 85,
+"pc": null,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": null,
+"check": false
+}
 },
 {
 "cert": "167644898",
@@ -500,10 +896,19 @@
 "name": "FA Mimikyu V",
 "setName": "2021 Battle Styles",
 "number": "148",
-"est": 28,
+"est": 30,
 "conf": 2,
 "done": "07/30/26",
-"spec": "2021 BATTLE STYLES 148 FA MIMIKYU V"
+"spec": "2021 BATTLE STYLES 148 FA MIMIKYU V",
+"src": {
+"cl": 28,
+"pc": 33.0,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": "Mimikyu V #148 Pokemon Battle Styles",
+"check": false
+}
 },
 {
 "cert": "167644899",
@@ -511,10 +916,19 @@
 "name": "FA Latias",
 "setName": "2023 Sword And Shield Crown Zenith",
 "number": "GG20",
-"est": 50,
+"est": 44,
 "conf": 5,
 "done": "07/30/26",
-"spec": "2023 SWORD AND SHIELD CROWN ZENITH GG20 FA LATIAS"
+"spec": "2023 SWORD AND SHIELD CROWN ZENITH GG20 FA LATIAS",
+"src": {
+"cl": 50,
+"pc": 43.95,
+"apr": 13.5,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Latias #GG20 Pokemon Crown Zenith",
+"check": false
+}
 },
 {
 "cert": "167644900",
@@ -525,7 +939,16 @@
 "est": 18,
 "conf": 3,
 "done": "07/30/26",
-"spec": "2023 SVI EN-247 KORAIDON EX SIR"
+"spec": "2023 SVI EN-247 KORAIDON EX SIR",
+"src": {
+"cl": 18,
+"pc": 22.43,
+"apr": 15.25,
+"aprN": 2,
+"ebay": null,
+"pcTitle": "Koraidon ex #247 Pokemon Scarlet & Violet",
+"check": false
+}
 },
 {
 "cert": "167644901",
@@ -533,11 +956,20 @@
 "name": "FA Meowth VMAX Meowth VMAX Special Collection",
 "setName": "2020 Promo",
 "number": "005",
-"est": 185,
+"est": 34,
 "conf": 5,
 "done": "07/30/26",
 "spec": "2020 PROMO 005 FA MEOWTH VMAX MEOWTH VMAX SPECIAL COLLECTION",
-"match": "Meowth VMAX"
+"match": "Meowth VMAX",
+"src": {
+"cl": 185,
+"pc": null,
+"apr": 34.33,
+"aprN": 5,
+"ebay": null,
+"pcTitle": null,
+"check": true
+}
 },
 {
 "cert": "167644902",
@@ -545,22 +977,40 @@
 "name": "Greninja V",
 "setName": "2021 Fusion Strike",
 "number": "073",
-"est": 39,
+"est": 37,
 "conf": 5,
 "done": "07/30/26",
 "spec": "2021 FUSION STRIKE 073 GRENINJA V",
-"match": "Greninja V"
+"match": "Greninja V",
+"src": {
+"cl": 39,
+"pc": 35.0,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": "Greninja V #73 | Pokemon Fusion Strike",
+"check": false
+}
 },
 {
 "cert": "167644903",
 "grade": "PSA 10",
 "name": "FA Snorlax VMAX",
-"setName": "2020",
+"setName": "2020 Sword & Shield",
 "number": "142",
 "est": 222,
 "conf": 5,
 "done": "07/30/26",
-"spec": "2020 142 FA SNORLAX VMAX"
+"spec": "2020 142 FA SNORLAX VMAX",
+"src": {
+"cl": 222,
+"pc": 221.76,
+"apr": 170.0,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Snorlax Vmax #142 | Pokemon Sword & Shield",
+"check": false
+}
 },
 {
 "cert": "167644904",
@@ -568,33 +1018,60 @@
 "name": "Eevee & Snorlax GX",
 "setName": "2019 Team Up",
 "number": "120",
-"est": 912,
+"est": 778,
 "conf": 5,
 "done": "07/30/26",
 "spec": "2019 TEAM UP 120 EEVEE & SNORLAX GX",
-"match": "Eevee & Snorlax-GX"
+"match": "Eevee & Snorlax-GX",
+"src": {
+"cl": 912,
+"pc": 777.59,
+"apr": 480.0,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Eevee & Snorlax GX #120 | Pokemon Team Up",
+"check": false
+}
 },
 {
 "cert": "167644905",
 "grade": "PSA 10",
 "name": "FA Snorlax V",
-"setName": "2020",
+"setName": "2020 Sword & Shield",
 "number": "197",
 "est": 166,
 "conf": 4,
 "done": "07/30/26",
-"spec": "2020 197 FA SNORLAX V"
+"spec": "2020 197 FA SNORLAX V",
+"src": {
+"cl": 166,
+"pc": 220.0,
+"apr": 88.0,
+"aprN": 2,
+"ebay": null,
+"pcTitle": "Snorlax V #197 | Pokemon Sword & Shield",
+"check": false
+}
 },
 {
 "cert": "167644906",
 "grade": "PSA 8",
 "name": "Snorlax V",
-"setName": "2020",
+"setName": "2020 Sword & Shield",
 "number": "141",
-"est": 42,
+"est": 32,
 "conf": 2,
 "done": "07/30/26",
-"spec": "2020 141 SNORLAX V"
+"spec": "2020 141 SNORLAX V",
+"src": {
+"cl": 42,
+"pc": 21.61,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": "Snorlax V #141 Pokemon Sword & Shield",
+"check": false
+}
 },
 {
 "cert": "167644907",
@@ -602,21 +1079,39 @@
 "name": "FA Charizard VMAX",
 "setName": "2020 Darkness Ablaze",
 "number": "020",
-"est": 47,
+"est": 51,
 "conf": 5,
 "done": "07/30/26",
-"spec": "2020 DARKNESS ABLAZE 020 FA CHARIZARD VMAX"
+"spec": "2020 DARKNESS ABLAZE 020 FA CHARIZARD VMAX",
+"src": {
+"cl": 47,
+"pc": 54.0,
+"apr": 51.0,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Charizard VMAX #20 | Pokemon Darkness Ablaze",
+"check": false
+}
 },
 {
 "cert": "167644908",
 "grade": "PSA 8",
 "name": "Oricorio ex Mega Charizard X ex Ultra-Premium Collection",
-"setName": "2025 Mep En-Mega Evolution Promo",
+"setName": "2025 Mega Evolution Promo",
 "number": "024",
-"est": 16,
+"est": 12.75,
 "conf": 5,
 "done": "07/30/26",
-"spec": "2025 MEP EN-MEGA EVOLUTION PROMO 024 ORICORIO EX MEGA CHARIZARD X ex ULTRA-PREMIUM COLLECTION"
+"spec": "2025 MEP EN-MEGA EVOLUTION PROMO 024 ORICORIO EX MEGA CHARIZARD X ex ULTRA-PREMIUM COLLECTION",
+"src": {
+"cl": 16,
+"pc": 12.05,
+"apr": 12.75,
+"aprN": 2,
+"ebay": null,
+"pcTitle": "Oricorio EX #24 | Pokemon Promo",
+"check": false
+}
 },
 {
 "cert": "167644909",
@@ -624,10 +1119,19 @@
 "name": "FA Jirachi V",
 "setName": "2022 Astral Radiance",
 "number": "170",
-"est": 88,
+"est": 73,
 "conf": 4,
 "done": "07/30/26",
-"spec": "2022 ASTRAL RADIANCE 170 FA JIRACHI V"
+"spec": "2022 ASTRAL RADIANCE 170 FA JIRACHI V",
+"src": {
+"cl": 88,
+"pc": 58.35,
+"apr": null,
+"aprN": 1,
+"ebay": null,
+"pcTitle": "Jirachi V #170 | Pokemon Astral Radiance",
+"check": false
+}
 },
 {
 "cert": "167644910",
@@ -635,10 +1139,19 @@
 "name": "Arceus V Arceus V Figure Collection",
 "setName": "2022 Promo",
 "number": "204",
-"est": 26,
+"est": 22,
 "conf": 5,
 "done": "07/30/26",
-"spec": "2022 PROMO 204 ARCEUS V ARCEUS V FIGURE COLLECTION"
+"spec": "2022 PROMO 204 ARCEUS V ARCEUS V FIGURE COLLECTION",
+"src": {
+"cl": 26,
+"pc": 22.5,
+"apr": 20.5,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Arceus V #SWSH204 Pokemon Promo",
+"check": false
+}
 },
 {
 "cert": "167644911",
@@ -646,11 +1159,20 @@
 "name": "FA Rayquaza V",
 "setName": "2021 Evolving Skies",
 "number": "193",
-"est": 107,
+"est": 98,
 "conf": 4,
 "done": "07/30/26",
 "spec": "2021 EVOLVING SKIES 193 FA RAYQUAZA V",
-"match": "Rayquaza"
+"match": "Rayquaza",
+"src": {
+"cl": 107,
+"pc": 88.42,
+"apr": null,
+"aprN": 1,
+"ebay": null,
+"pcTitle": "Rayquaza V #193 | Pokemon Evolving Skies",
+"check": false
+}
 },
 {
 "cert": "167644912",
@@ -662,7 +1184,16 @@
 "conf": 2,
 "done": "07/30/26",
 "spec": "2023-2024 POKEMON PLAY! POKEMON PRIZE PACK 086 GARDEVOIR EX",
-"match": "Gardevoir Priza (check name)"
+"match": "Gardevoir Priza (check name)",
+"src": {
+"cl": 30,
+"pc": null,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": null,
+"check": false
+}
 },
 {
 "cert": "167644913",
@@ -670,10 +1201,19 @@
 "name": "FA Lucario VSTAR Crown Zenith Elite Trainer Box",
 "setName": "2023 Promo",
 "number": "291",
-"est": 30,
+"est": 25,
 "conf": 5,
 "done": "07/30/26",
-"spec": "2023 PROMO 291 FA LUCARIO VSTAR CROWN ZENITH ELITE TRAINER BOX"
+"spec": "2023 PROMO 291 FA LUCARIO VSTAR CROWN ZENITH ELITE TRAINER BOX",
+"src": {
+"cl": 30,
+"pc": null,
+"apr": 20.0,
+"aprN": 5,
+"ebay": null,
+"pcTitle": null,
+"check": false
+}
 },
 {
 "cert": "167291091",
@@ -681,10 +1221,19 @@
 "name": "FA Rayquaza VMAX Secret",
 "setName": "2021 Evolving Skies",
 "number": "217",
-"est": 270,
+"est": 241,
 "conf": 5,
 "done": "08/17/26",
-"spec": "2021 EVOLVING SKIES 217 FA RAYQUAZA VMAX SECRET"
+"spec": "2021 EVOLVING SKIES 217 FA RAYQUAZA VMAX SECRET",
+"src": {
+"cl": 270,
+"pc": 241.25,
+"apr": 167.5,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Rayquaza VMAX #217 | Pokemon Evolving Skies",
+"check": false
+}
 },
 {
 "cert": "167291092",
@@ -692,10 +1241,19 @@
 "name": "FA Rayquaza VMAX",
 "setName": "2022 Silver Tempest",
 "number": "TG29",
-"est": 140,
+"est": 150,
 "conf": 5,
 "done": "08/17/26",
-"spec": "2022 SILVER TEMPEST TG29 FA RAYQUAZA VMAX"
+"spec": "2022 SILVER TEMPEST TG29 FA RAYQUAZA VMAX",
+"src": {
+"cl": 140,
+"pc": 150.0,
+"apr": 185.5,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Rayquaza VMAX #TG29 | Pokemon Silver Tempest",
+"check": false
+}
 },
 {
 "cert": "167291093",
@@ -703,10 +1261,19 @@
 "name": "FA Umbreon VMAX",
 "setName": "2021 Evolving Skies",
 "number": "095",
-"est": 150,
+"est": 136,
 "conf": 5,
 "done": "08/17/26",
-"spec": "2021 EVOLVING SKIES 095 FA UMBREON VMAX"
+"spec": "2021 EVOLVING SKIES 095 FA UMBREON VMAX",
+"src": {
+"cl": 150,
+"pc": 135.66,
+"apr": 122.5,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Umbreon VMAX #95 | Pokemon Evolving Skies",
+"check": false
+}
 },
 {
 "cert": "167291094",
@@ -714,10 +1281,19 @@
 "name": "FA Tyranitar V",
 "setName": "2021 Battle Styles",
 "number": "154",
-"est": 30,
+"est": 28,
 "conf": 5,
 "done": "08/17/26",
-"spec": "2021 BATTLE STYLES 154 FA TYRANITAR V"
+"spec": "2021 BATTLE STYLES 154 FA TYRANITAR V",
+"src": {
+"cl": 30,
+"pc": 26.34,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": "Tyranitar V #154 | Pokemon Battle Styles",
+"check": false
+}
 },
 {
 "cert": "167291095",
@@ -725,10 +1301,19 @@
 "name": "FA Pikachu VMAX Pikachu VMAX Box",
 "setName": "2021 Promo",
 "number": "062",
-"est": 25,
+"est": 21,
 "conf": 3,
 "done": "08/17/26",
-"spec": "2021 PROMO 062 FA PIKACHU VMAX PIKACHU VMAX BOX"
+"spec": "2021 PROMO 062 FA PIKACHU VMAX PIKACHU VMAX BOX",
+"src": {
+"cl": 25,
+"pc": 17.2,
+"apr": null,
+"aprN": 1,
+"ebay": null,
+"pcTitle": "Pikachu VMAX #SWSH062 Pokemon Celebrations",
+"check": false
+}
 },
 {
 "cert": "167291096",
@@ -736,11 +1321,20 @@
 "name": "FA Blastoise VMAX Blastoise VMAX Battle Box",
 "setName": "2021 Promo",
 "number": "103",
-"est": 40,
+"est": 38,
 "conf": 5,
 "done": "08/17/26",
 "spec": "2021 PROMO 103 FA BLASTOISE VMAX BLASTOISE VMAX BATTLE BOX",
-"match": "Blastoise VMAX"
+"match": "Blastoise VMAX",
+"src": {
+"cl": 40,
+"pc": null,
+"apr": 36.0,
+"aprN": 2,
+"ebay": null,
+"pcTitle": null,
+"check": false
+}
 },
 {
 "cert": "167291097",
@@ -748,10 +1342,19 @@
 "name": "FA Umbreon VMAX Secret",
 "setName": "2021 Evolving Skies",
 "number": "214",
-"est": 228,
+"est": 180,
 "conf": 5,
 "done": "08/17/26",
-"spec": "2021 EVOLVING SKIES 214 FA UMBREON VMAX SECRET"
+"spec": "2021 EVOLVING SKIES 214 FA UMBREON VMAX SECRET",
+"src": {
+"cl": 228,
+"pc": 180.0,
+"apr": 151.0,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Umbreon VMAX #214 | Pokemon Evolving Skies",
+"check": false
+}
 },
 {
 "cert": "167291098",
@@ -759,10 +1362,19 @@
 "name": "FA Lucario VSTAR Crown Zenith Elite Trainer Box",
 "setName": "2023 Promo",
 "number": "291",
-"est": 105,
+"est": 116,
 "conf": 5,
 "done": "08/17/26",
-"spec": "2023 PROMO 291 FA LUCARIO VSTAR CROWN ZENITH ELITE TRAINER BOX"
+"spec": "2023 PROMO 291 FA LUCARIO VSTAR CROWN ZENITH ELITE TRAINER BOX",
+"src": {
+"cl": 105,
+"pc": null,
+"apr": 127.51,
+"aprN": 5,
+"ebay": null,
+"pcTitle": null,
+"check": false
+}
 },
 {
 "cert": "167291099",
@@ -770,10 +1382,19 @@
 "name": "FA Blacephalon GX",
 "setName": "2018 Lost Thunder",
 "number": "199",
-"est": 77,
+"est": 71,
 "conf": 5,
 "done": "08/17/26",
-"spec": "2018 LOST THUNDER 199 FA BLACEPHALON GX"
+"spec": "2018 LOST THUNDER 199 FA BLACEPHALON GX",
+"src": {
+"cl": 77,
+"pc": 64.32,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": "Blacephalon GX #199 | Pokemon Lost Thunder",
+"check": false
+}
 },
 {
 "cert": "167291100",
@@ -784,7 +1405,16 @@
 "est": 323,
 "conf": 5,
 "done": "08/17/26",
-"spec": "2021 FUSION STRIKE 156 GENGAR V"
+"spec": "2021 FUSION STRIKE 156 GENGAR V",
+"src": {
+"cl": 323,
+"pc": 366.58,
+"apr": 112.8,
+"aprN": 2,
+"ebay": null,
+"pcTitle": "Gengar V #156 | Pokemon Fusion Strike",
+"check": false
+}
 },
 {
 "cert": "167291101",
@@ -792,10 +1422,19 @@
 "name": "FA Blaziken V",
 "setName": "2021 Chilling Reign",
 "number": "161",
-"est": 145,
+"est": 128,
 "conf": 5,
 "done": "08/17/26",
-"spec": "2021 CHILLING REIGN 161 FA BLAZIKEN V"
+"spec": "2021 CHILLING REIGN 161 FA BLAZIKEN V",
+"src": {
+"cl": 145,
+"pc": 128.19,
+"apr": 67.0,
+"aprN": 3,
+"ebay": null,
+"pcTitle": "Blaziken V #161 | Pokemon Chilling Reign",
+"check": false
+}
 },
 {
 "cert": "167291102",
@@ -803,10 +1442,19 @@
 "name": "FA Flareon V",
 "setName": "2021 Evolving Skies",
 "number": "169",
-"est": 27,
+"est": 26,
 "conf": 5,
 "done": "08/17/26",
-"spec": "2021 EVOLVING SKIES 169 FA FLAREON V"
+"spec": "2021 EVOLVING SKIES 169 FA FLAREON V",
+"src": {
+"cl": 27,
+"pc": 25.5,
+"apr": null,
+"aprN": 1,
+"ebay": null,
+"pcTitle": "Flareon V #169 Pokemon Evolving Skies",
+"check": false
+}
 },
 {
 "cert": "167291103",
@@ -817,18 +1465,36 @@
 "est": 24,
 "conf": 4,
 "done": "08/17/26",
-"spec": "2021 PROMO 098 FA CROBAT V SHINING FATES PREMIUM COLLECTION BOX"
+"spec": "2021 PROMO 098 FA CROBAT V SHINING FATES PREMIUM COLLECTION BOX",
+"src": {
+"cl": 24,
+"pc": null,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": null,
+"check": false
+}
 },
 {
 "cert": "167291104",
 "grade": "PSA 9",
 "name": "FA Torkoal V",
-"setName": "2020",
+"setName": "2020 Sword & Shield",
 "number": "188",
 "est": 27,
 "conf": 5,
 "done": "08/17/26",
-"spec": "2020 188 FA TORKOAL V"
+"spec": "2020 188 FA TORKOAL V",
+"src": {
+"cl": 27,
+"pc": 26.67,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": "Torkoal V #188 | Pokemon Sword & Shield",
+"check": false
+}
 },
 {
 "cert": "167291105",
@@ -836,22 +1502,40 @@
 "name": "FA Zacian V Ultra Premium Collection",
 "setName": "2020 Promo",
 "number": "076",
-"est": 15,
+"est": 16.26,
 "conf": 5,
 "done": "08/17/26",
 "spec": "2020 PROMO 076 FA ZACIAN V ULTRA PREMIUM COLLECTION",
-"match": "Zacian V Promo"
+"match": "Zacian V Promo",
+"src": {
+"cl": 15,
+"pc": 26.0,
+"apr": 16.26,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Zacian V #SWSH076 | Pokemon Promo",
+"check": false
+}
 },
 {
 "cert": "167291106",
 "grade": "PSA 9",
 "name": "FA Zacian V Secret",
-"setName": "2020",
+"setName": "2020 Sword & Shield",
 "number": "211",
-"est": 17,
+"est": 22,
 "conf": 4,
 "done": "08/17/26",
-"spec": "2020 211 FA ZACIAN V SECRET"
+"spec": "2020 211 FA ZACIAN V SECRET",
+"src": {
+"cl": 17,
+"pc": 22.5,
+"apr": 27.0,
+"aprN": 3,
+"ebay": null,
+"pcTitle": "Zacian V #211 | Pokemon Sword & Shield",
+"check": false
+}
 },
 {
 "cert": "167291107",
@@ -859,11 +1543,20 @@
 "name": "FA Zamazenta V Ultra Premium Collection",
 "setName": "2020 Promo",
 "number": "077",
-"est": 34,
+"est": 28,
 "conf": 5,
 "done": "08/17/26",
 "spec": "2020 PROMO 077 FA ZAMAZENTA V ULTRA PREMIUM COLLECTION",
-"match": "Zamazenta V"
+"match": "Zamazenta V",
+"src": {
+"cl": 34,
+"pc": 28.13,
+"apr": 18.54,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Zamazenta V #SWSH077 | Pokemon Promo",
+"check": false
+}
 },
 {
 "cert": "167291108",
@@ -871,10 +1564,19 @@
 "name": "Yveltal",
 "setName": "2021 Celebrations",
 "number": "019",
-"est": 18,
+"est": 14.66,
 "conf": 5,
 "done": "08/17/26",
-"spec": "2021 CELEBRATIONS 019 YVELTAL"
+"spec": "2021 CELEBRATIONS 019 YVELTAL",
+"src": {
+"cl": 18,
+"pc": 11.31,
+"apr": null,
+"aprN": 1,
+"ebay": null,
+"pcTitle": "Yveltal #19 | Pokemon Celebrations",
+"check": false
+}
 },
 {
 "cert": "167291109",
@@ -882,10 +1584,19 @@
 "name": "Rattata No Rarity Symbol",
 "setName": "1996 Japanese Basic",
 "number": "19",
-"est": 110,
+"est": 37,
 "conf": 4,
 "done": "08/17/26",
-"spec": "1996 JAPANESE BASIC 19 RATTATA NO RARITY SYMBOL"
+"spec": "1996 JAPANESE BASIC 19 RATTATA NO RARITY SYMBOL",
+"src": {
+"cl": 110,
+"pc": 37.0,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": "Rattata [No Rarity] #19 | Pokemon Japanese Expansion Pack",
+"check": true
+}
 },
 {
 "cert": "167291110",
@@ -893,10 +1604,19 @@
 "name": "FA Espeon VMAX",
 "setName": "2021 Evolving Skies",
 "number": "065",
-"est": 40,
+"est": 35,
 "conf": 5,
 "done": "08/17/26",
-"spec": "2021 EVOLVING SKIES 065 FA ESPEON VMAX"
+"spec": "2021 EVOLVING SKIES 065 FA ESPEON VMAX",
+"src": {
+"cl": 40,
+"pc": 35.0,
+"apr": 20.5,
+"aprN": 3,
+"ebay": null,
+"pcTitle": "Espeon VMAX #65 | Pokemon Evolving Skies",
+"check": false
+}
 },
 {
 "cert": "158477108",
@@ -907,7 +1627,16 @@
 "est": 32,
 "conf": 5,
 "done": "08/27/26",
-"spec": "2021 PROMO 102 FA VENUSAUR VMAX VENUSAUR VMAX BATTLE BOX"
+"spec": "2021 PROMO 102 FA VENUSAUR VMAX VENUSAUR VMAX BATTLE BOX",
+"src": {
+"cl": 32,
+"pc": null,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": null,
+"check": false
+}
 },
 {
 "cert": "158477109",
@@ -915,10 +1644,19 @@
 "name": "Groudon",
 "setName": "2021 Celebrations",
 "number": "017",
-"est": 13,
+"est": 14.69,
 "conf": 5,
 "done": "08/27/26",
-"spec": "2021 CELEBRATIONS 017 GROUDON"
+"spec": "2021 CELEBRATIONS 017 GROUDON",
+"src": {
+"cl": 13,
+"pc": 16.38,
+"apr": null,
+"aprN": 1,
+"ebay": null,
+"pcTitle": "Groudon #17 | Pokemon Celebrations",
+"check": false
+}
 },
 {
 "cert": "158477110",
@@ -926,10 +1664,19 @@
 "name": "Solgaleo",
 "setName": "2021 Celebrations",
 "number": "021",
-"est": 12,
+"est": 11.0,
 "conf": 4,
 "done": "08/27/26",
-"spec": "2021 CELEBRATIONS 021 SOLGALEO"
+"spec": "2021 CELEBRATIONS 021 SOLGALEO",
+"src": {
+"cl": 12,
+"pc": 10.0,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": "Solgaleo #21 | Pokemon Celebrations",
+"check": false
+}
 },
 {
 "cert": "158477111",
@@ -937,10 +1684,19 @@
 "name": "Charizard VSTAR",
 "setName": "2022 Brilliant Stars",
 "number": "018",
-"est": 46,
+"est": 42,
 "conf": 5,
 "done": "08/27/26",
-"spec": "2022 BRILLIANT STARS 018 CHARIZARD VSTAR"
+"spec": "2022 BRILLIANT STARS 018 CHARIZARD VSTAR",
+"src": {
+"cl": 46,
+"pc": 41.93,
+"apr": 23.5,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Charizard VSTAR #18 | Pokemon Brilliant Stars",
+"check": false
+}
 },
 {
 "cert": "158477112",
@@ -948,10 +1704,19 @@
 "name": "FA Charizard V Ultra-Premium Collection-Charizard",
 "setName": "2022 Promo",
 "number": "260",
-"est": 60,
+"est": 65,
 "conf": 5,
 "done": "08/27/26",
-"spec": "2022 PROMO 260 FA CHARIZARD V ULTRA-PREMIUM COLLECTION-CHARIZARD"
+"spec": "2022 PROMO 260 FA CHARIZARD V ULTRA-PREMIUM COLLECTION-CHARIZARD",
+"src": {
+"cl": 60,
+"pc": 65.0,
+"apr": 77.88,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Charizard V #SWSH260 Pokemon Promo",
+"check": false
+}
 },
 {
 "cert": "158477113",
@@ -959,10 +1724,19 @@
 "name": "Pikachu Mcdonald's",
 "setName": "2025 Japanese M-P Promo",
 "number": "020",
-"est": 73,
+"est": 76,
 "conf": 5,
 "done": "08/27/26",
-"spec": "2025 JAPANESE M-P PROMO 020 PIKACHU McDONALD'S"
+"spec": "2025 JAPANESE M-P PROMO 020 PIKACHU McDONALD'S",
+"src": {
+"cl": 73,
+"pc": 76.0,
+"apr": 102.5,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Pikachu #20/M-P Pokemon Japanese Promo",
+"check": false
+}
 },
 {
 "cert": "158477114",
@@ -974,7 +1748,16 @@
 "conf": 5,
 "done": "08/27/26",
 "spec": "2021 PROMO 133 LANCE'S CHARIZARD V CELEBRATIONS COLLECTION",
-"match": "Lance's Charizard"
+"match": "Lance's Charizard",
+"src": {
+"cl": 31,
+"pc": 31.49,
+"apr": 27.4,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Lance's Charizard V #SWSH133 Pokemon Celebrations",
+"check": false
+}
 },
 {
 "cert": "158477115",
@@ -982,10 +1765,19 @@
 "name": "Greninja GX",
 "setName": "2018 Forbidden Light",
 "number": "24",
-"est": 39,
+"est": 32,
 "conf": 2,
 "done": "08/27/26",
-"spec": "2018 FORBIDDEN LIGHT 24 GRENINJA GX"
+"spec": "2018 FORBIDDEN LIGHT 24 GRENINJA GX",
+"src": {
+"cl": 39,
+"pc": 25.29,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": "Greninja-GX #24 | Pokemon Forbidden Light",
+"check": false
+}
 },
 {
 "cert": "158477116",
@@ -993,23 +1785,41 @@
 "name": "Charizard & Braixen GX",
 "setName": "2019 Cosmic Eclipse",
 "number": "22",
-"est": 71,
+"est": 56,
 "conf": 5,
 "done": "08/27/26",
 "spec": "2019 COSMIC ECLIPSE 22 CHARIZARD & BRAIXEN GX",
-"match": "Charizard & Braixen-GX"
+"match": "Charizard & Braixen-GX",
+"src": {
+"cl": 71,
+"pc": 55.51,
+"apr": 39.0,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Charizard & Braixen GX #22 Pokemon Cosmic Eclipse",
+"check": false
+}
 },
 {
 "cert": "158477117",
 "grade": "PSA 7",
 "name": "Squirtle Shadowless",
-"setName": "1999 Game",
+"setName": "1999 Base Set",
 "number": "63",
-"est": 87,
+"est": 73,
 "conf": 4,
 "done": "08/27/26",
 "spec": "1999 GAME 63 SQUIRTLE SHADOWLESS",
-"match": "Squirtle Shadowless"
+"match": "Squirtle Shadowless",
+"src": {
+"cl": 87,
+"pc": 59.0,
+"apr": null,
+"aprN": 1,
+"ebay": null,
+"pcTitle": "Squirtle [Shadowless] #63 Pokemon Base Set",
+"check": false
+}
 },
 {
 "cert": "158477118",
@@ -1020,7 +1830,16 @@
 "est": 32,
 "conf": 1,
 "done": "08/27/26",
-"spec": "2023-2024 POKEMON PLAY! POKEMON PRIZE PACK 130 GIRATINA V"
+"spec": "2023-2024 POKEMON PLAY! POKEMON PRIZE PACK 130 GIRATINA V",
+"src": {
+"cl": 32,
+"pc": null,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": null,
+"check": false
+}
 },
 {
 "cert": "158477119",
@@ -1028,23 +1847,41 @@
 "name": "Birthday Pikachu-Holo",
 "setName": "2021 Celebrations Classic Collection",
 "number": "24",
-"est": 65,
+"est": 60,
 "conf": 5,
 "done": "08/27/26",
 "spec": "2021 CELEBRATIONS CLASSIC COLLECTION 24 BIRTHDAY PIKACHU-HOLO",
-"match": "Birthday Pikachu"
+"match": "Birthday Pikachu",
+"src": {
+"cl": 65,
+"pc": 50.16,
+"apr": 60.0,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Pikachu Birthday #24 Pokemon Celebrations",
+"check": false
+}
 },
 {
 "cert": "158477120",
 "grade": "PSA 9",
 "name": "Pikachu Paldea Evolved Elite Trainer Box",
-"setName": "2023 Svp En-Promo",
+"setName": "2023 SV Black Star Promo",
 "number": "027",
-"est": 40,
+"est": 32,
 "conf": 5,
 "done": "08/27/26",
 "spec": "2023 SVP EN-PROMO 027 PIKACHU PALDEA EVOLVED ELITE TRAINER BOX",
-"match": "Pikachu"
+"match": "Pikachu",
+"src": {
+"cl": 40,
+"pc": 32.06,
+"apr": 31.0,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Pikachu [Paldea] #27 Pokemon Promo",
+"check": false
+}
 },
 {
 "cert": "158477121",
@@ -1055,7 +1892,16 @@
 "est": 15,
 "conf": 5,
 "done": "08/27/26",
-"spec": "2021 CELEBRATIONS 005 FA PIKACHU"
+"spec": "2021 CELEBRATIONS 005 FA PIKACHU",
+"src": {
+"cl": 15,
+"pc": 17.91,
+"apr": 7.5,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Pikachu #5 | Pokemon Celebrations",
+"check": false
+}
 },
 {
 "cert": "158477122",
@@ -1063,22 +1909,40 @@
 "name": "Lucario & Melmetal GX",
 "setName": "2019 Unbroken Bonds",
 "number": "120",
-"est": 39,
+"est": 43,
 "conf": 5,
 "done": "08/27/26",
 "spec": "2019 UNBROKEN BONDS 120 LUCARIO & MELMETAL GX",
-"match": "Lucario & Melmetal-GX"
+"match": "Lucario & Melmetal-GX",
+"src": {
+"cl": 39,
+"pc": 46.18,
+"apr": null,
+"aprN": 1,
+"ebay": null,
+"pcTitle": "Lucario & Melmetal GX #120 | Pokemon Unbroken Bonds",
+"check": false
+}
 },
 {
 "cert": "158477123",
 "grade": "PSA 8",
 "name": "M Blastoise ex",
-"setName": "2016 Xy Evolutions",
+"setName": "2016 XY Evolutions",
 "number": "22",
 "est": 29,
 "conf": 5,
 "done": "08/27/26",
-"spec": "2016 XY EVOLUTIONS 22 M BLASTOISE EX"
+"spec": "2016 XY EVOLUTIONS 22 M BLASTOISE EX",
+"src": {
+"cl": 29,
+"pc": 40.14,
+"apr": 27.5,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "M Blastoise EX #22 | Pokemon Evolutions",
+"check": false
+}
 },
 {
 "cert": "158477124",
@@ -1086,10 +1950,19 @@
 "name": "Venusaur & Snivy GX",
 "setName": "2019 Cosmic Eclipse",
 "number": "1",
-"est": 55,
+"est": 46,
 "conf": 5,
 "done": "08/27/26",
-"spec": "2019 COSMIC ECLIPSE 1 VENUSAUR & SNIVY GX"
+"spec": "2019 COSMIC ECLIPSE 1 VENUSAUR & SNIVY GX",
+"src": {
+"cl": 55,
+"pc": 46.5,
+"apr": 27.12,
+"aprN": 2,
+"ebay": null,
+"pcTitle": "Venusaur & Snivy GX #1 | Pokemon Cosmic Eclipse",
+"check": false
+}
 },
 {
 "cert": "158477125",
@@ -1100,7 +1973,16 @@
 "est": 38,
 "conf": 5,
 "done": "08/27/26",
-"spec": "2019 UNBROKEN BONDS 195a FA DEDENNE GX 2020 YELLOW A ALTERNATE ART TRAINER'S TOOLKIT"
+"spec": "2019 UNBROKEN BONDS 195a FA DEDENNE GX 2020 YELLOW A ALTERNATE ART TRAINER'S TOOLKIT",
+"src": {
+"cl": 38,
+"pc": 45.0,
+"apr": 34.0,
+"aprN": 4,
+"ebay": null,
+"pcTitle": "Dedenne GX #195a Pokemon Unbroken Bonds",
+"check": false
+}
 },
 {
 "cert": "158477126",
@@ -1108,10 +1990,19 @@
 "name": "FA Suicune GX",
 "setName": "2018 Lost Thunder",
 "number": "200",
-"est": 119,
+"est": 90,
 "conf": 4,
 "done": "08/27/26",
-"spec": "2018 LOST THUNDER 200 FA SUICUNE GX"
+"spec": "2018 LOST THUNDER 200 FA SUICUNE GX",
+"src": {
+"cl": 119,
+"pc": 60.53,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": "Suicune GX #200 | Pokemon Lost Thunder",
+"check": false
+}
 },
 {
 "cert": "158477127",
@@ -1122,7 +2013,16 @@
 "est": 21,
 "conf": 4,
 "done": "08/27/26",
-"spec": "2021 PROMO 102 FA VENUSAUR VMAX VENUSAUR VMAX BATTLE BOX"
+"spec": "2021 PROMO 102 FA VENUSAUR VMAX VENUSAUR VMAX BATTLE BOX",
+"src": {
+"cl": 21,
+"pc": null,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": null,
+"check": false
+}
 },
 {
 "cert": "158477144",
@@ -1130,11 +2030,20 @@
 "name": "Nami Manga Alternate Art",
 "setName": "2024 One Piece Japanese Prb01-Premium Booster -One Piece Card The Best-",
 "number": "016",
-"est": null,
+"est": 705,
 "conf": null,
 "done": "06/25/26",
 "spec": "2024 ONE PIECE JAPANESE PRB01-PREMIUM BOOSTER -ONE PIECE CARD THE BEST- 016 NAMI MANGA ALTERNATE ART",
-"match": "Nami (One Piece)"
+"match": "Nami (One Piece)",
+"src": {
+"cl": null,
+"pc": null,
+"apr": 705.0,
+"aprN": 5,
+"ebay": 72.68,
+"pcTitle": null,
+"check": true
+}
 },
 {
 "cert": "158503070",
@@ -1142,11 +2051,20 @@
 "name": "Nami Manga Alternate Art",
 "setName": "2024 One Piece Japanese Prb01-Premium Booster -One Piece Card The Best-",
 "number": "016",
-"est": null,
+"est": 705,
 "conf": null,
 "done": "06/02/26",
 "spec": "2024 ONE PIECE JAPANESE PRB01-PREMIUM BOOSTER -ONE PIECE CARD THE BEST- 016 NAMI MANGA ALTERNATE ART",
-"match": "Nami (One Piece)"
+"match": "Nami (One Piece)",
+"src": {
+"cl": null,
+"pc": null,
+"apr": 705.0,
+"aprN": 5,
+"ebay": 72.68,
+"pcTitle": null,
+"check": true
+}
 },
 {
 "cert": "158503190",
@@ -1154,10 +2072,19 @@
 "name": "Blastoise V Blastoise V Battle Deck",
 "setName": "2021 Promo",
 "number": "101",
-"est": 25,
+"est": 26,
 "conf": 5,
 "done": "09/17/26",
-"spec": "2021 PROMO 101 BLASTOISE V BLASTOISE V BATTLE DECK"
+"spec": "2021 PROMO 101 BLASTOISE V BLASTOISE V BATTLE DECK",
+"src": {
+"cl": 25,
+"pc": 26.83,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": "Blastoise V #SWSH101 Pokemon Promo",
+"check": false
+}
 },
 {
 "cert": "158503191",
@@ -1168,7 +2095,16 @@
 "est": null,
 "conf": null,
 "done": "09/17/26",
-"spec": "2021 CELEBRATIONS 001 HO-OH"
+"spec": "2021 CELEBRATIONS 001 HO-OH",
+"src": {
+"cl": null,
+"pc": null,
+"apr": null,
+"aprN": 1,
+"ebay": null,
+"pcTitle": null,
+"check": false
+}
 },
 {
 "cert": "158503192",
@@ -1176,10 +2112,19 @@
 "name": "Groudon",
 "setName": "2021 Celebrations",
 "number": "017",
-"est": 14,
+"est": 12.34,
 "conf": 5,
 "done": "09/17/26",
-"spec": "2021 CELEBRATIONS 017 GROUDON"
+"spec": "2021 CELEBRATIONS 017 GROUDON",
+"src": {
+"cl": 14,
+"pc": 10.68,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": "Groudon #17 | Pokemon Celebrations",
+"check": false
+}
 },
 {
 "cert": "158503193",
@@ -1187,10 +2132,19 @@
 "name": "Zekrom",
 "setName": "2021 Celebrations",
 "number": "010",
-"est": 14,
+"est": 15.79,
 "conf": 5,
 "done": "09/17/26",
-"spec": "2021 CELEBRATIONS 010 ZEKROM"
+"spec": "2021 CELEBRATIONS 010 ZEKROM",
+"src": {
+"cl": 14,
+"pc": 17.58,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": "Zekrom #10 | Pokemon Celebrations",
+"check": false
+}
 },
 {
 "cert": "158503194",
@@ -1198,10 +2152,19 @@
 "name": "Kyogre",
 "setName": "2021 Celebrations",
 "number": "003",
-"est": 25,
+"est": 18.95,
 "conf": 5,
 "done": "09/17/26",
-"spec": "2021 CELEBRATIONS 003 KYOGRE"
+"spec": "2021 CELEBRATIONS 003 KYOGRE",
+"src": {
+"cl": 25,
+"pc": 12.89,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": "Kyogre #3 | Pokemon Celebrations",
+"check": false
+}
 },
 {
 "cert": "158503195",
@@ -1209,10 +2172,19 @@
 "name": "Lugia",
 "setName": "2021 Celebrations",
 "number": "022",
-"est": 15,
+"est": 14.16,
 "conf": 5,
 "done": "09/17/26",
-"spec": "2021 CELEBRATIONS 022 LUGIA"
+"spec": "2021 CELEBRATIONS 022 LUGIA",
+"src": {
+"cl": 15,
+"pc": 13.32,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": "Lugia #22 Pokemon Celebrations",
+"check": false
+}
 },
 {
 "cert": "158503196",
@@ -1223,7 +2195,16 @@
 "est": 31,
 "conf": 5,
 "done": "09/17/26",
-"spec": "2021 PROMO 133 LANCE'S CHARIZARD V CELEBRATIONS COLLECTION"
+"spec": "2021 PROMO 133 LANCE'S CHARIZARD V CELEBRATIONS COLLECTION",
+"src": {
+"cl": 31,
+"pc": 31.49,
+"apr": 27.4,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Lance's Charizard V #SWSH133 Pokemon Celebrations",
+"check": false
+}
 },
 {
 "cert": "158503197",
@@ -1231,10 +2212,19 @@
 "name": "Cosmoem",
 "setName": "2021 Celebrations",
 "number": "014",
-"est": 12,
+"est": 12.15,
 "conf": 5,
 "done": "09/17/26",
-"spec": "2021 CELEBRATIONS 014 COSMOEM"
+"spec": "2021 CELEBRATIONS 014 COSMOEM",
+"src": {
+"cl": 12,
+"pc": 12.3,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": "Cosmoem #14 | Pokemon Celebrations",
+"check": false
+}
 },
 {
 "cert": "158503198",
@@ -1245,7 +2235,16 @@
 "est": 11,
 "conf": 5,
 "done": "09/17/26",
-"spec": "2021 CELEBRATIONS 001 HO-OH"
+"spec": "2021 CELEBRATIONS 001 HO-OH",
+"src": {
+"cl": 11,
+"pc": null,
+"apr": null,
+"aprN": 1,
+"ebay": null,
+"pcTitle": null,
+"check": false
+}
 },
 {
 "cert": "158503199",
@@ -1253,10 +2252,19 @@
 "name": "Lunala",
 "setName": "2021 Celebrations",
 "number": "015",
-"est": 21,
+"est": 18.0,
 "conf": 5,
 "done": "09/17/26",
-"spec": "2021 CELEBRATIONS 015 LUNALA"
+"spec": "2021 CELEBRATIONS 015 LUNALA",
+"src": {
+"cl": 21,
+"pc": 15.0,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": "Lunala #15 | Pokemon Celebrations",
+"check": false
+}
 },
 {
 "cert": "158503200",
@@ -1264,10 +2272,19 @@
 "name": "Cosmog",
 "setName": "2021 Celebrations",
 "number": "013",
-"est": 8,
+"est": 10.12,
 "conf": 5,
 "done": "09/17/26",
-"spec": "2021 CELEBRATIONS 013 COSMOG"
+"spec": "2021 CELEBRATIONS 013 COSMOG",
+"src": {
+"cl": 8,
+"pc": 12.25,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": "Cosmog #13 Pokemon Celebrations",
+"check": false
+}
 },
 {
 "cert": "158503201",
@@ -1278,7 +2295,16 @@
 "est": 13,
 "conf": 1,
 "done": "09/17/26",
-"spec": "2023-2024 POKEMON PLAY! POKEMON PRIZE PACK 131 GIRATINA VSTAR"
+"spec": "2023-2024 POKEMON PLAY! POKEMON PRIZE PACK 131 GIRATINA VSTAR",
+"src": {
+"cl": 13,
+"pc": null,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": null,
+"check": false
+}
 },
 {
 "cert": "158503202",
@@ -1289,19 +2315,37 @@
 "est": 18,
 "conf": 2,
 "done": "09/17/26",
-"spec": "2023-2024 POKEMON PLAY! POKEMON PRIZE PACK 130 GIRATINA V"
+"spec": "2023-2024 POKEMON PLAY! POKEMON PRIZE PACK 130 GIRATINA V",
+"src": {
+"cl": 18,
+"pc": null,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": null,
+"check": false
+}
 },
 {
 "cert": "158503203",
 "grade": "PSA 9",
 "name": "Pikachu Paldea Evolved Elite Trainer Box",
-"setName": "2023 Svp En-Promo",
+"setName": "2023 SV Black Star Promo",
 "number": "027",
-"est": 40,
+"est": 32,
 "conf": 5,
 "done": "09/17/26",
 "spec": "2023 SVP EN-PROMO 027 PIKACHU PALDEA EVOLVED ELITE TRAINER BOX",
-"match": "Pikachu"
+"match": "Pikachu",
+"src": {
+"cl": 40,
+"pc": 32.06,
+"apr": 31.0,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Pikachu [Paldea] #27 Pokemon Promo",
+"check": false
+}
 },
 {
 "cert": "158503204",
@@ -1309,44 +2353,80 @@
 "name": "FA Pikachu",
 "setName": "2021 Celebrations",
 "number": "005",
-"est": 18,
+"est": 14.19,
 "conf": 5,
 "done": "09/17/26",
-"spec": "2021 CELEBRATIONS 005 FA PIKACHU"
+"spec": "2021 CELEBRATIONS 005 FA PIKACHU",
+"src": {
+"cl": 18,
+"pc": 12.02,
+"apr": 14.19,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Pikachu #5 | Pokemon Celebrations",
+"check": false
+}
 },
 {
 "cert": "158503205",
 "grade": "PSA 7",
 "name": "Squirtle Shadowless",
-"setName": "1999 Game",
+"setName": "1999 Base Set",
 "number": "63",
-"est": 87,
+"est": 73,
 "conf": 4,
 "done": "09/17/26",
 "spec": "1999 GAME 63 SQUIRTLE SHADOWLESS",
-"match": "Squirtle Shadowless"
+"match": "Squirtle Shadowless",
+"src": {
+"cl": 87,
+"pc": 59.0,
+"apr": null,
+"aprN": 1,
+"ebay": null,
+"pcTitle": "Squirtle [Shadowless] #63 Pokemon Base Set",
+"check": false
+}
 },
 {
 "cert": "158503206",
 "grade": "PSA 7",
 "name": "Charmeleon IR",
-"setName": "2023 Mew En-151",
+"setName": "2023 151",
 "number": "169",
-"est": 41,
+"est": 40,
 "conf": 5,
 "done": "09/17/26",
-"spec": "2023 MEW EN-151 169 CHARMELEON IR"
+"spec": "2023 MEW EN-151 169 CHARMELEON IR",
+"src": {
+"cl": 41,
+"pc": 40.0,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": "Charmeleon #169 | Pokemon Scarlet & Violet 151",
+"check": false
+}
 },
 {
 "cert": "158503207",
 "grade": "PSA 7",
 "name": "Pikachu Worlds Celebration Tournament Winner",
-"setName": "2025 Svp En-Promo",
+"setName": "2025 SV Black Star Promo",
 "number": "225",
 "est": 119,
 "conf": 2,
 "done": "09/17/26",
-"spec": "2025 SVP EN-PROMO 225 PIKACHU WORLDS CELEBRATION TOURNAMENT WINNER"
+"spec": "2025 SVP EN-PROMO 225 PIKACHU WORLDS CELEBRATION TOURNAMENT WINNER",
+"src": {
+"cl": 119,
+"pc": null,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": null,
+"check": false
+}
 },
 {
 "cert": "158503208",
@@ -1354,10 +2434,19 @@
 "name": "Trevenant & Dusknoir GX Pale Moon-Gx Box",
 "setName": "2019 Promo",
 "number": "SM217",
-"est": 43,
+"est": 17.75,
 "conf": 3,
 "done": "09/17/26",
-"spec": "2019 PROMO SM217 TREVENANT & DUSKNOIR GX PALE MOON-GX BOX"
+"spec": "2019 PROMO SM217 TREVENANT & DUSKNOIR GX PALE MOON-GX BOX",
+"src": {
+"cl": 43,
+"pc": 17.75,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": "Trevenant & Dusknoir GX #SM217 Pokemon Promo",
+"check": true
+}
 },
 {
 "cert": "158503209",
@@ -1365,11 +2454,20 @@
 "name": "Jewelry Bonney Manga Alternate Art",
 "setName": "2025 One Piece Japanese Op12-Legacy Of The Master",
 "number": "118",
-"est": null,
+"est": 705,
 "conf": null,
 "done": "09/17/26",
 "spec": "2025 ONE PIECE JAPANESE OP12-LEGACY OF THE MASTER 118 JEWELRY BONNEY MANGA ALTERNATE ART",
-"match": "Jewelry Bonney (One Piece)"
+"match": "Jewelry Bonney (One Piece)",
+"src": {
+"cl": null,
+"pc": 705.0,
+"apr": null,
+"aprN": 0,
+"ebay": 82.5,
+"pcTitle": "Jewelry Bonney [Manga Alternate Art] OP12-118 | One Piece Japanese Legacy of the Master",
+"check": true
+}
 },
 {
 "cert": "151365983",
@@ -1377,11 +2475,20 @@
 "name": "Nami Manga Alternate Art",
 "setName": "2024 One Piece Japanese Prb01-Premium Booster -One Piece Card The Best-",
 "number": "016",
-"est": 1033,
+"est": 869,
 "conf": 5,
 "done": "03/27/26",
 "spec": "2024 ONE PIECE JAPANESE PRB01-PREMIUM BOOSTER -ONE PIECE CARD THE BEST- 016 NAMI MANGA ALTERNATE ART",
-"match": "Nami (One Piece)"
+"match": "Nami (One Piece)",
+"src": {
+"cl": 1033,
+"pc": null,
+"apr": 705.0,
+"aprN": 5,
+"ebay": null,
+"pcTitle": null,
+"check": false
+}
 },
 {
 "cert": "151821368",
@@ -1389,11 +2496,20 @@
 "name": "Trafalgar Law Manga Alternate Art",
 "setName": "2024 One Piece Japanese Op10-Royal Blood",
 "number": "119",
-"est": 658,
+"est": 665,
 "conf": 5,
 "done": "08/20/26",
 "spec": "2024 ONE PIECE JAPANESE OP10-ROYAL BLOOD 119 TRAFALGAR LAW MANGA ALTERNATE ART",
-"match": "Trafalgar Law (One Piece)"
+"match": "Trafalgar Law (One Piece)",
+"src": {
+"cl": 658,
+"pc": 672.0,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": "Trafalgar Law [Manga Alternate Art] OP10-119 | One Piece Japanese Royal Blood",
+"check": false
+}
 },
 {
 "cert": "151821369",
@@ -1401,11 +2517,20 @@
 "name": "Jewelry Bonney Manga Alternate Art",
 "setName": "2025 One Piece Japanese Op12-Legacy Of The Master",
 "number": "118",
-"est": 610,
+"est": 658,
 "conf": 5,
 "done": "08/20/26",
 "spec": "2025 ONE PIECE JAPANESE OP12-LEGACY OF THE MASTER 118 JEWELRY BONNEY MANGA ALTERNATE ART",
-"match": "Jewelry Bonney (One Piece)"
+"match": "Jewelry Bonney (One Piece)",
+"src": {
+"cl": 610,
+"pc": 705.0,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": "Jewelry Bonney [Manga Alternate Art] OP12-118 | One Piece Japanese Legacy of the Master",
+"check": false
+}
 },
 {
 "cert": "151821370",
@@ -1413,11 +2538,20 @@
 "name": "Monkey D. Luffy Manga Alternate Art",
 "setName": "2025 One Piece Japanese Op11-A Fist Of Divine Speed",
 "number": "118",
-"est": 960,
+"est": 1067,
 "conf": 5,
 "done": "08/20/26",
 "spec": "2025 ONE PIECE JAPANESE OP11-A FIST OF DIVINE SPEED 118 MONKEY D. LUFFY MANGA ALTERNATE ART",
-"match": "Luffy Gear 3 (One Piece)"
+"match": "Luffy Gear 3 (One Piece)",
+"src": {
+"cl": 960,
+"pc": 1174.99,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": "Monkey.D.Luffy [Manga] OP11-118 One Piece Japanese Fist of Divine Speed",
+"check": false
+}
 },
 {
 "cert": "151821371",
@@ -1425,10 +2559,19 @@
 "name": "Sogeking Manga Alternate Art",
 "setName": "2023 One Piece Japanese Op03-Pillars Of Strength",
 "number": "122",
-"est": 948,
+"est": 897,
 "conf": 5,
 "done": "08/20/26",
-"spec": "2023 ONE PIECE JAPANESE OP03-PILLARS OF STRENGTH 122 SOGEKING MANGA ALTERNATE ART"
+"spec": "2023 ONE PIECE JAPANESE OP03-PILLARS OF STRENGTH 122 SOGEKING MANGA ALTERNATE ART",
+"src": {
+"cl": 948,
+"pc": 897.39,
+"apr": 411.94,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Sogeking [Alternate Art Manga] OP03-122 | One Piece Japanese Pillars of Strength",
+"check": false
+}
 },
 {
 "cert": "151821372",
@@ -1436,11 +2579,20 @@
 "name": "Dracule Mihawk Manga Alternate Art",
 "setName": "2025 One Piece Japanese Op14-The Azure Sea's Seven",
 "number": "119",
-"est": 760,
+"est": 756,
 "conf": 5,
 "done": "08/20/26",
 "spec": "2025 ONE PIECE JAPANESE OP14-THE AZURE SEA'S SEVEN 119 DRACULE MIHAWK MANGA ALTERNATE ART",
-"match": "Mihawk (One Piece)"
+"match": "Mihawk (One Piece)",
+"src": {
+"cl": 760,
+"pc": 751.75,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": "Dracule Mihawk [Manga] OP14-119 | One Piece Japanese Azure Sea's Seven",
+"check": false
+}
 },
 {
 "cert": "151821373",
@@ -1448,10 +2600,19 @@
 "name": "Ash's Pikachu I Choose You!",
 "setName": "2017 Promo",
 "number": "SM108",
-"est": 48,
+"est": 16.74,
 "conf": 3,
 "done": "08/20/26",
-"spec": "2017 PROMO SM108 ASH'S PIKACHU I CHOOSE YOU!"
+"spec": "2017 PROMO SM108 ASH'S PIKACHU I CHOOSE YOU!",
+"src": {
+"cl": 48,
+"pc": 16.74,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": "Ash's Pikachu #SM108 Pokemon Promo",
+"check": true
+}
 },
 {
 "cert": "151821374",
@@ -1462,19 +2623,37 @@
 "est": 160,
 "conf": 5,
 "done": "08/20/26",
-"spec": "2025 ONE PIECE JAPANESE OP14-THE AZURE SEA'S SEVEN 030 DRACULE MIHAWK SPECIAL ALTERNATE ART"
+"spec": "2025 ONE PIECE JAPANESE OP14-THE AZURE SEA'S SEVEN 030 DRACULE MIHAWK SPECIAL ALTERNATE ART",
+"src": {
+"cl": 160,
+"pc": null,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": null,
+"check": false
+}
 },
 {
 "cert": "151821375",
 "grade": "PSA 10",
 "name": "Team Rocket's Meowth IR",
-"setName": "2025 Dri En-Destined Rivals",
+"setName": "2025 Destined Rivals",
 "number": "203",
-"est": 220,
+"est": 206,
 "conf": 5,
 "done": "08/20/26",
 "spec": "2025 DRI EN-DESTINED RIVALS 203 TEAM ROCKET'S MEOWTH IR",
-"match": "Team Rocket's Meowth"
+"match": "Team Rocket's Meowth",
+"src": {
+"cl": 220,
+"pc": 191.87,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": "Team Rocket's Meowth #203 | Pokemon Destined Rivals",
+"check": false
+}
 },
 {
 "cert": "151821376",
@@ -1482,10 +2661,19 @@
 "name": "Detective Pikachu-Holo Detective Pikachu Blu-Ray & Dvd Release",
 "setName": "2019 Promo",
 "number": "SM190",
-"est": 38,
+"est": 32,
 "conf": 5,
 "done": "08/20/26",
-"spec": "2019 PROMO SM190 DETECTIVE PIKACHU-HOLO DETECTIVE PIKACHU BLU-RAY & DVD RELEASE"
+"spec": "2019 PROMO SM190 DETECTIVE PIKACHU-HOLO DETECTIVE PIKACHU BLU-RAY & DVD RELEASE",
+"src": {
+"cl": 38,
+"pc": 25.44,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": "Detective Pikachu #SM190 Pokemon Promo",
+"check": false
+}
 },
 {
 "cert": "151821377",
@@ -1496,7 +2684,16 @@
 "est": 21,
 "conf": 5,
 "done": "08/20/26",
-"spec": "2022 GO 028 PIKACHU-HOLO"
+"spec": "2022 GO 028 PIKACHU-HOLO",
+"src": {
+"cl": 21,
+"pc": 36.5,
+"apr": 13.5,
+"aprN": 4,
+"ebay": null,
+"pcTitle": "Pikachu [Holo] #28 Pokemon Go",
+"check": false
+}
 },
 {
 "cert": "151821378",
@@ -1507,7 +2704,16 @@
 "est": 73,
 "conf": 5,
 "done": "08/20/26",
-"spec": "2022 LOST ORIGIN TG06 FA GENGAR"
+"spec": "2022 LOST ORIGIN TG06 FA GENGAR",
+"src": {
+"cl": 73,
+"pc": 74.78,
+"apr": 51.0,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Gengar #TG06 | Pokemon Lost Origin",
+"check": false
+}
 },
 {
 "cert": "151821379",
@@ -1515,21 +2721,39 @@
 "name": "Lillie's Ribombee Art Rare",
 "setName": "2025 Korean Sv9-Battle Partners",
 "number": "105",
-"est": null,
+"est": 14.1,
 "conf": null,
 "done": "08/20/26",
-"spec": "2025 KOREAN SV9-BATTLE PARTNERS 105 LILLIE'S RIBOMBEE ART RARE"
+"spec": "2025 KOREAN SV9-BATTLE PARTNERS 105 LILLIE'S RIBOMBEE ART RARE",
+"src": {
+"cl": null,
+"pc": 14.1,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": "Lillie's Ribombee #105 | Pokemon Korean Battle Partners",
+"check": false
+}
 },
 {
 "cert": "151821380",
 "grade": "PSA 5",
 "name": "FA Armored Mewtwo Mewtwo Strikes Back-Evolution",
-"setName": "2019 Japanese Sm-P Promo",
+"setName": "2019 Japanese SM-P Promo",
 "number": "365",
-"est": 54,
+"est": 59,
 "conf": 5,
 "done": "08/20/26",
-"spec": "2019 JAPANESE SM-P PROMO 365 FA ARMORED MEWTWO MEWTWO STRIKES BACK-EVOLUTION"
+"spec": "2019 JAPANESE SM-P PROMO 365 FA ARMORED MEWTWO MEWTWO STRIKES BACK-EVOLUTION",
+"src": {
+"cl": 54,
+"pc": 64.5,
+"apr": null,
+"aprN": 1,
+"ebay": null,
+"pcTitle": "Armored Mewtwo #365/SM-P Pokemon Japanese Promo",
+"check": false
+}
 },
 {
 "cert": "151821381",
@@ -1537,32 +2761,59 @@
 "name": "Pikachu Mcdonald's",
 "setName": "2025 Japanese M-P Promo",
 "number": "020",
-"est": 73,
+"est": 76,
 "conf": 5,
 "done": "08/20/26",
-"spec": "2025 JAPANESE M-P PROMO 020 PIKACHU McDONALD'S"
+"spec": "2025 JAPANESE M-P PROMO 020 PIKACHU McDONALD'S",
+"src": {
+"cl": 73,
+"pc": 76.0,
+"apr": 102.5,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Pikachu #20/M-P Pokemon Japanese Promo",
+"check": false
+}
 },
 {
 "cert": "151821382",
 "grade": "PSA 9",
 "name": "Team Rocket's Giovanni Boss Coffee X Pokemon Card Game Collaboration",
-"setName": "2025 Japanese Sv-P Promo",
+"setName": "2025 Japanese SV-P Promo",
 "number": "270",
-"est": 20,
+"est": 25,
 "conf": 5,
 "done": "08/20/26",
-"spec": "2025 JAPANESE SV-P PROMO 270 TEAM ROCKET'S GIOVANNI BOSS COFFEE X POKEMON CARD GAME COLLABORATION"
+"spec": "2025 JAPANESE SV-P PROMO 270 TEAM ROCKET'S GIOVANNI BOSS COFFEE X POKEMON CARD GAME COLLABORATION",
+"src": {
+"cl": 20,
+"pc": 30.98,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": "Team Rocket's Giovanni [Boss Coffee] #270/SV-P Pokemon Japanese Promo",
+"check": false
+}
 },
 {
 "cert": "151821383",
 "grade": "PSA 8",
 "name": "Umbreon GX",
-"setName": "2017",
+"setName": "2017 Sun & Moon",
 "number": "80",
-"est": 54,
+"est": 42,
 "conf": 5,
 "done": "08/20/26",
-"spec": "2017 80 UMBREON GX"
+"spec": "2017 80 UMBREON GX",
+"src": {
+"cl": 54,
+"pc": 41.78,
+"apr": 16.5,
+"aprN": 2,
+"ebay": null,
+"pcTitle": "Umbreon GX #80 | Pokemon Sun & Moon",
+"check": false
+}
 },
 {
 "cert": "151821384",
@@ -1570,10 +2821,19 @@
 "name": "FA Darkrai GX",
 "setName": "2017 Burning Shadows",
 "number": "139",
-"est": 183,
+"est": 52,
 "conf": 3,
 "done": "08/20/26",
-"spec": "2017 BURNING SHADOWS 139 FA DARKRAI GX"
+"spec": "2017 BURNING SHADOWS 139 FA DARKRAI GX",
+"src": {
+"cl": 183,
+"pc": 52.0,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": "Darkrai GX #139 | Pokemon Burning Shadows",
+"check": true
+}
 },
 {
 "cert": "151821385",
@@ -1581,10 +2841,19 @@
 "name": "Muk & Alolan Muk GX",
 "setName": "2019 Unbroken Bonds",
 "number": "61",
-"est": null,
+"est": 20,
 "conf": null,
 "done": "08/20/26",
-"spec": "2019 UNBROKEN BONDS 61 MUK & ALOLAN MUK GX"
+"spec": "2019 UNBROKEN BONDS 61 MUK & ALOLAN MUK GX",
+"src": {
+"cl": null,
+"pc": 20.0,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": "Muk & Alolan Muk GX #61 Pokemon Unbroken Bonds",
+"check": false
+}
 },
 {
 "cert": "151821386",
@@ -1592,10 +2861,19 @@
 "name": "Eevee GX Tag Team Powers Collection",
 "setName": "2020 Promo",
 "number": "SM242",
-"est": 80,
+"est": 65,
 "conf": 5,
 "done": "08/20/26",
-"spec": "2020 PROMO SM242 EEVEE GX TAG TEAM POWERS COLLECTION"
+"spec": "2020 PROMO SM242 EEVEE GX TAG TEAM POWERS COLLECTION",
+"src": {
+"cl": 80,
+"pc": 64.65,
+"apr": 28.0,
+"aprN": 3,
+"ebay": null,
+"pcTitle": "Eevee GX #SM242 Pokemon Promo",
+"check": false
+}
 },
 {
 "cert": "151821387",
@@ -1606,30 +2884,57 @@
 "est": 572,
 "conf": 5,
 "done": "08/20/26",
-"spec": "2018 CELESTIAL STORM 154 FA ARTICUNO GX"
+"spec": "2018 CELESTIAL STORM 154 FA ARTICUNO GX",
+"src": {
+"cl": 572,
+"pc": 572.21,
+"apr": null,
+"aprN": 1,
+"ebay": null,
+"pcTitle": "Articuno GX #154 | Pokemon Celestial Storm",
+"check": false
+}
 },
 {
 "cert": "149080529",
 "grade": "PSA 9",
 "name": "M Sharpedo ex Mega Sharpedo ex Premium Collection",
-"setName": "2017 Xy Promo",
+"setName": "2017 XY Promo",
 "number": "XY200",
-"est": 51,
+"est": 58,
 "conf": 5,
 "done": "06/24/26",
-"spec": "2017 XY PROMO XY200 M SHARPEDO EX MEGA SHARPEDO EX PREMIUM COLLECTION"
+"spec": "2017 XY PROMO XY200 M SHARPEDO EX MEGA SHARPEDO EX PREMIUM COLLECTION",
+"src": {
+"cl": 51,
+"pc": 65.0,
+"apr": null,
+"aprN": 1,
+"ebay": null,
+"pcTitle": "M Sharpedo EX #XY200 Pokemon Promo",
+"check": false
+}
 },
 {
 "cert": "149080530",
 "grade": "PSA 9",
 "name": "Pikachu Paldea Evolved Elite Trainer Box",
-"setName": "2023 Svp En-Promo",
+"setName": "2023 SV Black Star Promo",
 "number": "027",
-"est": 40,
+"est": 32,
 "conf": 5,
 "done": "06/24/26",
 "spec": "2023 SVP EN-PROMO 027 PIKACHU PALDEA EVOLVED ELITE TRAINER BOX",
-"match": "Pikachu"
+"match": "Pikachu",
+"src": {
+"cl": 40,
+"pc": 32.06,
+"apr": 31.0,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Pikachu [Paldea] #27 Pokemon Promo",
+"check": false
+}
 },
 {
 "cert": "149080531",
@@ -1640,7 +2945,16 @@
 "est": 15,
 "conf": 5,
 "done": "06/24/26",
-"spec": "2021 CELEBRATIONS 005 FA PIKACHU"
+"spec": "2021 CELEBRATIONS 005 FA PIKACHU",
+"src": {
+"cl": 15,
+"pc": 17.91,
+"apr": 7.5,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Pikachu #5 | Pokemon Celebrations",
+"check": false
+}
 },
 {
 "cert": "149080532",
@@ -1648,10 +2962,19 @@
 "name": "FA Greninja & Zoroark GX Secret",
 "setName": "2019 Unbroken Bonds",
 "number": "222",
-"est": 103,
+"est": 88,
 "conf": 4,
 "done": "06/24/26",
-"spec": "2019 UNBROKEN BONDS 222 FA GRENINJA & ZOROARK GX SECRET"
+"spec": "2019 UNBROKEN BONDS 222 FA GRENINJA & ZOROARK GX SECRET",
+"src": {
+"cl": 103,
+"pc": 72.04,
+"apr": null,
+"aprN": 1,
+"ebay": null,
+"pcTitle": "Greninja & Zoroark GX #222 | Pokemon Unbroken Bonds",
+"check": false
+}
 },
 {
 "cert": "149080533",
@@ -1659,10 +2982,19 @@
 "name": "Lugia GX",
 "setName": "2018 Lost Thunder",
 "number": "159",
-"est": 54,
+"est": 60,
 "conf": 5,
 "done": "06/24/26",
-"spec": "2018 LOST THUNDER 159 LUGIA GX"
+"spec": "2018 LOST THUNDER 159 LUGIA GX",
+"src": {
+"cl": 54,
+"pc": 65.0,
+"apr": null,
+"aprN": 1,
+"ebay": null,
+"pcTitle": "Lugia GX #159 | Pokemon Lost Thunder",
+"check": false
+}
 },
 {
 "cert": "149080534",
@@ -1670,10 +3002,19 @@
 "name": "FA Espeon VMAX",
 "setName": "2021 Evolving Skies",
 "number": "065",
-"est": 35,
+"est": 28,
 "conf": 4,
 "done": "06/24/26",
-"spec": "2021 EVOLVING SKIES 065 FA ESPEON VMAX"
+"spec": "2021 EVOLVING SKIES 065 FA ESPEON VMAX",
+"src": {
+"cl": 35,
+"pc": 20.0,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": "Espeon VMAX #65 | Pokemon Evolving Skies",
+"check": false
+}
 },
 {
 "cert": "149080535",
@@ -1681,11 +3022,20 @@
 "name": "Garchomp & Giratina GX",
 "setName": "2019 Unified Minds",
 "number": "146",
-"est": 365,
+"est": 355,
 "conf": 5,
 "done": "06/24/26",
 "spec": "2019 UNIFIED MINDS 146 GARCHOMP & GIRATINA GX",
-"match": "Garchomp & Giratina-GX"
+"match": "Garchomp & Giratina-GX",
+"src": {
+"cl": 365,
+"pc": 355.0,
+"apr": 275.0,
+"aprN": 4,
+"ebay": null,
+"pcTitle": "Garchomp & Giratina GX #146 | Pokemon Unified Minds",
+"check": false
+}
 },
 {
 "cert": "149080536",
@@ -1693,10 +3043,19 @@
 "name": "Greninja & Zoroark GX",
 "setName": "2019 Unbroken Bonds",
 "number": "107",
-"est": 36,
+"est": 31,
 "conf": 1,
 "done": "06/24/26",
-"spec": "2019 UNBROKEN BONDS 107 GRENINJA & ZOROARK GX"
+"spec": "2019 UNBROKEN BONDS 107 GRENINJA & ZOROARK GX",
+"src": {
+"cl": 36,
+"pc": 25.9,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": "Greninja & Zoroark GX #107 Pokemon Unbroken Bonds",
+"check": false
+}
 },
 {
 "cert": "149080537",
@@ -1704,10 +3063,19 @@
 "name": "Reshiram & Charizard GX",
 "setName": "2019 Unbroken Bonds",
 "number": "20",
-"est": 280,
+"est": 266,
 "conf": 5,
 "done": "06/24/26",
-"spec": "2019 UNBROKEN BONDS 20 RESHIRAM & CHARIZARD GX"
+"spec": "2019 UNBROKEN BONDS 20 RESHIRAM & CHARIZARD GX",
+"src": {
+"cl": 280,
+"pc": 266.0,
+"apr": 192.5,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Reshiram & Charizard GX #20 Pokemon Unbroken Bonds",
+"check": false
+}
 },
 {
 "cert": "149080538",
@@ -1715,10 +3083,19 @@
 "name": "FA Rayquaza GX",
 "setName": "2018 Celestial Storm",
 "number": "160",
-"est": 345,
+"est": 338,
 "conf": 5,
 "done": "06/24/26",
-"spec": "2018 CELESTIAL STORM 160 FA RAYQUAZA GX"
+"spec": "2018 CELESTIAL STORM 160 FA RAYQUAZA GX",
+"src": {
+"cl": 345,
+"pc": 330.0,
+"apr": null,
+"aprN": 1,
+"ebay": null,
+"pcTitle": "Rayquaza GX #160 | Pokemon Celestial Storm",
+"check": false
+}
 },
 {
 "cert": "149080539",
@@ -1726,55 +3103,100 @@
 "name": "Eevee & Snorlax GX",
 "setName": "2019 Team Up",
 "number": "120",
-"est": 160,
+"est": 146,
 "conf": 5,
 "done": "06/24/26",
 "spec": "2019 TEAM UP 120 EEVEE & SNORLAX GX",
-"match": "Eevee & Snorlax-GX"
+"match": "Eevee & Snorlax-GX",
+"src": {
+"cl": 160,
+"pc": 145.64,
+"apr": 109.44,
+"aprN": 3,
+"ebay": null,
+"pcTitle": "Eevee & Snorlax GX #120 | Pokemon Team Up",
+"check": false
+}
 },
 {
 "cert": "149080540",
 "grade": "PSA 6",
 "name": "Sharpedo ex",
-"setName": "2015 Xy Primal Clash",
+"setName": "2015 XY Primal Clash",
 "number": "91",
-"est": 20,
+"est": 4.63,
 "conf": 1,
 "done": "06/24/26",
-"spec": "2015 XY PRIMAL CLASH 91 SHARPEDO EX"
+"spec": "2015 XY PRIMAL CLASH 91 SHARPEDO EX",
+"src": {
+"cl": 20,
+"pc": 4.63,
+"apr": null,
+"aprN": 1,
+"ebay": null,
+"pcTitle": "Sharpedo EX #91 Pokemon Primal Clash",
+"check": true
+}
 },
 {
 "cert": "149080541",
 "grade": "PSA 7",
 "name": "M Aggron ex",
-"setName": "2015 Xy Primal Clash",
+"setName": "2015 XY Primal Clash",
 "number": "94",
-"est": 63,
+"est": 20,
 "conf": 3,
 "done": "06/24/26",
-"spec": "2015 XY PRIMAL CLASH 94 M AGGRON EX"
+"spec": "2015 XY PRIMAL CLASH 94 M AGGRON EX",
+"src": {
+"cl": 63,
+"pc": 20.5,
+"apr": null,
+"aprN": 1,
+"ebay": null,
+"pcTitle": "M Aggron EX #94 Pokemon Primal Clash",
+"check": true
+}
 },
 {
 "cert": "149080542",
 "grade": "PSA 7",
 "name": "Primal Groudon ex",
-"setName": "2015 Xy Primal Clash",
+"setName": "2015 XY Primal Clash",
 "number": "86",
-"est": 85,
+"est": 81,
 "conf": 5,
 "done": "06/24/26",
-"spec": "2015 XY PRIMAL CLASH 86 PRIMAL GROUDON EX"
+"spec": "2015 XY PRIMAL CLASH 86 PRIMAL GROUDON EX",
+"src": {
+"cl": 85,
+"pc": 76.75,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": "Primal Groudon EX #86 | Pokemon Primal Clash",
+"check": false
+}
 },
 {
 "cert": "149080543",
 "grade": "PSA 6",
 "name": "M Slowbro ex",
-"setName": "2016 Xy Evolutions",
+"setName": "2016 XY Evolutions",
 "number": "27",
-"est": 16,
+"est": 14.75,
 "conf": 3,
 "done": "06/24/26",
-"spec": "2016 XY EVOLUTIONS 27 M SLOWBRO EX"
+"spec": "2016 XY EVOLUTIONS 27 M SLOWBRO EX",
+"src": {
+"cl": 16,
+"pc": 13.5,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": "M Slowbro EX #27 | Pokemon Evolutions",
+"check": false
+}
 },
 {
 "cert": "149080544",
@@ -1782,10 +3204,19 @@
 "name": "Pheromosa & Buzzwole GX",
 "setName": "2019 Unbroken Bonds",
 "number": "1",
-"est": 14,
+"est": 14.5,
 "conf": 3,
 "done": "06/24/26",
-"spec": "2019 UNBROKEN BONDS 1 PHEROMOSA & BUZZWOLE GX"
+"spec": "2019 UNBROKEN BONDS 1 PHEROMOSA & BUZZWOLE GX",
+"src": {
+"cl": 14,
+"pc": 15.0,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": "Pheromosa & Buzzwole GX #1 | Pokemon Unbroken Bonds",
+"check": false
+}
 },
 {
 "cert": "149080545",
@@ -1793,11 +3224,20 @@
 "name": "Greninja GX",
 "setName": "2018 Forbidden Light",
 "number": "24",
-"est": 400,
+"est": 388,
 "conf": 5,
 "done": "06/24/26",
 "spec": "2018 FORBIDDEN LIGHT 24 GRENINJA GX",
-"match": "Greninja GX"
+"match": "Greninja GX",
+"src": {
+"cl": 400,
+"pc": 375.0,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": "Greninja-GX #24 | Pokemon Forbidden Light",
+"check": false
+}
 },
 {
 "cert": "149080546",
@@ -1805,10 +3245,19 @@
 "name": "Lance's Charizard V Celebrations Collection",
 "setName": "2021 Promo",
 "number": "133",
-"est": 123,
+"est": 159,
 "conf": 5,
 "done": "06/24/26",
-"spec": "2021 PROMO 133 LANCE'S CHARIZARD V CELEBRATIONS COLLECTION"
+"spec": "2021 PROMO 133 LANCE'S CHARIZARD V CELEBRATIONS COLLECTION",
+"src": {
+"cl": 123,
+"pc": 159.0,
+"apr": 167.5,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Lance's Charizard V #SWSH133 Pokemon Celebrations",
+"check": false
+}
 },
 {
 "cert": "149080547",
@@ -1816,10 +3265,19 @@
 "name": "Sylveon GX",
 "setName": "2017 Guardians Rising",
 "number": "92",
-"est": 31,
+"est": 26,
 "conf": 5,
 "done": "06/24/26",
-"spec": "2017 GUARDIANS RISING 92 SYLVEON GX"
+"spec": "2017 GUARDIANS RISING 92 SYLVEON GX",
+"src": {
+"cl": 31,
+"pc": 21.99,
+"apr": null,
+"aprN": 1,
+"ebay": null,
+"pcTitle": "Sylveon GX #92 | Pokemon Guardians Rising",
+"check": false
+}
 },
 {
 "cert": "149080548",
@@ -1827,10 +3285,19 @@
 "name": "Vileplume GX",
 "setName": "2019 Cosmic Eclipse",
 "number": "4",
-"est": 33,
+"est": 28,
 "conf": 3,
 "done": "06/24/26",
-"spec": "2019 COSMIC ECLIPSE 4 VILEPLUME GX"
+"spec": "2019 COSMIC ECLIPSE 4 VILEPLUME GX",
+"src": {
+"cl": 33,
+"pc": 23.38,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": "Vileplume GX #4 | Pokemon Cosmic Eclipse",
+"check": false
+}
 },
 {
 "cert": "150820033",
@@ -1838,10 +3305,19 @@
 "name": "N's Zoroark ex Special Art Rare",
 "setName": "2025 Japanese M2a-Mega Dream ex",
 "number": "242",
-"est": 67,
+"est": 73,
 "conf": 5,
 "done": "05/11/26",
-"spec": "2025 JAPANESE M2a-MEGA DREAM ex 242 N'S ZOROARK EX SPECIAL ART RARE"
+"spec": "2025 JAPANESE M2a-MEGA DREAM ex 242 N'S ZOROARK EX SPECIAL ART RARE",
+"src": {
+"cl": 67,
+"pc": 78.88,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": "N's Zoroark ex #242 | Pokemon Japanese Mega Dream ex",
+"check": false
+}
 },
 {
 "cert": "150820034",
@@ -1852,7 +3328,16 @@
 "est": 80,
 "conf": 5,
 "done": "05/11/26",
-"spec": "2025 JAPANESE M2a-MEGA DREAM ex 223 MEGA CHARIZARD X EX MEGA ATTACK RARE"
+"spec": "2025 JAPANESE M2a-MEGA DREAM ex 223 MEGA CHARIZARD X EX MEGA ATTACK RARE",
+"src": {
+"cl": 80,
+"pc": 66.39,
+"apr": 111.0,
+"aprN": 4,
+"ebay": null,
+"pcTitle": "Mega Charizard X ex #223 Pokemon Japanese Mega Dream ex",
+"check": false
+}
 },
 {
 "cert": "150820035",
@@ -1860,10 +3345,19 @@
 "name": "Mega Scrafty ex Special Art Rare",
 "setName": "2025 Japanese M2a-Mega Dream ex",
 "number": "241",
-"est": 36,
+"est": 38,
 "conf": 4,
 "done": "05/11/26",
-"spec": "2025 JAPANESE M2a-MEGA DREAM ex 241 MEGA SCRAFTY EX SPECIAL ART RARE"
+"spec": "2025 JAPANESE M2a-MEGA DREAM ex 241 MEGA SCRAFTY EX SPECIAL ART RARE",
+"src": {
+"cl": 36,
+"pc": 39.06,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": "Mega Scrafty ex #241 Pokemon Japanese Mega Dream ex",
+"check": false
+}
 },
 {
 "cert": "150820036",
@@ -1874,18 +3368,36 @@
 "est": 15,
 "conf": 5,
 "done": "05/11/26",
-"spec": "2021 CELEBRATIONS 005 FA PIKACHU"
+"spec": "2021 CELEBRATIONS 005 FA PIKACHU",
+"src": {
+"cl": 15,
+"pc": 17.91,
+"apr": 7.5,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Pikachu #5 | Pokemon Celebrations",
+"check": false
+}
 },
 {
 "cert": "150820037",
 "grade": "PSA 7",
 "name": "Gengar ex",
-"setName": "2014 Xy Phantom Forces",
+"setName": "2014 XY Phantom Forces",
 "number": "34",
-"est": 116,
+"est": 103,
 "conf": 5,
 "done": "05/11/26",
-"spec": "2014 XY PHANTOM FORCES 34 GENGAR EX"
+"spec": "2014 XY PHANTOM FORCES 34 GENGAR EX",
+"src": {
+"cl": 116,
+"pc": 103.05,
+"apr": 49.75,
+"aprN": 2,
+"ebay": null,
+"pcTitle": "Gengar EX #34 | Pokemon Phantom Forces",
+"check": false
+}
 },
 {
 "cert": "150820038",
@@ -1893,10 +3405,19 @@
 "name": "Charizard-Holo Team Up Prerelease",
 "setName": "2019 Promo",
 "number": "SM158",
-"est": 103,
+"est": 92,
 "conf": 3,
 "done": "05/11/26",
-"spec": "2019 PROMO SM158 CHARIZARD-HOLO TEAM UP PRERELEASE"
+"spec": "2019 PROMO SM158 CHARIZARD-HOLO TEAM UP PRERELEASE",
+"src": {
+"cl": 103,
+"pc": 81.0,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": "Charizard #SM158 Pokemon Promo",
+"check": false
+}
 },
 {
 "cert": "150820039",
@@ -1907,7 +3428,16 @@
 "est": 475,
 "conf": 5,
 "done": "05/11/26",
-"spec": "2019 TEAM UP 53 GENGAR & MIMIKYU GX"
+"spec": "2019 TEAM UP 53 GENGAR & MIMIKYU GX",
+"src": {
+"cl": 475,
+"pc": 507.5,
+"apr": 330.0,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Gengar & Mimikyu GX #53 Pokemon Team Up",
+"check": false
+}
 },
 {
 "cert": "150820040",
@@ -1918,7 +3448,16 @@
 "est": 52,
 "conf": 5,
 "done": "05/11/26",
-"spec": "2021 JAPANESE VMAX CLIMAX 101 FA UMBREON VMAX"
+"spec": "2021 JAPANESE VMAX CLIMAX 101 FA UMBREON VMAX",
+"src": {
+"cl": 52,
+"pc": 60.73,
+"apr": 41.0,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Umbreon VMAX #101 | Pokemon Japanese VMAX Climax",
+"check": false
+}
 },
 {
 "cert": "150820041",
@@ -1926,10 +3465,19 @@
 "name": "FA Vaporeon V Vaporeon VMAX Premium Collection",
 "setName": "2021 Promo",
 "number": "181",
-"est": 74,
+"est": 71,
 "conf": 5,
 "done": "05/11/26",
-"spec": "2021 PROMO 181 FA VAPOREON V VAPOREON VMAX PREMIUM COLLECTION"
+"spec": "2021 PROMO 181 FA VAPOREON V VAPOREON VMAX PREMIUM COLLECTION",
+"src": {
+"cl": 74,
+"pc": 71.0,
+"apr": 53.0,
+"aprN": 3,
+"ebay": null,
+"pcTitle": "Vaporeon V #SWSH181 Pokemon Promo",
+"check": false
+}
 },
 {
 "cert": "150820042",
@@ -1940,7 +3488,16 @@
 "est": 68,
 "conf": 5,
 "done": "05/11/26",
-"spec": "2021 FUSION STRIKE 245 FA CELEBI V"
+"spec": "2021 FUSION STRIKE 245 FA CELEBI V",
+"src": {
+"cl": 68,
+"pc": 68.0,
+"apr": 42.0,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Celebi V #245 | Pokemon Fusion Strike",
+"check": false
+}
 },
 {
 "cert": "150820043",
@@ -1948,10 +3505,19 @@
 "name": "FA Empoleon V",
 "setName": "2021 Battle Styles",
 "number": "146",
-"est": 82,
+"est": 77,
 "conf": 4,
 "done": "05/11/26",
-"spec": "2021 BATTLE STYLES 146 FA EMPOLEON V"
+"spec": "2021 BATTLE STYLES 146 FA EMPOLEON V",
+"src": {
+"cl": 82,
+"pc": 71.41,
+"apr": null,
+"aprN": 1,
+"ebay": null,
+"pcTitle": "Empoleon V #146 Pokemon Battle Styles",
+"check": false
+}
 },
 {
 "cert": "150820044",
@@ -1959,10 +3525,19 @@
 "name": "FA Galarian Slowking V",
 "setName": "2021 Chilling Reign",
 "number": "179",
-"est": 108,
+"est": 100,
 "conf": 5,
 "done": "05/11/26",
-"spec": "2021 CHILLING REIGN 179 FA GALARIAN SLOWKING V"
+"spec": "2021 CHILLING REIGN 179 FA GALARIAN SLOWKING V",
+"src": {
+"cl": 108,
+"pc": 93.0,
+"apr": null,
+"aprN": 1,
+"ebay": null,
+"pcTitle": "Galarian Slowking V #179 | Pokemon Chilling Reign",
+"check": false
+}
 },
 {
 "cert": "150820045",
@@ -1970,10 +3545,19 @@
 "name": "FA Snorlax Secret",
 "setName": "2021 Chilling Reign",
 "number": "224",
-"est": 145,
+"est": 126,
 "conf": 5,
 "done": "05/11/26",
-"spec": "2021 CHILLING REIGN 224 FA SNORLAX SECRET"
+"spec": "2021 CHILLING REIGN 224 FA SNORLAX SECRET",
+"src": {
+"cl": 145,
+"pc": 125.94,
+"apr": 77.51,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Snorlax #224 | Pokemon Chilling Reign",
+"check": false
+}
 },
 {
 "cert": "150820046",
@@ -1981,10 +3565,19 @@
 "name": "FA Gengar VMAX",
 "setName": "2021 Fusion Strike",
 "number": "157",
-"est": 55,
+"est": 59,
 "conf": 5,
 "done": "05/11/26",
-"spec": "2021 FUSION STRIKE 157 FA GENGAR VMAX"
+"spec": "2021 FUSION STRIKE 157 FA GENGAR VMAX",
+"src": {
+"cl": 55,
+"pc": 59.15,
+"apr": 60.0,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Gengar VMAX #157 | Pokemon Fusion Strike",
+"check": false
+}
 },
 {
 "cert": "150820047",
@@ -1992,10 +3585,19 @@
 "name": "FA Mega Sableye & Tyranitar GX",
 "setName": "2019 Unified Minds",
 "number": "226",
-"est": 267,
+"est": 286,
 "conf": 4,
 "done": "05/11/26",
-"spec": "2019 UNIFIED MINDS 226 FA MEGA SABLEYE & TYRANITAR GX"
+"spec": "2019 UNIFIED MINDS 226 FA MEGA SABLEYE & TYRANITAR GX",
+"src": {
+"cl": 267,
+"pc": 305.0,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": "Mega Sableye & Tyranitar GX #226 | Pokemon Unified Minds",
+"check": false
+}
 },
 {
 "cert": "150820048",
@@ -2003,10 +3605,19 @@
 "name": "FA Charizard V Ultra-Premium Collection-Charizard",
 "setName": "2022 Promo",
 "number": "260",
-"est": 43,
+"est": 36,
 "conf": 3,
 "done": "05/11/26",
-"spec": "2022 PROMO 260 FA CHARIZARD V ULTRA-PREMIUM COLLECTION-CHARIZARD"
+"spec": "2022 PROMO 260 FA CHARIZARD V ULTRA-PREMIUM COLLECTION-CHARIZARD",
+"src": {
+"cl": 43,
+"pc": 28.0,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": "Charizard V #SWSH260 Pokemon Promo",
+"check": false
+}
 },
 {
 "cert": "150820049",
@@ -2014,10 +3625,19 @@
 "name": "FA Charizard VMAX Ultra-Premium Collection-Charizard",
 "setName": "2022 Promo",
 "number": "261",
-"est": 79,
+"est": 72,
 "conf": 5,
 "done": "05/11/26",
-"spec": "2022 PROMO 261 FA CHARIZARD VMAX ULTRA-PREMIUM COLLECTION-CHARIZARD"
+"spec": "2022 PROMO 261 FA CHARIZARD VMAX ULTRA-PREMIUM COLLECTION-CHARIZARD",
+"src": {
+"cl": 79,
+"pc": 69.53,
+"apr": 72.5,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Charizard VMax #SWSH261 Pokemon Promo",
+"check": false
+}
 },
 {
 "cert": "150820050",
@@ -2028,7 +3648,16 @@
 "est": 70,
 "conf": 5,
 "done": "05/11/26",
-"spec": "2021 PROMO 087 FA EEVEE VMAX SHINING FATES ELITE TRAINER BOX"
+"spec": "2021 PROMO 087 FA EEVEE VMAX SHINING FATES ELITE TRAINER BOX",
+"src": {
+"cl": 70,
+"pc": 73.11,
+"apr": 56.0,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Eevee VMAX #SWSH087 Pokemon Promo",
+"check": false
+}
 },
 {
 "cert": "150820051",
@@ -2036,21 +3665,39 @@
 "name": "FA Reshiram",
 "setName": "2013 Black & White Legendary Treasures Radiant Collection",
 "number": "RC22",
-"est": 149,
+"est": 138,
 "conf": 5,
 "done": "05/11/26",
-"spec": "2013 BLACK & WHITE LEGENDARY TREASURES RADIANT COLLECTION RC22 FA RESHIRAM"
+"spec": "2013 BLACK & WHITE LEGENDARY TREASURES RADIANT COLLECTION RC22 FA RESHIRAM",
+"src": {
+"cl": 149,
+"pc": 128.0,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": "Reshiram #RC22 Pokemon Legendary Treasures",
+"check": false
+}
 },
 {
 "cert": "150820052",
 "grade": "PSA 8",
 "name": "Pikachu Worlds Celebration Tournament Winner",
-"setName": "2025 Svp En-Promo",
+"setName": "2025 SV Black Star Promo",
 "number": "225",
-"est": 100,
+"est": 101,
 "conf": 5,
 "done": "05/11/26",
-"spec": "2025 SVP EN-PROMO 225 PIKACHU WORLDS CELEBRATION TOURNAMENT WINNER"
+"spec": "2025 SVP EN-PROMO 225 PIKACHU WORLDS CELEBRATION TOURNAMENT WINNER",
+"src": {
+"cl": 100,
+"pc": 102.5,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": "Pikachu [World Championships Winner] #225 | Pokemon Promo",
+"check": false
+}
 },
 {
 "cert": "147088468",
@@ -2058,22 +3705,40 @@
 "name": "Charizard V Champion's Path Elite Trainer Box",
 "setName": "2020 Promo",
 "number": "050",
-"est": 85,
+"est": 74,
 "conf": 5,
 "done": "06/11/26",
-"spec": "2020 PROMO 050 CHARIZARD V CHAMPION'S PATH ELITE TRAINER BOX"
+"spec": "2020 PROMO 050 CHARIZARD V CHAMPION'S PATH ELITE TRAINER BOX",
+"src": {
+"cl": 85,
+"pc": null,
+"apr": 62.0,
+"aprN": 5,
+"ebay": null,
+"pcTitle": null,
+"check": false
+}
 },
 {
 "cert": "147088469",
 "grade": "PSA 7",
 "name": "Primal Kyogre ex",
-"setName": "2015 Xy Primal Clash",
+"setName": "2015 XY Primal Clash",
 "number": "55",
-"est": 94,
+"est": 74,
 "conf": 5,
 "done": "06/11/26",
 "spec": "2015 XY PRIMAL CLASH 55 PRIMAL KYOGRE EX",
-"match": "Primal Kyogre EX"
+"match": "Primal Kyogre EX",
+"src": {
+"cl": 94,
+"pc": 54.0,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": "Primal Kyogre EX #55 Pokemon Primal Clash",
+"check": false
+}
 },
 {
 "cert": "147088470",
@@ -2081,10 +3746,19 @@
 "name": "Trevenant & Dusknoir GX Pale Moon-Gx Box",
 "setName": "2019 Promo",
 "number": "SM217",
-"est": 44,
+"est": 35,
 "conf": 3,
 "done": "06/11/26",
-"spec": "2019 PROMO SM217 TREVENANT & DUSKNOIR GX PALE MOON-GX BOX"
+"spec": "2019 PROMO SM217 TREVENANT & DUSKNOIR GX PALE MOON-GX BOX",
+"src": {
+"cl": 44,
+"pc": 25.27,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": "Trevenant & Dusknoir GX #SM217 Pokemon Promo",
+"check": false
+}
 },
 {
 "cert": "147088471",
@@ -2092,34 +3766,61 @@
 "name": "FA Pikachu",
 "setName": "2021 Celebrations",
 "number": "005",
-"est": 18,
+"est": 14.19,
 "conf": 5,
 "done": "06/11/26",
-"spec": "2021 CELEBRATIONS 005 FA PIKACHU"
+"spec": "2021 CELEBRATIONS 005 FA PIKACHU",
+"src": {
+"cl": 18,
+"pc": 12.02,
+"apr": 14.19,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Pikachu #5 | Pokemon Celebrations",
+"check": false
+}
 },
 {
 "cert": "147088472",
 "grade": "PSA 9",
 "name": "Pikachu Paldea Evolved Elite Trainer Box",
-"setName": "2023 Svp En-Promo",
+"setName": "2023 SV Black Star Promo",
 "number": "027",
-"est": 40,
+"est": 32,
 "conf": 5,
 "done": "06/11/26",
 "spec": "2023 SVP EN-PROMO 027 PIKACHU PALDEA EVOLVED ELITE TRAINER BOX",
-"match": "Pikachu"
+"match": "Pikachu",
+"src": {
+"cl": 40,
+"pc": 32.06,
+"apr": 31.0,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Pikachu [Paldea] #27 Pokemon Promo",
+"check": false
+}
 },
 {
 "cert": "147088473",
 "grade": "PSA 9",
 "name": "Team Rocket's Wobbuffet Destined Rivals Elite Trainer Box",
-"setName": "2025 Svp En-Promo",
+"setName": "2025 SV Black Star Promo",
 "number": "203",
-"est": 28,
+"est": 24,
 "conf": 5,
 "done": "06/11/26",
 "spec": "2025 SVP EN-PROMO 203 TEAM ROCKET'S WOBBUFFET DESTINED RIVALS ELITE TRAINER BOX",
-"match": "Team Rocket's Wobbuffet"
+"match": "Team Rocket's Wobbuffet",
+"src": {
+"cl": 28,
+"pc": null,
+"apr": 19.5,
+"aprN": 5,
+"ebay": null,
+"pcTitle": null,
+"check": false
+}
 },
 {
 "cert": "147088474",
@@ -2127,33 +3828,60 @@
 "name": "FA Lucario VSTAR Crown Zenith Elite Trainer Box",
 "setName": "2023 Promo",
 "number": "291",
-"est": 30,
+"est": 25,
 "conf": 5,
 "done": "06/11/26",
-"spec": "2023 PROMO 291 FA LUCARIO VSTAR CROWN ZENITH ELITE TRAINER BOX"
+"spec": "2023 PROMO 291 FA LUCARIO VSTAR CROWN ZENITH ELITE TRAINER BOX",
+"src": {
+"cl": 30,
+"pc": null,
+"apr": 20.0,
+"aprN": 5,
+"ebay": null,
+"pcTitle": null,
+"check": false
+}
 },
 {
 "cert": "147088475",
 "grade": "PSA 9",
 "name": "Charmander Obsidian Flames Elite Trainer Box",
-"setName": "2023 Svp En-Promo",
+"setName": "2023 SV Black Star Promo",
 "number": "044",
-"est": 105,
+"est": 87,
 "conf": 5,
 "done": "06/11/26",
 "spec": "2023 SVP EN-PROMO 044 CHARMANDER OBSIDIAN FLAMES ELITE TRAINER BOX",
-"match": "Charmander"
+"match": "Charmander",
+"src": {
+"cl": 105,
+"pc": null,
+"apr": 69.0,
+"aprN": 5,
+"ebay": null,
+"pcTitle": null,
+"check": false
+}
 },
 {
 "cert": "147088476",
 "grade": "PSA 7",
 "name": "Squirtle Shadowless",
-"setName": "1999 Game",
+"setName": "1999 Base Set",
 "number": "63",
-"est": 87,
+"est": 73,
 "conf": 4,
 "done": "06/11/26",
-"spec": "1999 GAME 63 SQUIRTLE SHADOWLESS"
+"spec": "1999 GAME 63 SQUIRTLE SHADOWLESS",
+"src": {
+"cl": 87,
+"pc": 59.0,
+"apr": null,
+"aprN": 1,
+"ebay": null,
+"pcTitle": "Squirtle [Shadowless] #63 Pokemon Base Set",
+"check": false
+}
 },
 {
 "cert": "147088477",
@@ -2161,10 +3889,19 @@
 "name": "Sylveon GX Yellow A Alternate Art",
 "setName": "2017 Guardians Rising",
 "number": "92a",
-"est": 700,
+"est": 516,
 "conf": 5,
 "done": "06/11/26",
-"spec": "2017 GUARDIANS RISING 92a SYLVEON GX YELLOW A ALTERNATE ART"
+"spec": "2017 GUARDIANS RISING 92a SYLVEON GX YELLOW A ALTERNATE ART",
+"src": {
+"cl": 700,
+"pc": 516.17,
+"apr": 70.5,
+"aprN": 2,
+"ebay": null,
+"pcTitle": "Sylveon GX #92a Pokemon Guardians Rising",
+"check": false
+}
 },
 {
 "cert": "147088478",
@@ -2172,10 +3909,19 @@
 "name": "FA Dedenne GX 2020 Yellow A Alternate Art Trainer's Toolkit",
 "setName": "2019 Unbroken Bonds",
 "number": "195a",
-"est": 44,
+"est": 36,
 "conf": 3,
 "done": "06/11/26",
-"spec": "2019 UNBROKEN BONDS 195a FA DEDENNE GX 2020 YELLOW A ALTERNATE ART TRAINER'S TOOLKIT"
+"spec": "2019 UNBROKEN BONDS 195a FA DEDENNE GX 2020 YELLOW A ALTERNATE ART TRAINER'S TOOLKIT",
+"src": {
+"cl": 44,
+"pc": 27.01,
+"apr": null,
+"aprN": 1,
+"ebay": null,
+"pcTitle": "Dedenne GX #195a Pokemon Unbroken Bonds",
+"check": false
+}
 },
 {
 "cert": "147088479",
@@ -2187,7 +3933,16 @@
 "conf": 5,
 "done": "06/11/26",
 "spec": "2019 COSMIC ECLIPSE 165 MEGA LOPUNNY & JIGGLYPUFF GX",
-"match": "Mega Lopunny & Jigglypuff-GX"
+"match": "Mega Lopunny & Jigglypuff-GX",
+"src": {
+"cl": 257,
+"pc": 260.87,
+"apr": 100.75,
+"aprN": 4,
+"ebay": null,
+"pcTitle": "Mega Lopunny & Jigglypuff GX #165 Pokemon Cosmic Eclipse",
+"check": false
+}
 },
 {
 "cert": "147088480",
@@ -2195,21 +3950,39 @@
 "name": "Venusaur & Snivy GX",
 "setName": "2019 Cosmic Eclipse",
 "number": "1",
-"est": 61,
+"est": 47,
 "conf": 1,
 "done": "06/11/26",
-"spec": "2019 COSMIC ECLIPSE 1 VENUSAUR & SNIVY GX"
+"spec": "2019 COSMIC ECLIPSE 1 VENUSAUR & SNIVY GX",
+"src": {
+"cl": 61,
+"pc": 32.99,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": "Venusaur & Snivy GX #1 | Pokemon Cosmic Eclipse",
+"check": false
+}
 },
 {
 "cert": "147088481",
 "grade": "PSA 9",
 "name": "M Blastoise ex",
-"setName": "2016 Xy Evolutions",
+"setName": "2016 XY Evolutions",
 "number": "22",
-"est": 50,
+"est": 44,
 "conf": 5,
 "done": "06/11/26",
-"spec": "2016 XY EVOLUTIONS 22 M BLASTOISE EX"
+"spec": "2016 XY EVOLUTIONS 22 M BLASTOISE EX",
+"src": {
+"cl": 50,
+"pc": 44.0,
+"apr": 41.0,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "M Blastoise EX #22 | Pokemon Evolutions",
+"check": false
+}
 },
 {
 "cert": "147088482",
@@ -2220,7 +3993,16 @@
 "est": 89,
 "conf": 5,
 "done": "06/11/26",
-"spec": "2019 UNIFIED MINDS 229 FA DRAGONITE GX"
+"spec": "2019 UNIFIED MINDS 229 FA DRAGONITE GX",
+"src": {
+"cl": 89,
+"pc": 98.09,
+"apr": 30.0,
+"aprN": 3,
+"ebay": null,
+"pcTitle": "Dragonite GX #229 Pokemon Unified Minds",
+"check": false
+}
 },
 {
 "cert": "147088483",
@@ -2231,7 +4013,16 @@
 "est": 29,
 "conf": 3,
 "done": "06/11/26",
-"spec": "2013 BLACK & WHITE LEGENDARY TREASURES 102 LUGIA EX"
+"spec": "2013 BLACK & WHITE LEGENDARY TREASURES 102 LUGIA EX",
+"src": {
+"cl": 29,
+"pc": 28.5,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": "Lugia EX #102 Pokemon Legendary Treasures",
+"check": false
+}
 },
 {
 "cert": "147088484",
@@ -2239,10 +4030,19 @@
 "name": "FA Reshiram GX",
 "setName": "2018 Dragon Majesty",
 "number": "65",
-"est": 600,
+"est": 550,
 "conf": 5,
 "done": "06/11/26",
-"spec": "2018 DRAGON MAJESTY 65 FA RESHIRAM GX"
+"spec": "2018 DRAGON MAJESTY 65 FA RESHIRAM GX",
+"src": {
+"cl": 600,
+"pc": 550.0,
+"apr": 207.5,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Reshiram GX #65 | Pokemon Dragon Majesty",
+"check": false
+}
 },
 {
 "cert": "147088485",
@@ -2253,7 +4053,16 @@
 "est": 235,
 "conf": 5,
 "done": "06/11/26",
-"spec": "2019 UNBROKEN BONDS 120 LUCARIO & MELMETAL GX"
+"spec": "2019 UNBROKEN BONDS 120 LUCARIO & MELMETAL GX",
+"src": {
+"cl": 235,
+"pc": 236.25,
+"apr": 211.5,
+"aprN": 2,
+"ebay": null,
+"pcTitle": "Lucario & Melmetal GX #120 | Pokemon Unbroken Bonds",
+"check": false
+}
 },
 {
 "cert": "147088486",
@@ -2261,10 +4070,19 @@
 "name": "FA Alolan Ninetales GX",
 "setName": "2018 Lost Thunder",
 "number": "205",
-"est": 36,
+"est": 33,
 "conf": 4,
 "done": "06/11/26",
-"spec": "2018 LOST THUNDER 205 FA ALOLAN NINETALES GX"
+"spec": "2018 LOST THUNDER 205 FA ALOLAN NINETALES GX",
+"src": {
+"cl": 36,
+"pc": 29.46,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": "Alolan Ninetales GX #205 | Pokemon Lost Thunder",
+"check": false
+}
 },
 {
 "cert": "147088487",
@@ -2272,10 +4090,19 @@
 "name": "FA Slowpoke & Psyduck GX Secret",
 "setName": "2019 Unified Minds",
 "number": "239",
-"est": 260,
+"est": 279,
 "conf": 5,
 "done": "06/11/26",
-"spec": "2019 UNIFIED MINDS 239 FA SLOWPOKE & PSYDUCK GX SECRET"
+"spec": "2019 UNIFIED MINDS 239 FA SLOWPOKE & PSYDUCK GX SECRET",
+"src": {
+"cl": 260,
+"pc": 297.17,
+"apr": null,
+"aprN": 1,
+"ebay": null,
+"pcTitle": "Slowpoke & Psyduck GX #239 | Pokemon Unified Minds",
+"check": false
+}
 },
 {
 "cert": "150526304",
@@ -2283,10 +4110,19 @@
 "name": "FA Pikachu",
 "setName": "2021 Celebrations",
 "number": "005",
-"est": 18,
+"est": 14.19,
 "conf": 5,
 "done": "06/02/26",
-"spec": "2021 CELEBRATIONS 005 FA PIKACHU"
+"spec": "2021 CELEBRATIONS 005 FA PIKACHU",
+"src": {
+"cl": 18,
+"pc": 12.02,
+"apr": 14.19,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Pikachu #5 | Pokemon Celebrations",
+"check": false
+}
 },
 {
 "cert": "150526305",
@@ -2294,10 +4130,19 @@
 "name": "Meowth 1st Edition",
 "setName": "2000 Rocket",
 "number": "62",
-"est": 30,
+"est": 22,
 "conf": 5,
 "done": "06/02/26",
-"spec": "2000 ROCKET 62 MEOWTH 1ST EDITION"
+"spec": "2000 ROCKET 62 MEOWTH 1ST EDITION",
+"src": {
+"cl": 30,
+"pc": 21.5,
+"apr": 12.0,
+"aprN": 3,
+"ebay": null,
+"pcTitle": "Meowth [1st Edition] #62 | Pokemon Team Rocket",
+"check": false
+}
 },
 {
 "cert": "150526306",
@@ -2305,10 +4150,19 @@
 "name": "Abra 1st Edition",
 "setName": "2000 Rocket",
 "number": "49",
-"est": 15,
+"est": 15.0,
 "conf": 5,
 "done": "06/02/26",
-"spec": "2000 ROCKET 49 ABRA 1ST EDITION"
+"spec": "2000 ROCKET 49 ABRA 1ST EDITION",
+"src": {
+"cl": 15,
+"pc": 15.0,
+"apr": null,
+"aprN": 1,
+"ebay": null,
+"pcTitle": "Abra [1st Edition] #49 | Pokemon Team Rocket",
+"check": false
+}
 },
 {
 "cert": "150526307",
@@ -2316,10 +4170,19 @@
 "name": "Blaine's Vulpix 1st Edition",
 "setName": "2000 Gym Challenge",
 "number": "66",
-"est": 36,
+"est": 30,
 "conf": 3,
 "done": "06/02/26",
-"spec": "2000 GYM CHALLENGE 66 BLAINE'S VULPIX 1ST EDITION"
+"spec": "2000 GYM CHALLENGE 66 BLAINE'S VULPIX 1ST EDITION",
+"src": {
+"cl": 36,
+"pc": 24.0,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": "Blaine's Vulpix [1st Edition] #66 | Pokemon Gym Challenge",
+"check": false
+}
 },
 {
 "cert": "150526308",
@@ -2330,7 +4193,16 @@
 "est": 243,
 "conf": 5,
 "done": "06/02/26",
-"spec": "2003 YU-GI-OH! PROMO 002 OBELISK THE TORMENTOR ENGLISH GAME BOY ADVANCE-SECRET RARE"
+"spec": "2003 YU-GI-OH! PROMO 002 OBELISK THE TORMENTOR ENGLISH GAME BOY ADVANCE-SECRET RARE",
+"src": {
+"cl": 243,
+"pc": null,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": null,
+"check": false
+}
 },
 {
 "cert": "150526309",
@@ -2338,44 +4210,80 @@
 "name": "Dark Vaporeon 1st Edition",
 "setName": "2000 Rocket",
 "number": "45",
-"est": 33,
+"est": 34,
 "conf": 5,
 "done": "06/02/26",
-"spec": "2000 ROCKET 45 DARK VAPOREON 1ST EDITION"
+"spec": "2000 ROCKET 45 DARK VAPOREON 1ST EDITION",
+"src": {
+"cl": 33,
+"pc": 34.99,
+"apr": null,
+"aprN": 1,
+"ebay": null,
+"pcTitle": "Dark Vaporeon [1st Edition] #45 | Pokemon Team Rocket",
+"check": false
+}
 },
 {
 "cert": "150526310",
 "grade": "PSA 8",
 "name": "M Sharpedo ex Mega Sharpedo ex Premium Collection",
-"setName": "2017 Xy Promo",
+"setName": "2017 XY Promo",
 "number": "XY200",
-"est": 57,
+"est": 43,
 "conf": 4,
 "done": "06/02/26",
-"spec": "2017 XY PROMO XY200 M SHARPEDO EX MEGA SHARPEDO EX PREMIUM COLLECTION"
+"spec": "2017 XY PROMO XY200 M SHARPEDO EX MEGA SHARPEDO EX PREMIUM COLLECTION",
+"src": {
+"cl": 57,
+"pc": 29.88,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": "M Sharpedo EX #XY200 Pokemon Promo",
+"check": false
+}
 },
 {
 "cert": "150526311",
 "grade": "PSA 8",
 "name": "Hawlucha Prerelease",
-"setName": "2023 Svp En-Promo",
+"setName": "2023 SV Black Star Promo",
 "number": "007",
 "est": 27,
 "conf": 2,
 "done": "06/02/26",
-"spec": "2023 SVP EN-PROMO 007 HAWLUCHA PRERELEASE"
+"spec": "2023 SVP EN-PROMO 007 HAWLUCHA PRERELEASE",
+"src": {
+"cl": 27,
+"pc": null,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": null,
+"check": false
+}
 },
 {
 "cert": "150526312",
 "grade": "PSA 9",
 "name": "Pikachu Paldea Evolved Elite Trainer Box",
-"setName": "2023 Svp En-Promo",
+"setName": "2023 SV Black Star Promo",
 "number": "027",
-"est": 40,
+"est": 32,
 "conf": 5,
 "done": "06/02/26",
 "spec": "2023 SVP EN-PROMO 027 PIKACHU PALDEA EVOLVED ELITE TRAINER BOX",
-"match": "Pikachu"
+"match": "Pikachu",
+"src": {
+"cl": 40,
+"pc": 32.06,
+"apr": 31.0,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Pikachu [Paldea] #27 Pokemon Promo",
+"check": false
+}
 },
 {
 "cert": "150526313",
@@ -2386,7 +4294,16 @@
 "est": 20,
 "conf": 1,
 "done": "06/02/26",
-"spec": "2023-2024 POKEMON PLAY! POKEMON PRIZE PACK 131 GIRATINA VSTAR"
+"spec": "2023-2024 POKEMON PLAY! POKEMON PRIZE PACK 131 GIRATINA VSTAR",
+"src": {
+"cl": 20,
+"pc": null,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": null,
+"check": false
+}
 },
 {
 "cert": "150526314",
@@ -2397,7 +4314,16 @@
 "est": 32,
 "conf": 1,
 "done": "06/02/26",
-"spec": "2023-2024 POKEMON PLAY! POKEMON PRIZE PACK 130 GIRATINA V"
+"spec": "2023-2024 POKEMON PLAY! POKEMON PRIZE PACK 130 GIRATINA V",
+"src": {
+"cl": 32,
+"pc": null,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": null,
+"check": false
+}
 },
 {
 "cert": "150526315",
@@ -2408,18 +4334,36 @@
 "est": 55,
 "conf": 1,
 "done": "06/02/26",
-"spec": "2024-2025 POKEMON PLAY! POKEMON PRIZE PACK 070 IRON HANDS EX"
+"spec": "2024-2025 POKEMON PLAY! POKEMON PRIZE PACK 070 IRON HANDS EX",
+"src": {
+"cl": 55,
+"pc": null,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": null,
+"check": false
+}
 },
 {
 "cert": "150526316",
 "grade": "PSA 9",
 "name": "N's Darmanitan Journey Together Prerelease-Staff",
-"setName": "2025 Svp En-Promo",
+"setName": "2025 SV Black Star Promo",
 "number": "181",
 "est": 25,
 "conf": 5,
 "done": "06/02/26",
-"spec": "2025 SVP EN-PROMO 181 N'S DARMANITAN JOURNEY TOGETHER PRERELEASE-STAFF"
+"spec": "2025 SVP EN-PROMO 181 N'S DARMANITAN JOURNEY TOGETHER PRERELEASE-STAFF",
+"src": {
+"cl": 25,
+"pc": null,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": null,
+"check": false
+}
 },
 {
 "cert": "150526317",
@@ -2431,7 +4375,16 @@
 "conf": 3,
 "done": "06/02/26",
 "spec": "2023 PLAY! POKEMON PRIZE PACK: SERIES 3 059 RADIANT ALAKAZAM",
-"match": "Radiant Alakazam Play"
+"match": "Radiant Alakazam Play",
+"src": {
+"cl": 509,
+"pc": null,
+"apr": null,
+"aprN": 0,
+"ebay": 25.39,
+"pcTitle": null,
+"check": true
+}
 },
 {
 "cert": "150526318",
@@ -2442,7 +4395,16 @@
 "est": 70,
 "conf": 5,
 "done": "06/02/26",
-"spec": "2024 JAPANESE SV5K-WILD FORCE 095 RAGING BOLT EX SPECIAL ART RARE"
+"spec": "2024 JAPANESE SV5K-WILD FORCE 095 RAGING BOLT EX SPECIAL ART RARE",
+"src": {
+"cl": 70,
+"pc": 70.0,
+"apr": 71.0,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Raging Bolt ex #95 | Pokemon Japanese Wild Force",
+"check": false
+}
 },
 {
 "cert": "150526319",
@@ -2450,10 +4412,19 @@
 "name": "Entei Pokemon 3: The Movie",
 "setName": "2001 Wizards Of The Coast Promo",
 "number": "34",
-"est": 103,
+"est": 102,
 "conf": 5,
 "done": "06/02/26",
-"spec": "2001 WIZARDS OF THE COAST PROMO 34 ENTEI POKEMON 3: THE MOVIE"
+"spec": "2001 WIZARDS OF THE COAST PROMO 34 ENTEI POKEMON 3: THE MOVIE",
+"src": {
+"cl": 103,
+"pc": 101.59,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": "Entei #34 Pokemon Promo",
+"check": false
+}
 },
 {
 "cert": "150526320",
@@ -2464,7 +4435,16 @@
 "est": null,
 "conf": null,
 "done": "06/02/26",
-"spec": "2005 EX EMERALD 70 TREECKO GENCON INDIANAPOLIS"
+"spec": "2005 EX EMERALD 70 TREECKO GENCON INDIANAPOLIS",
+"src": {
+"cl": null,
+"pc": null,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": null,
+"check": false
+}
 },
 {
 "cert": "150526321",
@@ -2476,7 +4456,16 @@
 "conf": 5,
 "done": "06/02/26",
 "spec": "2021 CELEBRATIONS CLASSIC COLLECTION 24 BIRTHDAY PIKACHU-HOLO",
-"match": "Birthday Pikachu"
+"match": "Birthday Pikachu",
+"src": {
+"cl": 185,
+"pc": 178.79,
+"apr": 241.5,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Pikachu Birthday #24 Pokemon Celebrations",
+"check": false
+}
 },
 {
 "cert": "150526322",
@@ -2484,21 +4473,39 @@
 "name": "FA Charizard VMAX Ultra-Premium Collection-Charizard",
 "setName": "2022 Promo",
 "number": "261",
-"est": 40,
+"est": 41,
 "conf": 5,
 "done": "06/02/26",
-"spec": "2022 PROMO 261 FA CHARIZARD VMAX ULTRA-PREMIUM COLLECTION-CHARIZARD"
+"spec": "2022 PROMO 261 FA CHARIZARD VMAX ULTRA-PREMIUM COLLECTION-CHARIZARD",
+"src": {
+"cl": 40,
+"pc": 41.01,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": "Charizard VMax #SWSH261 Pokemon Promo",
+"check": false
+}
 },
 {
 "cert": "150526323",
 "grade": "PSA 7",
 "name": "Ceruledge IR",
-"setName": "2024 Ssp En-Surging Sparks",
+"setName": "2024 Surging Sparks",
 "number": "197",
-"est": 29,
+"est": 13.5,
 "conf": 3,
 "done": "06/02/26",
-"spec": "2024 SSP EN-SURGING SPARKS 197 CERULEDGE IR"
+"spec": "2024 SSP EN-SURGING SPARKS 197 CERULEDGE IR",
+"src": {
+"cl": 29,
+"pc": 13.5,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": "Ceruledge #197 Pokemon Surging Sparks",
+"check": true
+}
 },
 {
 "cert": "150708269",
@@ -2506,21 +4513,39 @@
 "name": "FA Zekrom",
 "setName": "2013 Black & White Legendary Treasures",
 "number": "115",
-"est": 207,
+"est": 184,
 "conf": 4,
 "done": "05/04/26",
-"spec": "2013 BLACK & WHITE LEGENDARY TREASURES 115 FA ZEKROM"
+"spec": "2013 BLACK & WHITE LEGENDARY TREASURES 115 FA ZEKROM",
+"src": {
+"cl": 207,
+"pc": 161.0,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": "Zekrom #115 Pokemon Legendary Treasures",
+"check": false
+}
 },
 {
 "cert": "150228047",
 "grade": "PSA 8",
 "name": "Pikachu Red Cheeks-Shadowless",
-"setName": "1999 Game",
+"setName": "1999 Base Set",
 "number": "58",
-"est": 250,
+"est": 198,
 "conf": 5,
 "done": "06/25/26",
-"spec": "1999 GAME 58 PIKACHU RED CHEEKS-SHADOWLESS"
+"spec": "1999 GAME 58 PIKACHU RED CHEEKS-SHADOWLESS",
+"src": {
+"cl": 250,
+"pc": 198.0,
+"apr": 71.0,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Pikachu [Shadowless Red Cheeks] #58 | Pokemon Base Set",
+"check": false
+}
 },
 {
 "cert": "150148532",
@@ -2528,10 +4553,19 @@
 "name": "Trevenant & Dusknoir GX Pale Moon-Gx Box",
 "setName": "2019 Promo",
 "number": "SM217",
-"est": 133,
+"est": 129,
 "conf": 5,
 "done": "06/22/26",
-"spec": "2019 PROMO SM217 TREVENANT & DUSKNOIR GX PALE MOON-GX BOX"
+"spec": "2019 PROMO SM217 TREVENANT & DUSKNOIR GX PALE MOON-GX BOX",
+"src": {
+"cl": 133,
+"pc": 124.87,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": "Trevenant & Dusknoir GX #SM217 Pokemon Promo",
+"check": false
+}
 },
 {
 "cert": "150148533",
@@ -2539,10 +4573,19 @@
 "name": "Charizard & Braixen GX",
 "setName": "2019 Cosmic Eclipse",
 "number": "22",
-"est": 43,
+"est": 42,
 "conf": 5,
 "done": "06/22/26",
-"spec": "2019 COSMIC ECLIPSE 22 CHARIZARD & BRAIXEN GX"
+"spec": "2019 COSMIC ECLIPSE 22 CHARIZARD & BRAIXEN GX",
+"src": {
+"cl": 43,
+"pc": 42.22,
+"apr": 28.75,
+"aprN": 4,
+"ebay": null,
+"pcTitle": "Charizard & Braixen GX #22 Pokemon Cosmic Eclipse",
+"check": false
+}
 },
 {
 "cert": "150148534",
@@ -2550,10 +4593,19 @@
 "name": "Lugia GX",
 "setName": "2018 Lost Thunder",
 "number": "159",
-"est": 54,
+"est": 60,
 "conf": 5,
 "done": "06/22/26",
-"spec": "2018 LOST THUNDER 159 LUGIA GX"
+"spec": "2018 LOST THUNDER 159 LUGIA GX",
+"src": {
+"cl": 54,
+"pc": 65.0,
+"apr": null,
+"aprN": 1,
+"ebay": null,
+"pcTitle": "Lugia GX #159 | Pokemon Lost Thunder",
+"check": false
+}
 },
 {
 "cert": "150148535",
@@ -2561,10 +4613,19 @@
 "name": "Mewtwo & Mew GX",
 "setName": "2019 Unified Minds",
 "number": "71",
-"est": 173,
+"est": 73,
 "conf": 2,
 "done": "06/22/26",
-"spec": "2019 UNIFIED MINDS 71 MEWTWO & MEW GX"
+"spec": "2019 UNIFIED MINDS 71 MEWTWO & MEW GX",
+"src": {
+"cl": 173,
+"pc": 72.82,
+"apr": null,
+"aprN": 1,
+"ebay": null,
+"pcTitle": "Mewtwo & Mew GX #71 Pokemon Unified Minds",
+"check": true
+}
 },
 {
 "cert": "150148536",
@@ -2572,11 +4633,20 @@
 "name": "Reshiram & Zekrom GX",
 "setName": "2019 Cosmic Eclipse",
 "number": "157",
-"est": 774,
+"est": 700,
 "conf": 5,
 "done": "06/22/26",
 "spec": "2019 COSMIC ECLIPSE 157 RESHIRAM & ZEKROM GX",
-"match": "Reshiram & Zekrom-GX"
+"match": "Reshiram & Zekrom-GX",
+"src": {
+"cl": 774,
+"pc": 700.0,
+"apr": 530.0,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Reshiram & Zekrom GX #157 Pokemon Cosmic Eclipse",
+"check": false
+}
 },
 {
 "cert": "150148537",
@@ -2587,7 +4657,16 @@
 "est": 45,
 "conf": 5,
 "done": "06/22/26",
-"spec": "2019 COSMIC ECLIPSE 262 FA SILVALLY GX SECRET"
+"spec": "2019 COSMIC ECLIPSE 262 FA SILVALLY GX SECRET",
+"src": {
+"cl": 45,
+"pc": 46.5,
+"apr": 17.5,
+"aprN": 4,
+"ebay": null,
+"pcTitle": "Silvally GX #262 | Pokemon Cosmic Eclipse",
+"check": false
+}
 },
 {
 "cert": "150148538",
@@ -2595,10 +4674,19 @@
 "name": "Reshiram & Charizard GX",
 "setName": "2019 Unbroken Bonds",
 "number": "20",
-"est": 280,
+"est": 266,
 "conf": 5,
 "done": "06/22/26",
-"spec": "2019 UNBROKEN BONDS 20 RESHIRAM & CHARIZARD GX"
+"spec": "2019 UNBROKEN BONDS 20 RESHIRAM & CHARIZARD GX",
+"src": {
+"cl": 280,
+"pc": 266.0,
+"apr": 192.5,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Reshiram & Charizard GX #20 Pokemon Unbroken Bonds",
+"check": false
+}
 },
 {
 "cert": "150148539",
@@ -2606,11 +4694,20 @@
 "name": "Togepi & Cleffa & Igglybuff GX",
 "setName": "2019 Cosmic Eclipse",
 "number": "143",
-"est": 99,
+"est": 90,
 "conf": 5,
 "done": "06/22/26",
 "spec": "2019 COSMIC ECLIPSE 143 TOGEPI & CLEFFA & IGGLYBUFF GX",
-"match": "Togepi & Cleffa & Igglybuff-GX"
+"match": "Togepi & Cleffa & Igglybuff-GX",
+"src": {
+"cl": 99,
+"pc": 80.0,
+"apr": null,
+"aprN": 1,
+"ebay": null,
+"pcTitle": "Togepi & Cleffa & Igglybuff GX #143 | Pokemon Cosmic Eclipse",
+"check": false
+}
 },
 {
 "cert": "150148540",
@@ -2618,10 +4715,19 @@
 "name": "Greninja-Gold Star Celebrations Elite Trainer Box",
 "setName": "2021 Promo",
 "number": "144",
-"est": 22,
+"est": 26,
 "conf": 5,
 "done": "06/22/26",
-"spec": "2021 PROMO 144 GRENINJA-GOLD STAR CELEBRATIONS ELITE TRAINER BOX"
+"spec": "2021 PROMO 144 GRENINJA-GOLD STAR CELEBRATIONS ELITE TRAINER BOX",
+"src": {
+"cl": 22,
+"pc": 30.75,
+"apr": 26.0,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Greninja [Gold Star] #SWSH144 Pokemon Celebrations",
+"check": false
+}
 },
 {
 "cert": "150148541",
@@ -2633,18 +4739,36 @@
 "conf": 5,
 "done": "06/22/26",
 "spec": "2019 COSMIC ECLIPSE 75 SOLGALEO & LUNALA GX",
-"match": "Solgaleo & Lunala-GX"
+"match": "Solgaleo & Lunala-GX",
+"src": {
+"cl": 300,
+"pc": 331.12,
+"apr": 173.43,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Solgaleo & Lunala GX #75 Pokemon Cosmic Eclipse",
+"check": false
+}
 },
 {
 "cert": "150148542",
 "grade": "PSA 8",
 "name": "N's Reshiram Enhanced Booster Box Topper",
-"setName": "2025 Jtg En-Journey Together",
+"setName": "2025 Journey Together",
 "number": "167",
-"est": 10,
+"est": 14.49,
 "conf": 5,
 "done": "06/22/26",
-"spec": "2025 JTG EN-JOURNEY TOGETHER 167 N'S RESHIRAM ENHANCED BOOSTER BOX TOPPER"
+"spec": "2025 JTG EN-JOURNEY TOGETHER 167 N'S RESHIRAM ENHANCED BOOSTER BOX TOPPER",
+"src": {
+"cl": 10,
+"pc": 18.99,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": "N's Reshiram #167 Pokemon Journey Together",
+"check": false
+}
 },
 {
 "cert": "150148543",
@@ -2652,10 +4776,19 @@
 "name": "Umbreon & Darkrai GX",
 "setName": "2019 Unified Minds",
 "number": "125",
-"est": 126,
+"est": 118,
 "conf": 5,
 "done": "06/22/26",
-"spec": "2019 UNIFIED MINDS 125 UMBREON & DARKRAI GX"
+"spec": "2019 UNIFIED MINDS 125 UMBREON & DARKRAI GX",
+"src": {
+"cl": 126,
+"pc": 117.5,
+"apr": 106.5,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Umbreon & Darkrai GX #125 Pokemon Unified Minds",
+"check": false
+}
 },
 {
 "cert": "150148544",
@@ -2663,10 +4796,19 @@
 "name": "Pikachu & Zekrom GX",
 "setName": "2019 Team Up",
 "number": "33",
-"est": 92,
+"est": 95,
 "conf": 5,
 "done": "06/22/26",
-"spec": "2019 TEAM UP 33 PIKACHU & ZEKROM GX"
+"spec": "2019 TEAM UP 33 PIKACHU & ZEKROM GX",
+"src": {
+"cl": 92,
+"pc": 95.0,
+"apr": 123.5,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Pikachu & Zekrom GX #33 Pokemon Team Up",
+"check": false
+}
 },
 {
 "cert": "150148545",
@@ -2674,10 +4816,19 @@
 "name": "FA Blastoise VMAX Blastoise VMAX Battle Box",
 "setName": "2021 Promo",
 "number": "103",
-"est": 40,
+"est": 38,
 "conf": 5,
 "done": "06/22/26",
-"spec": "2021 PROMO 103 FA BLASTOISE VMAX BLASTOISE VMAX BATTLE BOX"
+"spec": "2021 PROMO 103 FA BLASTOISE VMAX BLASTOISE VMAX BATTLE BOX",
+"src": {
+"cl": 40,
+"pc": null,
+"apr": 36.0,
+"aprN": 2,
+"ebay": null,
+"pcTitle": null,
+"check": false
+}
 },
 {
 "cert": "150148546",
@@ -2689,52 +4840,97 @@
 "conf": 5,
 "done": "06/22/26",
 "spec": "2019 PROMO SM104a FA SOLGALEO GX HIDDEN FATES PREMIUM COLLECTION",
-"match": "Solgaleo GX Promo"
+"match": "Solgaleo GX Promo",
+"src": {
+"cl": 79,
+"pc": 83.55,
+"apr": 61.0,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Solgaleo GX #SM104a Pokemon Promo",
+"check": false
+}
 },
 {
 "cert": "150148547",
 "grade": "PSA 9",
 "name": "Inteleon Mega Evolution Prerelease-Staff",
-"setName": "2025 Mep En-Mega Evolution Promo",
+"setName": "2025 Mega Evolution Promo",
 "number": "002",
 "est": 25,
 "conf": 4,
 "done": "06/22/26",
-"spec": "2025 MEP EN-MEGA EVOLUTION PROMO 002 INTELEON MEGA EVOLUTION PRERELEASE-STAFF"
+"spec": "2025 MEP EN-MEGA EVOLUTION PROMO 002 INTELEON MEGA EVOLUTION PRERELEASE-STAFF",
+"src": {
+"cl": 25,
+"pc": null,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": null,
+"check": false
+}
 },
 {
 "cert": "150148548",
 "grade": "PSA 9",
 "name": "Meganium Mega Evolution Prerelease-Staff",
-"setName": "2025 Mep En-Mega Evolution Promo",
+"setName": "2025 Mega Evolution Promo",
 "number": "001",
 "est": 70,
 "conf": 5,
 "done": "06/22/26",
 "spec": "2025 MEP EN-MEGA EVOLUTION PROMO 001 MEGANIUM MEGA EVOLUTION PRERELEASE-STAFF",
-"match": "Meganium Mega Evolution Staff"
+"match": "Meganium Mega Evolution Staff",
+"src": {
+"cl": 70,
+"pc": null,
+"apr": null,
+"aprN": 0,
+"ebay": 70.0,
+"pcTitle": null,
+"check": false
+}
 },
 {
 "cert": "150148549",
 "grade": "PSA 9",
 "name": "Lunatone Mega Evolution Prerelease-Staff",
-"setName": "2025 Mep En-Mega Evolution Promo",
+"setName": "2025 Mega Evolution Promo",
 "number": "004",
 "est": 72,
 "conf": 4,
 "done": "06/22/26",
-"spec": "2025 MEP EN-MEGA EVOLUTION PROMO 004 LUNATONE MEGA EVOLUTION PRERELEASE-STAFF"
+"spec": "2025 MEP EN-MEGA EVOLUTION PROMO 004 LUNATONE MEGA EVOLUTION PRERELEASE-STAFF",
+"src": {
+"cl": 72,
+"pc": null,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": null,
+"check": false
+}
 },
 {
 "cert": "150148550",
 "grade": "PSA 9",
 "name": "Alakazam Mega Evolution Prerelease-Staff",
-"setName": "2025 Mep En-Mega Evolution Promo",
+"setName": "2025 Mega Evolution Promo",
 "number": "003",
 "est": 160,
 "conf": 5,
 "done": "06/22/26",
-"spec": "2025 MEP EN-MEGA EVOLUTION PROMO 003 ALAKAZAM MEGA EVOLUTION PRERELEASE-STAFF"
+"spec": "2025 MEP EN-MEGA EVOLUTION PROMO 003 ALAKAZAM MEGA EVOLUTION PRERELEASE-STAFF",
+"src": {
+"cl": 160,
+"pc": null,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": null,
+"check": false
+}
 },
 {
 "cert": "150148551",
@@ -2742,56 +4938,101 @@
 "name": "Shanks PSA Magazine Exclusive",
 "setName": "2025 One Piece Promos",
 "number": "001",
-"est": 51,
+"est": 72,
 "conf": 5,
 "done": "06/22/26",
 "spec": "2025 ONE PIECE PROMOS 001 SHANKS PSA MAGAZINE EXCLUSIVE",
-"match": "Shanks Magazine (One Piece)"
+"match": "Shanks Magazine (One Piece)",
+"src": {
+"cl": 51,
+"pc": 94.0,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": "Shanks [Magazine] OP09-001 One Piece Promo",
+"check": false
+}
 },
 {
 "cert": "150148552",
 "grade": "PSA 9",
 "name": "Pikachu Paldea Evolved Elite Trainer Box",
-"setName": "2023 Svp En-Promo",
+"setName": "2023 SV Black Star Promo",
 "number": "027",
-"est": 40,
+"est": 32,
 "conf": 5,
 "done": "06/22/26",
 "spec": "2023 SVP EN-PROMO 027 PIKACHU PALDEA EVOLVED ELITE TRAINER BOX",
-"match": "Pikachu"
+"match": "Pikachu",
+"src": {
+"cl": 40,
+"pc": 32.06,
+"apr": 31.0,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Pikachu [Paldea] #27 Pokemon Promo",
+"check": false
+}
 },
 {
 "cert": "135016794",
 "grade": "PSA 9",
 "name": "Latias ex SIR",
-"setName": "2024 Ssp En-Surging Sparks",
+"setName": "2024 Surging Sparks",
 "number": "239",
-"est": 130,
+"est": 134,
 "conf": 5,
 "done": "12/15/25",
-"spec": "2024 SSP EN-SURGING SPARKS 239 LATIAS EX SIR"
+"spec": "2024 SSP EN-SURGING SPARKS 239 LATIAS EX SIR",
+"src": {
+"cl": 130,
+"pc": 152.75,
+"apr": 133.5,
+"aprN": 3,
+"ebay": null,
+"pcTitle": "Latias ex #239 Pokemon Surging Sparks",
+"check": false
+}
 },
 {
 "cert": "135016795",
 "grade": "PSA 8",
 "name": "Team Rocket's Moltres ex SIR",
-"setName": "2025 Dri En-Destined Rivals",
+"setName": "2025 Destined Rivals",
 "number": "229",
-"est": 43,
+"est": 52,
 "conf": 5,
 "done": "12/15/25",
-"spec": "2025 DRI EN-DESTINED RIVALS 229 TEAM ROCKET'S MOLTRES EX SIR"
+"spec": "2025 DRI EN-DESTINED RIVALS 229 TEAM ROCKET'S MOLTRES EX SIR",
+"src": {
+"cl": 43,
+"pc": 61.0,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": "Team Rocket's Moltres ex #229 Pokemon Destined Rivals",
+"check": false
+}
 },
 {
 "cert": "135016796",
 "grade": "PSA 8",
 "name": "FA M Altaria ex",
-"setName": "2016 Xy Fates Collide",
+"setName": "2016 XY Fates Collide",
 "number": "121",
-"est": 43,
+"est": 44,
 "conf": 4,
 "done": "12/15/25",
-"spec": "2016 XY FATES COLLIDE 121 FA M ALTARIA EX"
+"spec": "2016 XY FATES COLLIDE 121 FA M ALTARIA EX",
+"src": {
+"cl": 43,
+"pc": 45.0,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": "M Altaria EX #121 Pokemon Fates Collide",
+"check": false
+}
 },
 {
 "cert": "135016797",
@@ -2799,10 +5040,19 @@
 "name": "Espeon & Deoxys GX",
 "setName": "2019 Unified Minds",
 "number": "72",
-"est": 94,
+"est": 90,
 "conf": 5,
 "done": "12/15/25",
-"spec": "2019 UNIFIED MINDS 72 ESPEON & DEOXYS GX"
+"spec": "2019 UNIFIED MINDS 72 ESPEON & DEOXYS GX",
+"src": {
+"cl": 94,
+"pc": 90.07,
+"apr": 30.75,
+"aprN": 2,
+"ebay": null,
+"pcTitle": "Espeon & Deoxys GX #72 | Pokemon Unified Minds",
+"check": false
+}
 },
 {
 "cert": "135016798",
@@ -2810,10 +5060,19 @@
 "name": "FA Blastoise VMAX Blastoise VMAX Battle Box",
 "setName": "2021 Promo",
 "number": "103",
-"est": 40,
+"est": 38,
 "conf": 5,
 "done": "12/15/25",
-"spec": "2021 PROMO 103 FA BLASTOISE VMAX BLASTOISE VMAX BATTLE BOX"
+"spec": "2021 PROMO 103 FA BLASTOISE VMAX BLASTOISE VMAX BATTLE BOX",
+"src": {
+"cl": 40,
+"pc": null,
+"apr": 36.0,
+"aprN": 2,
+"ebay": null,
+"pcTitle": null,
+"check": false
+}
 },
 {
 "cert": "135016799",
@@ -2821,10 +5080,19 @@
 "name": "Pikachu & Zekrom GX",
 "setName": "2019 Team Up",
 "number": "33",
-"est": 345,
+"est": 375,
 "conf": 5,
 "done": "12/15/25",
-"spec": "2019 TEAM UP 33 PIKACHU & ZEKROM GX"
+"spec": "2019 TEAM UP 33 PIKACHU & ZEKROM GX",
+"src": {
+"cl": 345,
+"pc": 471.85,
+"apr": 375.0,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Pikachu & Zekrom GX #33 Pokemon Team Up",
+"check": false
+}
 },
 {
 "cert": "135016800",
@@ -2832,10 +5100,19 @@
 "name": "Solgaleo & Lunala GX",
 "setName": "2019 Cosmic Eclipse",
 "number": "75",
-"est": 70,
+"est": 61,
 "conf": 5,
 "done": "12/15/25",
-"spec": "2019 COSMIC ECLIPSE 75 SOLGALEO & LUNALA GX"
+"spec": "2019 COSMIC ECLIPSE 75 SOLGALEO & LUNALA GX",
+"src": {
+"cl": 70,
+"pc": 61.0,
+"apr": 45.98,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Solgaleo & Lunala GX #75 Pokemon Cosmic Eclipse",
+"check": false
+}
 },
 {
 "cert": "135016801",
@@ -2843,10 +5120,19 @@
 "name": "Togepi & Cleffa & Igglybuff GX",
 "setName": "2019 Cosmic Eclipse",
 "number": "143",
-"est": 475,
+"est": 376,
 "conf": 5,
 "done": "12/15/25",
-"spec": "2019 COSMIC ECLIPSE 143 TOGEPI & CLEFFA & IGGLYBUFF GX"
+"spec": "2019 COSMIC ECLIPSE 143 TOGEPI & CLEFFA & IGGLYBUFF GX",
+"src": {
+"cl": 475,
+"pc": 376.27,
+"apr": 263.75,
+"aprN": 4,
+"ebay": null,
+"pcTitle": "Togepi & Cleffa & Igglybuff GX #143 | Pokemon Cosmic Eclipse",
+"check": false
+}
 },
 {
 "cert": "135016802",
@@ -2854,10 +5140,19 @@
 "name": "Celebi & Venusaur GX",
 "setName": "2019 Team Up",
 "number": "1",
-"est": 36,
+"est": 50,
 "conf": 3,
 "done": "12/15/25",
-"spec": "2019 TEAM UP 1 CELEBI & VENUSAUR GX"
+"spec": "2019 TEAM UP 1 CELEBI & VENUSAUR GX",
+"src": {
+"cl": 36,
+"pc": 63.5,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": "Celebi & Venusaur GX #1 Pokemon Team Up",
+"check": false
+}
 },
 {
 "cert": "135016803",
@@ -2865,10 +5160,19 @@
 "name": "Blastoise & Piplup GX",
 "setName": "2019 Cosmic Eclipse",
 "number": "38",
-"est": 150,
+"est": 130,
 "conf": 5,
 "done": "12/15/25",
-"spec": "2019 COSMIC ECLIPSE 38 BLASTOISE & PIPLUP GX"
+"spec": "2019 COSMIC ECLIPSE 38 BLASTOISE & PIPLUP GX",
+"src": {
+"cl": 150,
+"pc": 130.25,
+"apr": 96.0,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Blastoise & Piplup GX #38 | Pokemon Cosmic Eclipse",
+"check": false
+}
 },
 {
 "cert": "135016804",
@@ -2876,10 +5180,19 @@
 "name": "FA Moltres & Zapdos & Articuno GX",
 "setName": "2019 Hidden Fates",
 "number": "66",
-"est": 205,
+"est": 170,
 "conf": 5,
 "done": "12/15/25",
-"spec": "2019 HIDDEN FATES 66 FA MOLTRES & ZAPDOS & ARTICUNO GX"
+"spec": "2019 HIDDEN FATES 66 FA MOLTRES & ZAPDOS & ARTICUNO GX",
+"src": {
+"cl": 205,
+"pc": 169.62,
+"apr": 123.5,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Moltres & Zapdos & Articuno GX #66 Pokemon Hidden Fates",
+"check": false
+}
 },
 {
 "cert": "135016805",
@@ -2890,29 +5203,56 @@
 "est": 107,
 "conf": 5,
 "done": "12/15/25",
-"spec": "2019 UNBROKEN BONDS 130 GARDEVOIR & SYLVEON GX"
+"spec": "2019 UNBROKEN BONDS 130 GARDEVOIR & SYLVEON GX",
+"src": {
+"cl": 107,
+"pc": 109.99,
+"apr": 61.38,
+"aprN": 4,
+"ebay": null,
+"pcTitle": "Gardevoir & Sylveon GX #130 | Pokemon Unbroken Bonds",
+"check": false
+}
 },
 {
 "cert": "135016806",
 "grade": "PSA 9",
 "name": "FA Snorlax VMAX",
-"setName": "2020",
+"setName": "2020 Sword & Shield",
 "number": "142",
 "est": 59,
 "conf": 5,
 "done": "12/15/25",
-"spec": "2020 142 FA SNORLAX VMAX"
+"spec": "2020 142 FA SNORLAX VMAX",
+"src": {
+"cl": 59,
+"pc": 60.0,
+"apr": 59.0,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Snorlax Vmax #142 | Pokemon Sword & Shield",
+"check": false
+}
 },
 {
 "cert": "135016807",
 "grade": "PSA 8",
 "name": "FA Gardevoir ex",
-"setName": "2016 Xy Generations Radiant Collection",
+"setName": "2016 XY Generations Radiant Collection",
 "number": "RC30",
-"est": 79,
+"est": 82,
 "conf": 5,
 "done": "12/15/25",
-"spec": "2016 XY GENERATIONS RADIANT COLLECTION RC30 FA GARDEVOIR EX"
+"spec": "2016 XY GENERATIONS RADIANT COLLECTION RC30 FA GARDEVOIR EX",
+"src": {
+"cl": 79,
+"pc": 108.92,
+"apr": 82.5,
+"aprN": 3,
+"ebay": null,
+"pcTitle": "Gardevoir EX #RC30 Pokemon Generations",
+"check": false
+}
 },
 {
 "cert": "135016808",
@@ -2923,7 +5263,16 @@
 "est": 1642,
 "conf": 5,
 "done": "12/15/25",
-"spec": "2019 TEAM UP 113 LATIAS & LATIOS GX"
+"spec": "2019 TEAM UP 113 LATIAS & LATIOS GX",
+"src": {
+"cl": 1642,
+"pc": 2126.0,
+"apr": 425.0,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Latias & Latios GX #113 Pokemon Team Up",
+"check": false
+}
 },
 {
 "cert": "135016809",
@@ -2931,10 +5280,19 @@
 "name": "Umbreon & Darkrai GX",
 "setName": "2019 Unified Minds",
 "number": "125",
-"est": 645,
+"est": 624,
 "conf": 5,
 "done": "12/15/25",
-"spec": "2019 UNIFIED MINDS 125 UMBREON & DARKRAI GX"
+"spec": "2019 UNIFIED MINDS 125 UMBREON & DARKRAI GX",
+"src": {
+"cl": 645,
+"pc": 624.29,
+"apr": 511.0,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Umbreon & Darkrai GX #125 Pokemon Unified Minds",
+"check": false
+}
 },
 {
 "cert": "135016810",
@@ -2942,21 +5300,39 @@
 "name": "Slowpoke & Psyduck GX",
 "setName": "2019 Unified Minds",
 "number": "35",
-"est": 821,
+"est": 819,
 "conf": 5,
 "done": "12/15/25",
-"spec": "2019 UNIFIED MINDS 35 SLOWPOKE & PSYDUCK GX"
+"spec": "2019 UNIFIED MINDS 35 SLOWPOKE & PSYDUCK GX",
+"src": {
+"cl": 821,
+"pc": 819.37,
+"apr": 457.5,
+"aprN": 4,
+"ebay": null,
+"pcTitle": "Slowpoke & Psyduck GX #35 | Pokemon Unified Minds",
+"check": false
+}
 },
 {
 "cert": "135016811",
 "grade": "PSA 8",
 "name": "FA Espeon ex",
-"setName": "2016 Xy Breakpoint",
+"setName": "2016 XY Breakpoint",
 "number": "117",
-"est": 196,
+"est": 152,
 "conf": 4,
 "done": "12/15/25",
-"spec": "2016 XY BREAKPOINT 117 FA ESPEON EX"
+"spec": "2016 XY BREAKPOINT 117 FA ESPEON EX",
+"src": {
+"cl": 196,
+"pc": 152.5,
+"apr": 56.18,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Espeon EX #117 Pokemon BREAKpoint",
+"check": false
+}
 },
 {
 "cert": "135016812",
@@ -2964,10 +5340,19 @@
 "name": "FA Raichu & Alolan Raichu GX",
 "setName": "2019 Unified Minds",
 "number": "220",
-"est": 56,
+"est": 65,
 "conf": 5,
 "done": "12/15/25",
-"spec": "2019 UNIFIED MINDS 220 FA RAICHU & ALOLAN RAICHU GX"
+"spec": "2019 UNIFIED MINDS 220 FA RAICHU & ALOLAN RAICHU GX",
+"src": {
+"cl": 56,
+"pc": 74.87,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": "Raichu & Alolan Raichu GX #220 Pokemon Unified Minds",
+"check": false
+}
 },
 {
 "cert": "135016813",
@@ -2975,10 +5360,19 @@
 "name": "Reshiram & Zekrom GX",
 "setName": "2019 Cosmic Eclipse",
 "number": "157",
-"est": 774,
+"est": 700,
 "conf": 5,
 "done": "12/15/25",
-"spec": "2019 COSMIC ECLIPSE 157 RESHIRAM & ZEKROM GX"
+"spec": "2019 COSMIC ECLIPSE 157 RESHIRAM & ZEKROM GX",
+"src": {
+"cl": 774,
+"pc": 700.0,
+"apr": 530.0,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Reshiram & Zekrom GX #157 Pokemon Cosmic Eclipse",
+"check": false
+}
 },
 {
 "cert": "135016814",
@@ -2986,10 +5380,19 @@
 "name": "FA Slowpoke & Psyduck GX",
 "setName": "2019 Unified Minds",
 "number": "217",
-"est": 299,
+"est": 266,
 "conf": 5,
 "done": "12/15/25",
-"spec": "2019 UNIFIED MINDS 217 FA SLOWPOKE & PSYDUCK GX"
+"spec": "2019 UNIFIED MINDS 217 FA SLOWPOKE & PSYDUCK GX",
+"src": {
+"cl": 299,
+"pc": 233.3,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": "Psyduck & Slowpoke GX #217 Pokemon Unified Minds",
+"check": false
+}
 },
 {
 "cert": "134868870",
@@ -2997,10 +5400,19 @@
 "name": "FA Slowpoke & Psyduck GX",
 "setName": "2019 Unified Minds",
 "number": "218",
-"est": 395,
+"est": 373,
 "conf": 5,
 "done": "12/12/25",
-"spec": "2019 UNIFIED MINDS 218 FA SLOWPOKE & PSYDUCK GX"
+"spec": "2019 UNIFIED MINDS 218 FA SLOWPOKE & PSYDUCK GX",
+"src": {
+"cl": 395,
+"pc": 350.69,
+"apr": null,
+"aprN": 1,
+"ebay": null,
+"pcTitle": "Psyduck & Slowpoke GX #218 Pokemon Unified Minds",
+"check": false
+}
 },
 {
 "cert": "134868871",
@@ -3011,7 +5423,16 @@
 "est": 269,
 "conf": 5,
 "done": "12/12/25",
-"spec": "2019 COSMIC ECLIPSE 143a TOGEPI & CLEFFA & IGGLYBUFF GX 2020 YELLOW A ALTERNATE ART SMALL BUT MIGHTY PREMIUM COLLECTION"
+"spec": "2019 COSMIC ECLIPSE 143a TOGEPI & CLEFFA & IGGLYBUFF GX 2020 YELLOW A ALTERNATE ART SMALL BUT MIGHTY PREMIUM COLLECTION",
+"src": {
+"cl": 269,
+"pc": 305.21,
+"apr": 256.37,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Togepi & Cleffa & Igglybuff GX #143a | Pokemon Cosmic Eclipse",
+"check": false
+}
 },
 {
 "cert": "135143687",
@@ -3019,10 +5440,19 @@
 "name": "FA Gengar & Mimikyu GX",
 "setName": "2019 Team Up",
 "number": "164",
-"est": null,
+"est": 880,
 "conf": null,
 "done": "11/25/25",
-"spec": "2019 TEAM UP 164 FA GENGAR & MIMIKYU GX"
+"spec": "2019 TEAM UP 164 FA GENGAR & MIMIKYU GX",
+"src": {
+"cl": null,
+"pc": 1850.0,
+"apr": 880.0,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Gengar & Mimikyu GX #164 | Pokemon Team Up",
+"check": true
+}
 },
 {
 "cert": "135143688",
@@ -3030,10 +5460,19 @@
 "name": "FA Reshiram & Zekrom GX",
 "setName": "2019 Cosmic Eclipse",
 "number": "222",
-"est": 380,
+"est": 342,
 "conf": 5,
 "done": "11/25/25",
-"spec": "2019 COSMIC ECLIPSE 222 FA RESHIRAM & ZEKROM GX"
+"spec": "2019 COSMIC ECLIPSE 222 FA RESHIRAM & ZEKROM GX",
+"src": {
+"cl": 380,
+"pc": 341.64,
+"apr": 320.0,
+"aprN": 3,
+"ebay": null,
+"pcTitle": "Reshiram & Zekrom GX #222 | Pokemon Cosmic Eclipse",
+"check": false
+}
 },
 {
 "cert": "134422991",
@@ -3041,10 +5480,19 @@
 "name": "FA Gengar & Mimikyu GX Secret",
 "setName": "2019 Team Up",
 "number": "186",
-"est": 324,
+"est": 339,
 "conf": 4,
 "done": "12/10/25",
-"spec": "2019 TEAM UP 186 FA GENGAR & MIMIKYU GX SECRET"
+"spec": "2019 TEAM UP 186 FA GENGAR & MIMIKYU GX SECRET",
+"src": {
+"cl": 324,
+"pc": 354.5,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": "Gengar & Mimikyu GX #186 | Pokemon Team Up",
+"check": false
+}
 },
 {
 "cert": "134423106",
@@ -3055,7 +5503,16 @@
 "est": 1476,
 "conf": 5,
 "done": "11/17/25",
-"spec": "2019 TEAM UP 164 FA GENGAR & MIMIKYU GX"
+"spec": "2019 TEAM UP 164 FA GENGAR & MIMIKYU GX",
+"src": {
+"cl": 1476,
+"pc": 1850.0,
+"apr": 880.0,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Gengar & Mimikyu GX #164 | Pokemon Team Up",
+"check": false
+}
 },
 {
 "cert": "134423322",
@@ -3066,7 +5523,16 @@
 "est": 154,
 "conf": 5,
 "done": "11/20/25",
-"spec": "2021 CELEBRATIONS CLASSIC COLLECTION 88 MEW EX-HOLO"
+"spec": "2021 CELEBRATIONS CLASSIC COLLECTION 88 MEW EX-HOLO",
+"src": {
+"cl": 154,
+"pc": 104.27,
+"apr": 162.5,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Mew EX #88 Pokemon Celebrations",
+"check": false
+}
 },
 {
 "cert": "134423323",
@@ -3077,7 +5543,16 @@
 "est": 65,
 "conf": 5,
 "done": "11/20/25",
-"spec": "2022 GO 072 FA MEWTWO V"
+"spec": "2022 GO 072 FA MEWTWO V",
+"src": {
+"cl": 65,
+"pc": 62.79,
+"apr": 70.7,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Mewtwo V #72 | Pokemon Go",
+"check": false
+}
 },
 {
 "cert": "134423324",
@@ -3088,7 +5563,16 @@
 "est": 27,
 "conf": 4,
 "done": "11/20/25",
-"spec": "2022 LOST ORIGIN TG30 FA MEW VMAX"
+"spec": "2022 LOST ORIGIN TG30 FA MEW VMAX",
+"src": {
+"cl": 27,
+"pc": 27.0,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": "Mew VMAX #TG30 | Pokemon Lost Origin",
+"check": false
+}
 },
 {
 "cert": "134423325",
@@ -3096,21 +5580,39 @@
 "name": "FA Mew",
 "setName": "2021 Celebrations",
 "number": "025",
-"est": 50,
+"est": 60,
 "conf": 5,
 "done": "11/20/25",
-"spec": "2021 CELEBRATIONS 025 FA MEW"
+"spec": "2021 CELEBRATIONS 025 FA MEW",
+"src": {
+"cl": 50,
+"pc": 60.0,
+"apr": 60.0,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Mew #25 | Pokemon Celebrations",
+"check": false
+}
 },
 {
 "cert": "134423326",
 "grade": "PSA 9",
 "name": "Squirtle IR",
-"setName": "2024 Scr En-Stellar Crown",
+"setName": "2024 Stellar Crown",
 "number": "148",
 "est": 93,
 "conf": 5,
 "done": "11/20/25",
-"spec": "2024 SCR EN-STELLAR CROWN 148 SQUIRTLE IR"
+"spec": "2024 SCR EN-STELLAR CROWN 148 SQUIRTLE IR",
+"src": {
+"cl": 93,
+"pc": 94.68,
+"apr": 63.0,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Squirtle #148 | Pokemon Stellar Crown",
+"check": false
+}
 },
 {
 "cert": "134423327",
@@ -3118,10 +5620,19 @@
 "name": "FA Charizard VMAX Ultra-Premium Collection-Charizard",
 "setName": "2022 Promo",
 "number": "261",
-"est": 79,
+"est": 72,
 "conf": 5,
 "done": "11/20/25",
-"spec": "2022 PROMO 261 FA CHARIZARD VMAX ULTRA-PREMIUM COLLECTION-CHARIZARD"
+"spec": "2022 PROMO 261 FA CHARIZARD VMAX ULTRA-PREMIUM COLLECTION-CHARIZARD",
+"src": {
+"cl": 79,
+"pc": 69.53,
+"apr": 72.5,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Charizard VMax #SWSH261 Pokemon Promo",
+"check": false
+}
 },
 {
 "cert": "134423328",
@@ -3132,7 +5643,16 @@
 "est": 31,
 "conf": 5,
 "done": "11/20/25",
-"spec": "2021 PROMO 133 LANCE'S CHARIZARD V CELEBRATIONS COLLECTION"
+"spec": "2021 PROMO 133 LANCE'S CHARIZARD V CELEBRATIONS COLLECTION",
+"src": {
+"cl": 31,
+"pc": 31.49,
+"apr": 27.4,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Lance's Charizard V #SWSH133 Pokemon Celebrations",
+"check": false
+}
 },
 {
 "cert": "134423329",
@@ -3143,7 +5663,16 @@
 "est": 118,
 "conf": 5,
 "done": "11/20/25",
-"spec": "2022 PROMO 262 FA CHARIZARD VSTAR ULTRA-PREMIUM COLLECTION-CHARIZARD"
+"spec": "2022 PROMO 262 FA CHARIZARD VSTAR ULTRA-PREMIUM COLLECTION-CHARIZARD",
+"src": {
+"cl": 118,
+"pc": 111.98,
+"apr": 132.5,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Charizard VStar #SWSH262 | Pokemon Promo",
+"check": false
+}
 },
 {
 "cert": "134423330",
@@ -3154,7 +5683,16 @@
 "est": 460,
 "conf": 5,
 "done": "11/20/25",
-"spec": "2021 CELEBRATIONS CLASSIC COLLECTION 4 CHARIZARD-HOLO"
+"spec": "2021 CELEBRATIONS CLASSIC COLLECTION 4 CHARIZARD-HOLO",
+"src": {
+"cl": 460,
+"pc": 440.0,
+"apr": 560.0,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Charizard #4 Pokemon Celebrations",
+"check": false
+}
 },
 {
 "cert": "134423331",
@@ -3162,43 +5700,79 @@
 "name": "Special Delivery Charizard-Holo Pokemon Center United Kingdom",
 "setName": "2022 Promo",
 "number": "075",
-"est": 225,
+"est": 262,
 "conf": 5,
 "done": "11/20/25",
-"spec": "2022 PROMO 075 SPECIAL DELIVERY CHARIZARD-HOLO POKEMON CENTER UNITED KINGDOM"
+"spec": "2022 PROMO 075 SPECIAL DELIVERY CHARIZARD-HOLO POKEMON CENTER UNITED KINGDOM",
+"src": {
+"cl": 225,
+"pc": 262.48,
+"apr": 281.0,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Special Delivery Charizard #SWSH075 Pokemon Promo",
+"check": false
+}
 },
 {
 "cert": "134423332",
 "grade": "PSA 9",
 "name": "Mew ex 151 Ultra-Premium Collection",
-"setName": "2023 Svp En-Promo",
+"setName": "2023 SV Black Star Promo",
 "number": "053",
 "est": 100,
 "conf": 5,
 "done": "11/20/25",
-"spec": "2023 SVP EN-PROMO 053 MEW EX 151 ULTRA-PREMIUM COLLECTION"
+"spec": "2023 SVP EN-PROMO 053 MEW EX 151 ULTRA-PREMIUM COLLECTION",
+"src": {
+"cl": 100,
+"pc": 91.79,
+"apr": 117.5,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Mew ex #53 Pokemon Promo",
+"check": false
+}
 },
 {
 "cert": "134423333",
 "grade": "PSA 8",
 "name": "Pokemon Flute Shadowless",
-"setName": "1999 Game",
+"setName": "1999 Base Set",
 "number": "86",
-"est": 95,
+"est": 37,
 "conf": 3,
 "done": "11/20/25",
-"spec": "1999 GAME 86 POKEMON FLUTE SHADOWLESS"
+"spec": "1999 GAME 86 POKEMON FLUTE SHADOWLESS",
+"src": {
+"cl": 95,
+"pc": 36.62,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": "Pokemon Flute [Shadowless] #86 Pokemon Base Set",
+"check": true
+}
 },
 {
 "cert": "134423334",
 "grade": "PSA 9",
 "name": "Mewtwo 151 Ultra-Premium Collection",
-"setName": "2023 Svp En-Promo",
+"setName": "2023 SV Black Star Promo",
 "number": "052",
-"est": 73,
+"est": 68,
 "conf": 5,
 "done": "11/20/25",
-"spec": "2023 SVP EN-PROMO 052 MEWTWO 151 ULTRA-PREMIUM COLLECTION"
+"spec": "2023 SVP EN-PROMO 052 MEWTWO 151 ULTRA-PREMIUM COLLECTION",
+"src": {
+"cl": 73,
+"pc": 68.16,
+"apr": 54.0,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Mewtwo #52 Pokemon Promo",
+"check": false
+}
 },
 {
 "cert": "134423335",
@@ -3206,10 +5780,19 @@
 "name": "Greninja-Gold Star Celebrations Elite Trainer Box",
 "setName": "2021 Promo",
 "number": "144",
-"est": 22,
+"est": 26,
 "conf": 5,
 "done": "11/20/25",
-"spec": "2021 PROMO 144 GRENINJA-GOLD STAR CELEBRATIONS ELITE TRAINER BOX"
+"spec": "2021 PROMO 144 GRENINJA-GOLD STAR CELEBRATIONS ELITE TRAINER BOX",
+"src": {
+"cl": 22,
+"pc": 30.75,
+"apr": 26.0,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Greninja [Gold Star] #SWSH144 Pokemon Celebrations",
+"check": false
+}
 },
 {
 "cert": "134423336",
@@ -3220,7 +5803,16 @@
 "est": 97,
 "conf": 5,
 "done": "11/20/25",
-"spec": "2023 SWORD AND SHIELD CROWN ZENITH GG67 FA ORIGIN FORME PALKIA VSTAR SECRET"
+"spec": "2023 SWORD AND SHIELD CROWN ZENITH GG67 FA ORIGIN FORME PALKIA VSTAR SECRET",
+"src": {
+"cl": 97,
+"pc": 102.61,
+"apr": 78.0,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Origin Forme Palkia VSTAR #GG67 Pokemon Crown Zenith",
+"check": false
+}
 },
 {
 "cert": "134423337",
@@ -3231,7 +5823,16 @@
 "est": 168,
 "conf": 5,
 "done": "11/20/25",
-"spec": "2018 CELESTIAL STORM 177a FA RAYQUAZA GX 2019 YELLOW A HIDDEN FATES PREMIUM COLLECTION"
+"spec": "2018 CELESTIAL STORM 177a FA RAYQUAZA GX 2019 YELLOW A HIDDEN FATES PREMIUM COLLECTION",
+"src": {
+"cl": 168,
+"pc": 197.85,
+"apr": 130.1,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Rayquaza GX #177a Pokemon Celestial Storm",
+"check": false
+}
 },
 {
 "cert": "134423338",
@@ -3239,112 +5840,202 @@
 "name": "Palafin ex Special Art Rare",
 "setName": "2024 Japanese Sv8a-Terastal Fest ex",
 "number": "207",
-"est": 44,
+"est": 48,
 "conf": 5,
 "done": "11/20/25",
-"spec": "2024 JAPANESE SV8a-TERASTAL FEST ex 207 PALAFIN EX SPECIAL ART RARE"
+"spec": "2024 JAPANESE SV8a-TERASTAL FEST ex 207 PALAFIN EX SPECIAL ART RARE",
+"src": {
+"cl": 44,
+"pc": 51.5,
+"apr": 47.8,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Palafin Ex #207 Pokemon Japanese Terastal Festival",
+"check": false
+}
 },
 {
 "cert": "134423339",
 "grade": "PSA 8",
 "name": "Bulbasaur Shadowless",
-"setName": "1999 Game",
+"setName": "1999 Base Set",
 "number": "44",
-"est": 70,
+"est": 50,
 "conf": 5,
 "done": "11/20/25",
-"spec": "1999 GAME 44 BULBASAUR SHADOWLESS"
+"spec": "1999 GAME 44 BULBASAUR SHADOWLESS",
+"src": {
+"cl": 70,
+"pc": 50.45,
+"apr": 29.55,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Bulbasaur [Shadowless] #44 Pokemon Base Set",
+"check": false
+}
 },
 {
 "cert": "134423340",
 "grade": "PSA 8",
 "name": "Team Rocket's Tyranitar Prerelease-Staff",
-"setName": "2025 Dri En-Destined Rivals",
+"setName": "2025 Destined Rivals",
 "number": "096",
 "est": 159,
 "conf": 2,
 "done": "11/20/25",
 "spec": "2025 DRI EN-DESTINED RIVALS 096 TEAM ROCKET'S TYRANITAR PRERELEASE-STAFF",
-"match": "Team Rocket's Tyranitar Prerelease Staff"
+"match": "Team Rocket's Tyranitar Prerelease Staff",
+"src": {
+"cl": 159,
+"pc": null,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": null,
+"check": false
+}
 },
 {
 "cert": "134423341",
 "grade": "PSA 9",
 "name": "Team Rocket's Mimikyu Prerelease-Staff",
-"setName": "2025 Dri En-Destined Rivals",
+"setName": "2025 Destined Rivals",
 "number": "087",
-"est": 130,
+"est": 140,
 "conf": 5,
 "done": "11/20/25",
 "spec": "2025 DRI EN-DESTINED RIVALS 087 TEAM ROCKET'S MIMIKYU PRERELEASE-STAFF",
-"match": "Team Rocket's Mimikyu Prerelease Staff"
+"match": "Team Rocket's Mimikyu Prerelease Staff",
+"src": {
+"cl": 130,
+"pc": null,
+"apr": null,
+"aprN": 0,
+"ebay": 150.0,
+"pcTitle": null,
+"check": false
+}
 },
 {
 "cert": "134423342",
 "grade": "PSA 9",
 "name": "Misty's Gyarados Prerelease-Staff",
-"setName": "2025 Dri En-Destined Rivals",
+"setName": "2025 Destined Rivals",
 "number": "049",
-"est": 158,
+"est": 167,
 "conf": 4,
 "done": "11/20/25",
 "spec": "2025 DRI EN-DESTINED RIVALS 049 MISTY'S GYARADOS PRERELEASE-STAFF",
-"match": "Misty's Gyarados Prerelease Staff"
+"match": "Misty's Gyarados Prerelease Staff",
+"src": {
+"cl": 158,
+"pc": 176.03,
+"apr": null,
+"aprN": 1,
+"ebay": null,
+"pcTitle": "Misty's Gyarados [Staff] #49 | Pokemon Destined Rivals",
+"check": false
+}
 },
 {
 "cert": "134423343",
 "grade": "PSA 8",
 "name": "Ethan's Typhlosion Prerelease-Staff",
-"setName": "2025 Dri En-Destined Rivals",
+"setName": "2025 Destined Rivals",
 "number": "034",
-"est": 90,
+"est": 83,
 "conf": 5,
 "done": "11/20/25",
-"spec": "2025 DRI EN-DESTINED RIVALS 034 ETHAN'S TYPHLOSION PRERELEASE-STAFF"
+"spec": "2025 DRI EN-DESTINED RIVALS 034 ETHAN'S TYPHLOSION PRERELEASE-STAFF",
+"src": {
+"cl": 90,
+"pc": 75.26,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": "Ethan's Typhlosion [Staff] #34 Pokemon Destined Rivals",
+"check": false
+}
 },
 {
 "cert": "134423344",
 "grade": "PSA 9",
 "name": "Bulbasaur IR",
-"setName": "2023 Mew En-151",
+"setName": "2023 151",
 "number": "166",
 "est": 50,
 "conf": 5,
 "done": "11/20/25",
-"spec": "2023 MEW EN-151 166 BULBASAUR IR"
+"spec": "2023 MEW EN-151 166 BULBASAUR IR",
+"src": {
+"cl": 50,
+"pc": 53.87,
+"apr": 40.0,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Bulbasaur #166 | Pokemon Scarlet & Violet 151",
+"check": false
+}
 },
 {
 "cert": "134423345",
 "grade": "PSA 8",
 "name": "M Sharpedo ex Mega Sharpedo ex Premium Collection",
-"setName": "2017 Xy Promo",
+"setName": "2017 XY Promo",
 "number": "XY200",
-"est": 57,
+"est": 43,
 "conf": 4,
 "done": "11/20/25",
-"spec": "2017 XY PROMO XY200 M SHARPEDO EX MEGA SHARPEDO EX PREMIUM COLLECTION"
+"spec": "2017 XY PROMO XY200 M SHARPEDO EX MEGA SHARPEDO EX PREMIUM COLLECTION",
+"src": {
+"cl": 57,
+"pc": 29.88,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": "M Sharpedo EX #XY200 Pokemon Promo",
+"check": false
+}
 },
 {
 "cert": "134423346",
 "grade": "PSA 9",
 "name": "Hop's Snorlax Journey Together Prerelease-Staff",
-"setName": "2025 Svp En-Promo",
+"setName": "2025 SV Black Star Promo",
 "number": "184",
 "est": 153,
 "conf": 5,
 "done": "11/20/25",
-"spec": "2025 SVP EN-PROMO 184 HOP'S SNORLAX JOURNEY TOGETHER PRERELEASE-STAFF"
+"spec": "2025 SVP EN-PROMO 184 HOP'S SNORLAX JOURNEY TOGETHER PRERELEASE-STAFF",
+"src": {
+"cl": 153,
+"pc": null,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": null,
+"check": false
+}
 },
 {
 "cert": "134423347",
 "grade": "PSA 9",
 "name": "Team Rocket's Wobbuffet Destined Rivals Elite Trainer Box",
-"setName": "2025 Svp En-Promo",
+"setName": "2025 SV Black Star Promo",
 "number": "203",
-"est": 28,
+"est": 24,
 "conf": 5,
 "done": "11/20/25",
-"spec": "2025 SVP EN-PROMO 203 TEAM ROCKET'S WOBBUFFET DESTINED RIVALS ELITE TRAINER BOX"
+"spec": "2025 SVP EN-PROMO 203 TEAM ROCKET'S WOBBUFFET DESTINED RIVALS ELITE TRAINER BOX",
+"src": {
+"cl": 28,
+"pc": null,
+"apr": 19.5,
+"aprN": 5,
+"ebay": null,
+"pcTitle": null,
+"check": false
+}
 },
 {
 "cert": "134423348",
@@ -3355,7 +6046,16 @@
 "est": 63,
 "conf": 5,
 "done": "11/20/25",
-"spec": "2025 PLAY! POKEMON PRIZE PACK: SERIES 7 057 PIKACHU EX"
+"spec": "2025 PLAY! POKEMON PRIZE PACK: SERIES 7 057 PIKACHU EX",
+"src": {
+"cl": 63,
+"pc": null,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": null,
+"check": false
+}
 },
 {
 "cert": "134423349",
@@ -3363,76 +6063,139 @@
 "name": "Cyndaquil",
 "setName": "2000 Neo Genesis",
 "number": "57",
-"est": 61,
+"est": 36,
 "conf": 4,
 "done": "11/20/25",
-"spec": "2000 NEO GENESIS 57 CYNDAQUIL"
+"spec": "2000 NEO GENESIS 57 CYNDAQUIL",
+"src": {
+"cl": 61,
+"pc": 36.46,
+"apr": 15.5,
+"aprN": 3,
+"ebay": null,
+"pcTitle": "Cyndaquil #57 Pokemon Neo Genesis",
+"check": false
+}
 },
 {
 "cert": "134423350",
 "grade": "PSA 8",
 "name": "Meowth-Holo Toys R Us",
-"setName": "2016 Xy Generations",
+"setName": "2016 XY Generations",
 "number": "53",
-"est": 90,
+"est": 75,
 "conf": 4,
 "done": "11/20/25",
-"spec": "2016 XY GENERATIONS 53 MEOWTH-HOLO TOYS R US"
+"spec": "2016 XY GENERATIONS 53 MEOWTH-HOLO TOYS R US",
+"src": {
+"cl": 90,
+"pc": 60.0,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": "Meowth [Toys R Us] #53 | Pokemon Generations",
+"check": false
+}
 },
 {
 "cert": "134423351",
 "grade": "PSA 8",
 "name": "Electabuzz-Holo Cosmos-Toys R Us",
-"setName": "2016 Xy Evolutions",
+"setName": "2016 XY Evolutions",
 "number": "41",
-"est": 99,
+"est": 81,
 "conf": 5,
 "done": "11/20/25",
-"spec": "2016 XY EVOLUTIONS 41 ELECTABUZZ-HOLO COSMOS-TOYS R US"
+"spec": "2016 XY EVOLUTIONS 41 ELECTABUZZ-HOLO COSMOS-TOYS R US",
+"src": {
+"cl": 99,
+"pc": 63.97,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": "Electabuzz [Toys R Us] #41 Pokemon Evolutions",
+"check": false
+}
 },
 {
 "cert": "134423352",
 "grade": "PSA 9",
 "name": "Koraidon Elite Trainer Box-Koraidon",
-"setName": "2023 Svp En-Promo",
+"setName": "2023 SV Black Star Promo",
 "number": "014",
-"est": 21,
+"est": 19.99,
 "conf": 5,
 "done": "11/20/25",
-"spec": "2023 SVP EN-PROMO 014 KORAIDON ELITE TRAINER BOX-KORAIDON"
+"spec": "2023 SVP EN-PROMO 014 KORAIDON ELITE TRAINER BOX-KORAIDON",
+"src": {
+"cl": 21,
+"pc": 19.99,
+"apr": 15.0,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Koraidon #14 | Pokemon Promo",
+"check": false
+}
 },
 {
 "cert": "134423353",
 "grade": "PSA 9",
 "name": "Charmander Obsidian Flames Elite Trainer Box",
-"setName": "2023 Svp En-Promo",
+"setName": "2023 SV Black Star Promo",
 "number": "044",
-"est": 105,
+"est": 87,
 "conf": 5,
 "done": "11/20/25",
-"spec": "2023 SVP EN-PROMO 044 CHARMANDER OBSIDIAN FLAMES ELITE TRAINER BOX"
+"spec": "2023 SVP EN-PROMO 044 CHARMANDER OBSIDIAN FLAMES ELITE TRAINER BOX",
+"src": {
+"cl": 105,
+"pc": null,
+"apr": 69.0,
+"aprN": 5,
+"ebay": null,
+"pcTitle": null,
+"check": false
+}
 },
 {
 "cert": "134423354",
 "grade": "PSA 9",
 "name": "Umbreon ex Surprise Box Exclusive",
-"setName": "2025 Pre En-Prismatic Evolutions",
+"setName": "2025 Prismatic Evolutions",
 "number": "060",
-"est": 30,
+"est": 25,
 "conf": 5,
 "done": "11/20/25",
-"spec": "2025 PRE EN-PRISMATIC EVOLUTIONS 060 UMBREON EX SURPRISE BOX EXCLUSIVE"
+"spec": "2025 PRE EN-PRISMATIC EVOLUTIONS 060 UMBREON EX SURPRISE BOX EXCLUSIVE",
+"src": {
+"cl": 30,
+"pc": 25.0,
+"apr": 16.5,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Umbreon ex #60 Pokemon Prismatic Evolutions",
+"check": false
+}
 },
 {
 "cert": "134423355",
 "grade": "PSA 10",
 "name": "Pikachu Paldea Evolved Elite Trainer Box",
-"setName": "2023 Svp En-Promo",
+"setName": "2023 SV Black Star Promo",
 "number": "027",
-"est": 180,
+"est": 220,
 "conf": 5,
 "done": "11/20/25",
-"spec": "2023 SVP EN-PROMO 027 PIKACHU PALDEA EVOLVED ELITE TRAINER BOX"
+"spec": "2023 SVP EN-PROMO 027 PIKACHU PALDEA EVOLVED ELITE TRAINER BOX",
+"src": {
+"cl": 180,
+"pc": 220.0,
+"apr": 230.5,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Pikachu [Paldea] #27 Pokemon Promo",
+"check": false
+}
 },
 {
 "cert": "134423356",
@@ -3443,18 +6206,36 @@
 "est": 57,
 "conf": 5,
 "done": "11/20/25",
-"spec": "2001 WIZARDS OF THE COAST PROMO 34 ENTEI POKEMON 3: THE MOVIE"
+"spec": "2001 WIZARDS OF THE COAST PROMO 34 ENTEI POKEMON 3: THE MOVIE",
+"src": {
+"cl": 57,
+"pc": 57.43,
+"apr": null,
+"aprN": 0,
+"ebay": null,
+"pcTitle": "Entei #34 Pokemon Promo",
+"check": false
+}
 },
 {
 "cert": "134423357",
 "grade": "PSA 8",
 "name": "Squirtle Shadowless",
-"setName": "1999 Game",
+"setName": "1999 Base Set",
 "number": "63",
-"est": 92,
+"est": 76,
 "conf": 5,
 "done": "11/20/25",
-"spec": "1999 GAME 63 SQUIRTLE SHADOWLESS"
+"spec": "1999 GAME 63 SQUIRTLE SHADOWLESS",
+"src": {
+"cl": 92,
+"pc": 76.0,
+"apr": 29.75,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Squirtle [Shadowless] #63 Pokemon Base Set",
+"check": false
+}
 },
 {
 "cert": "134423358",
@@ -3462,10 +6243,19 @@
 "name": "Boa Hancock PSA Magazine Exclusive",
 "setName": "2025 One Piece Promos",
 "number": "038",
-"est": 181,
+"est": 182,
 "conf": 5,
 "done": "11/20/25",
-"spec": "2025 ONE PIECE PROMOS 038 BOA HANCOCK PSA MAGAZINE EXCLUSIVE"
+"spec": "2025 ONE PIECE PROMOS 038 BOA HANCOCK PSA MAGAZINE EXCLUSIVE",
+"src": {
+"cl": 181,
+"pc": 208.25,
+"apr": 182.5,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Boa Hancock [Magazine] OP07-038 One Piece 500 Years in the Future",
+"check": false
+}
 },
 {
 "cert": "134423359",
@@ -3473,9 +6263,18 @@
 "name": "Shanks PSA Magazine Exclusive",
 "setName": "2025 One Piece Promos",
 "number": "001",
-"est": 118,
+"est": 143,
 "conf": 5,
 "done": "11/20/25",
-"spec": "2025 ONE PIECE PROMOS 001 SHANKS PSA MAGAZINE EXCLUSIVE"
+"spec": "2025 ONE PIECE PROMOS 001 SHANKS PSA MAGAZINE EXCLUSIVE",
+"src": {
+"cl": 118,
+"pc": 142.77,
+"apr": 220.5,
+"aprN": 5,
+"ebay": null,
+"pcTitle": "Shanks [Magazine] OP09-001 One Piece Promo",
+"check": false
+}
 }
 ]
