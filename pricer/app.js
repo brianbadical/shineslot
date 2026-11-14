@@ -267,7 +267,7 @@ function applyPrices(list){
 // Earlier automatic eBay look-ups went by card name only, so for a slab with a cert the blended price replaces them.
 // Sold prices you typed in yourself always stay.
 // The PSA label is the truth for a slab: use its set and number, and drop any picture or raw price guessed from the name.
-const fromLabel=(c,p)=>{ c.setName=p.setName; c.number=p.number; c.psaLabel=p.spec; for(const k of ['img','imgBig','tcgUrl','apiId','prices','variant','pending']) delete c[k]; };
+const fromLabel=(c,p)=>{ c.setName=p.setName; c.number=p.number; c.psaLabel=p.spec; for(const k of ['img','imgBig','tcgUrl','apiId','prices','variant','pending']) delete c[k]; if(p.img){ c.img=p.img; c.imgBig=p.imgBig||p.img; } };
 const dropAuto=c=>{ c.solds=(c.solds||[]).filter(s=>!/Claude look-up/i.test(s.note||'')); };
 function applyPsa(list){
   let linked=0, refreshed=0, added=[]; const have=new Set(cards.map(c=>String(c.cert||'')).filter(Boolean));
@@ -276,7 +276,7 @@ function applyPsa(list){
     if(have.has(p.cert)){ // already in: refresh its blended price
       const c=cards.find(c=>String(c.cert)===p.cert);
       if(c && (c.est!==p.est || JSON.stringify(c.src)!==JSON.stringify(p.src))){ c.est=p.est; c.src=p.src; if(c.override===LOOKUP&&p.est!=null) c.override=null; refreshed++; }
-      if(c && (c.img || c.setName!==p.setName)){ fromLabel(c,p); refreshed++; }
+      if(c && (c.img!==p.img || c.setName!==p.setName)){ fromLabel(c,p); refreshed++; }
       if(c && p.est!=null && (c.solds||[]).some(s=>/Claude look-up/i.test(s.note||''))){ dropAuto(c); refreshed++; }
       continue;
     }
@@ -287,7 +287,7 @@ function applyPsa(list){
       linked++;
     } else {
       added.push({id:uid(),name:p.name,setName:p.setName,number:p.number,grade:p.grade,paid:null,cert:p.cert,psaLabel:p.spec,
-        est:p.est,src:p.src,solds:[],useLast:5,override:p.est==null?LOOKUP:null,sold:null,added:today(),from:'PSA order '+p.done});
+        est:p.est,src:p.src,img:p.img,imgBig:p.imgBig,solds:[],useLast:5,override:p.est==null?LOOKUP:null,sold:null,added:today(),from:'PSA order '+p.done});
     }
   }
   cards.push(...added);
