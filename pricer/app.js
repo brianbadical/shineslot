@@ -6,6 +6,7 @@ const PSA_API = 'https://api.psacard.com/publicapi/cert/GetByCertNumber/';
 const TOKEN_KEY = 'pricer-psa-token';
 const XKEY = 'pricer-extras-v1';   // binder card sales, other sales, expenses
 const LIST_KEY = 'pricer-my-list-loaded';
+const LOOKUP = 999999;   // means "look this one up yourself"
 let cards = load();
 let extras = loadX();
 let tab = 'cards', filter = '', qkind = 'binder';
@@ -30,10 +31,10 @@ function soldsUsed(c){
 }
 function avgSolds(c){ const u=soldsUsed(c); return u.length ? u.reduce((t,s)=>t+s.price,0)/u.length : null; }
 function rawPrice(c){ const p=c.prices&&c.prices[c.variant]; return p ? (p.market ?? p.mid ?? p.low ?? null) : null; }
-function value(c){ if(c.override!=null) return c.override; return c.grade ? avgSolds(c) : rawPrice(c); }
+function value(c){ if(c.override!=null) return c.override; return c.grade ? (avgSolds(c) ?? c.est ?? null) : rawPrice(c); }
 function valueSource(c){
   if(c.override!=null) return 'Your price';
-  if(c.grade) return soldsUsed(c).length ? 'Avg of last '+soldsUsed(c).length+' sold' : 'No solds yet';
+  if(c.grade) return soldsUsed(c).length ? 'Avg of last '+soldsUsed(c).length+' sold' : c.est!=null ? 'PSA estimate (Card Ladder)' : 'No solds yet';
   return rawPrice(c)!=null ? 'TCGplayer market' : 'No price yet';
 }
 
@@ -111,7 +112,7 @@ function render(){
 }
 function totalsHtml(list){
   const left=list.filter(c=>!c.sold);
-  const LOOKUP=999999, need=left.filter(c=>value(c)>=LOOKUP).length;
+  const need=left.filter(c=>value(c)>=LOOKUP).length;
   const paid=left.reduce((t,c)=>t+(c.paid||0),0), val=left.reduce((t,c)=>{const v=value(c)||0; return t+(v>=LOOKUP?0:v);},0);
   const sold=list.filter(c=>c.sold), sales=sold.reduce((t,c)=>t+c.sold.price,0), soldCost=sold.reduce((t,c)=>t+(c.paid||0),0);
   return `<div class="totals">
@@ -134,15 +135,16 @@ function rowHtml(c){
     <div class="val"><b>${money(v)}</b><div class="sub">paid ${money(p)}</div>${pl}</div></div>`;
 }
 function cardsView(){
-  if(!cards.length) return `<div class="empty"><p>No cards yet.</p><button class="big" id="mylist">Load my card list</button><button class="big ghost" data-go="add">Add your own cards</button></div>`;
+  if(!cards.length) return `<div class="empty"><p>No cards yet.</p><button class="big" id="mylist">Load my card list</button><button class="big ghost" id="mypsa">Load my PSA slabs</button><button class="big ghost" data-go="add">Add your own cards</button></div>`;
   const f=filter.toLowerCase();
-  const list=cards.filter(c=>!f||(c.name+' '+c.setName+' '+c.number+' '+c.grade+' '+(c.cert||'')).toLowerCase().includes(f));
+  const list=cards.filter(c=>!f||(c.name+' '+c.setName+' '+c.number+' '+c.grade+' '+(c.cert||'')+' '+(c.from||'')).toLowerCase().includes(f));
   return totalsHtml(cards)+`<input class="search" id="q" placeholder="Search your cards" value="${esc(filter)}">`
     +list.map(rowHtml).join('')
     +`<button class="big ghost" id="refresh">Update all prices</button><p class="hint">Raw prices come from TCGplayer. Graded prices come from the sold prices you add to each card.</p>`;
 }
 function addView(){
   return `<button class="big ghost" id="mylist">Load my card list and eBay prices</button>
+  <button class="big ghost" id="mypsa">Load my PSA slabs (last year's orders)</button>
   <label>Paste your card list</label>
   <p class="hint">One card per line: <b>name, set, number, grade, what you paid, PSA cert</b>. Leave grade blank for raw. Cert is optional.<br>Example:<br>Charizard, Base Set, 4/102, PSA 9, 250<br>Pikachu, Celebrations, 5/25, , 3</p>
   <textarea id="list" placeholder="Charizard, Base Set, 4/102, PSA 9, 250"></textarea>
@@ -214,6 +216,7 @@ function detail(c){
    <div class="three"><div><input id="cert" inputmode="numeric" value="${esc(c.cert||'')}" placeholder="From the slab label"></div><div></div><button id="psa">Look up</button></div>
    ${c.psa?`<p class="hint">PSA says: <b>${esc([c.psa.year,c.psa.brand,c.psa.subject,c.psa.number?'#'+c.psa.number:'',c.psa.variety].filter(Boolean).join(' '))}</b>, ${esc(c.psa.grade)}. Population ${esc(c.psa.pop??'—')}, ${esc(c.psa.popHigher??'—')} graded higher.</p>`:''}
    ${c.cert?`<p class="hint"><a style="color:var(--blue)" target="_blank" rel="noopener" href="https://www.psacard.com/cert/${esc(c.cert)}">Open this cert on PSA</a></p>`:''}
+   ${c.psaLabel?`<p class="hint">PSA label: ${esc(c.psaLabel)}${c.est!=null?'<br>PSA estimate (Card Ladder): '+money(c.est)+'. Sold prices you add count first.':''}</p>`:''}
    <label>Recent sold prices</label>
    <p class="hint">Add the last few sold prices for this card and grade (from eBay "Sold items" or 130point). The value is the average of the newest <b>${c.useLast||3}</b> you keep switched on. Tap a sale to leave it out.</p>
    <table class="solds">${solds.map(s=>`<tr class="${s.off?'off':''}" data-soldtoggle="${s.id}"><td>${esc(s.date)}</td><td><b>${money(s.price)}</b></td><td>${esc(s.note||'')}</td><td>${used.has(s)?'✓ used':s.off?'left out':''}</td><td><span data-solddel="${s.id}" style="color:var(--red);padding:6px">✕</span></td></tr>`).join('')||'<tr><td class="sub">No sold prices yet.</td></tr>'}</table>
@@ -258,6 +261,25 @@ function applyPrices(list){
   }
   return n;
 }
+// Slabs from your PSA orders. A slab already on your list just gets its cert and PSA estimate.
+// Any other slab is added as a new card. A cert that is already in the app is never added twice.
+function applyPsa(list){
+  let linked=0, added=[]; const have=new Set(cards.map(c=>String(c.cert||'')).filter(Boolean));
+  const same=(a,b)=>String(a||'').toLowerCase()===String(b||'').toLowerCase();
+  for(const p of list){
+    if(have.has(p.cert)) continue; have.add(p.cert);
+    const c=p.match && cards.find(c=>!c.cert && same(c.name,p.match) && same(c.grade,p.grade));
+    if(c){
+      c.cert=p.cert; c.psaLabel=p.spec; if(p.est!=null){ c.est=p.est; if(c.override===LOOKUP) c.override=null; }
+      linked++;
+    } else {
+      added.push({id:uid(),name:p.name,setName:p.setName,number:p.number,grade:p.grade,paid:null,cert:p.cert,psaLabel:p.spec,
+        est:p.est,solds:[],useLast:5,override:p.est==null?LOOKUP:null,sold:null,added:today(),from:'PSA order '+p.done});
+    }
+  }
+  cards.push(...added);
+  return {linked, added:added.length};
+}
 // Background lookups only redraw the card list, so they never wipe what you are typing.
 function softRender(){ if(tab==='cards' && !$('#sheet').classList.contains('on') && document.activeElement?.id!=='q') render(); }
 
@@ -269,7 +291,7 @@ async function runLookups(list){
   toast(off?off+' cards will look up when you have signal':'All cards looked up');
 }
 document.addEventListener('click',async e=>{
-  const t=e.target.closest('[data-tab],[data-go],[data-open],[data-qkind],[data-xdel],#import,#refresh,#export,#csv,#qsave,#mylist');
+  const t=e.target.closest('[data-tab],[data-go],[data-open],[data-qkind],[data-xdel],#import,#refresh,#export,#csv,#qsave,#mylist,#mypsa');
   if(!t) { if(e.target.id==='sheet') close(); return; }
   if(t.dataset.tab||t.dataset.go){ tab=t.dataset.tab||t.dataset.go; render(); return; }
   if(t.dataset.open){ detail(cards.find(c=>c.id===t.dataset.open)); return; }
@@ -295,6 +317,14 @@ document.addEventListener('click',async e=>{
     }catch(err){ toast('Could not load the list. Try again with signal'); }
     return;
   }
+  if(t.id==='mypsa'){
+    try{
+      const r=await fetch('my-psa.json',{cache:'no-store'}); if(!r.ok) throw 0;
+      const n=applyPsa(await r.json()); save(); tab='cards'; render();
+      toast(n.linked||n.added ? n.linked+' slabs matched your list. '+n.added+' new slabs added' : 'All your PSA slabs are already in');
+    }catch(err){ toast('Could not load your PSA slabs. Try again with signal'); }
+    return;
+  }
   if(t.id==='import'){ const add=parseList($('#list').value); if(!add.length) return toast('Paste at least one card'); cards.push(...add); save(); tab='cards'; render(); runLookups(add.filter(needsLookup)); }
   if(t.id==='refresh'){ if(!navigator.onLine) return toast('Needs signal'); let n=0; for(const c of cards){ try{ await refreshOne(c); }catch(err){} n++; if(n%5===0){save();render();} } save(); render(); toast('Prices updated'); }
   if(t.id==='export'){ download('card-pricer-backup-'+today()+'.json', JSON.stringify({cards,extras},null,1), 'application/json'); }
@@ -310,4 +340,4 @@ function net(){ const n=$('#net'); n.textContent=navigator.onLine?'Online':'No s
 addEventListener('online',net); addEventListener('offline',net);
 if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(()=>{});
 render(); net();
-if(typeof module!=='undefined') module.exports={applyPrices,parseList,avgSolds,soldsUsed,value,needsLookup,xAmt,xLabel};
+if(typeof module!=='undefined') module.exports={applyPsa,applyPrices,parseList,avgSolds,soldsUsed,value,needsLookup,xAmt,xLabel};
