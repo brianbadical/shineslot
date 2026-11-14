@@ -65,6 +65,7 @@ async function lookup(c){
   }catch(e){ c.pending=true; }
 }
 async function refreshOne(c){
+  if(c.psaLabel) return; // slab: the PSA label says which card it is, so no name guessing
   if(!c.apiId) return lookup(c);
   const r = await fetch(API+'/'+c.apiId); if(!r.ok) throw new Error('x');
   applyApi(c, (await r.json()).data); c.pending=false;
@@ -247,7 +248,7 @@ function confirmDel(c){ const b=$('#del'); if(b.dataset.sure) return true; b.dat
 function close(){ $('#sheet').classList.remove('on'); render(); }
 
 // Sealed product and One Piece cards are not in the Pokemon price list, so skip looking them up.
-function needsLookup(c){ return !/^sealed$/i.test(c.grade||'') && !/one piece/i.test(c.name||''); }
+function needsLookup(c){ return !c.psaLabel && !/^sealed$/i.test(c.grade||'') && !/one piece/i.test(c.name||''); }
 
 // Researched eBay solds for graded, sealed and One Piece cards. Only fills cards you have not priced yourself.
 // 999999 means "look this one up yourself": the solds were too mixed to trust.
@@ -265,6 +266,8 @@ function applyPrices(list){
 // Any other slab is added as a new card. A cert that is already in the app is never added twice.
 // Earlier automatic eBay look-ups went by card name only, so for a slab with a cert the blended price replaces them.
 // Sold prices you typed in yourself always stay.
+// The PSA label is the truth for a slab: use its set and number, and drop any picture or raw price guessed from the name.
+const fromLabel=(c,p)=>{ c.setName=p.setName; c.number=p.number; c.psaLabel=p.spec; for(const k of ['img','imgBig','tcgUrl','apiId','prices','variant','pending']) delete c[k]; };
 const dropAuto=c=>{ c.solds=(c.solds||[]).filter(s=>!/Claude look-up/i.test(s.note||'')); };
 function applyPsa(list){
   let linked=0, refreshed=0, added=[]; const have=new Set(cards.map(c=>String(c.cert||'')).filter(Boolean));
@@ -273,13 +276,14 @@ function applyPsa(list){
     if(have.has(p.cert)){ // already in: refresh its blended price
       const c=cards.find(c=>String(c.cert)===p.cert);
       if(c && (c.est!==p.est || JSON.stringify(c.src)!==JSON.stringify(p.src))){ c.est=p.est; c.src=p.src; if(c.override===LOOKUP&&p.est!=null) c.override=null; refreshed++; }
+      if(c && (c.img || c.setName!==p.setName)){ fromLabel(c,p); refreshed++; }
       if(c && p.est!=null && (c.solds||[]).some(s=>/Claude look-up/i.test(s.note||''))){ dropAuto(c); refreshed++; }
       continue;
     }
     have.add(p.cert);
     const c=p.match && cards.find(c=>!c.cert && same(c.name,p.match) && same(c.grade,p.grade));
     if(c){
-      c.cert=p.cert; c.psaLabel=p.spec; c.src=p.src; if(p.est!=null){ c.est=p.est; dropAuto(c); if(c.override===LOOKUP) c.override=null; }
+      c.cert=p.cert; fromLabel(c,p); c.src=p.src; if(p.est!=null){ c.est=p.est; dropAuto(c); if(c.override===LOOKUP) c.override=null; }
       linked++;
     } else {
       added.push({id:uid(),name:p.name,setName:p.setName,number:p.number,grade:p.grade,paid:null,cert:p.cert,psaLabel:p.spec,
