@@ -111,11 +111,12 @@ function render(){
 }
 function totalsHtml(list){
   const left=list.filter(c=>!c.sold);
-  const paid=left.reduce((t,c)=>t+(c.paid||0),0), val=left.reduce((t,c)=>t+(value(c)||0),0);
+  const LOOKUP=999999, need=left.filter(c=>value(c)>=LOOKUP).length;
+  const paid=left.reduce((t,c)=>t+(c.paid||0),0), val=left.reduce((t,c)=>{const v=value(c)||0; return t+(v>=LOOKUP?0:v);},0);
   const sold=list.filter(c=>c.sold), sales=sold.reduce((t,c)=>t+c.sold.price,0), soldCost=sold.reduce((t,c)=>t+(c.paid||0),0);
   return `<div class="totals">
    <div class="tot"><b>${left.length}</b><span>cards on hand</span></div>
-   <div class="tot"><b>${money(val)}</b><span>worth now</span></div>
+   <div class="tot"><b>${money(val)}</b><span>worth now${need?` (${need} need a price: 999999)`:''}</span></div>
    <div class="tot"><b>${money(paid)}</b><span>you paid</span></div>
    <div class="tot"><b class="${val-paid>=0?'up':'down'}">${money(val-paid)}</b><span>profit if sold today</span></div>
    ${sold.length?`<div class="tot"><b>${money(sales)}</b><span>${sold.length} sold</span></div><div class="tot"><b class="${sales-soldCost>=0?'up':'down'}">${money(sales-soldCost)}</b><span>profit on sold</span></div>`:''}
@@ -141,7 +142,7 @@ function cardsView(){
     +`<button class="big ghost" id="refresh">Update all prices</button><p class="hint">Raw prices come from TCGplayer. Graded prices come from the sold prices you add to each card.</p>`;
 }
 function addView(){
-  return `<button class="big ghost" id="mylist">Load my card list (from the card show list)</button>
+  return `<button class="big ghost" id="mylist">Load my card list and eBay prices</button>
   <label>Paste your card list</label>
   <p class="hint">One card per line: <b>name, set, number, grade, what you paid, PSA cert</b>. Leave grade blank for raw. Cert is optional.<br>Example:<br>Charizard, Base Set, 4/102, PSA 9, 250<br>Pikachu, Celebrations, 5/25, , 3</p>
   <textarea id="list" placeholder="Charizard, Base Set, 4/102, PSA 9, 250"></textarea>
@@ -245,6 +246,18 @@ function close(){ $('#sheet').classList.remove('on'); render(); }
 // Sealed product and One Piece cards are not in the Pokemon price list, so skip looking them up.
 function needsLookup(c){ return !/^sealed$/i.test(c.grade||'') && !/one piece/i.test(c.name||''); }
 
+// Researched eBay solds for graded, sealed and One Piece cards. Only fills cards you have not priced yourself.
+// 999999 means "look this one up yourself": the solds were too mixed to trust.
+function applyPrices(list){
+  let n=0; const key=(name,grade)=>(name+'|'+(grade||'')).toLowerCase();
+  const m=new Map(list.map(p=>[key(p.name,p.grade),p]));
+  for(const c of cards){
+    const p=m.get(key(c.name,c.grade)); if(!p||c.sold||c.override!=null||(c.solds||[]).length) continue;
+    c.solds=p.solds.map(s=>({id:uid(),date:s.date,price:s.price,note:s.note||'eBay sold',off:!!s.off}));
+    c.useLast=5; if(p.override!=null) c.override=p.override; n++;
+  }
+  return n;
+}
 // Background lookups only redraw the card list, so they never wipe what you are typing.
 function softRender(){ if(tab==='cards' && !$('#sheet').classList.contains('on') && document.activeElement?.id!=='q') render(); }
 
@@ -270,11 +283,16 @@ document.addEventListener('click',async e=>{
     extras.push(x); save(); render(); toast(qkind==='expense'?'Expense saved':'Sale saved'); return;
   }
   if(t.id==='mylist'){
+    // First tap adds the cards. Later taps only fill in researched eBay prices, never duplicate cards.
     let done=false; try{ done=!!localStorage.getItem(LIST_KEY); }catch(err){}
-    if(done && !t.dataset.sure){ t.dataset.sure=1; t.textContent='Already loaded. Tap again to add it again'; return; }
-    try{ const r=await fetch('my-list.txt'); if(!r.ok) throw 0; const add=parseList(await r.text()); cards.push(...add); save(); try{ localStorage.setItem(LIST_KEY,today()); }catch(err){}
-      tab='cards'; render(); toast(add.length+' cards added'); runLookups(add.filter(needsLookup)); }
-    catch(err){ toast('Could not load the list. Try again with signal'); }
+    try{
+      let add=[];
+      if(!done){ const r=await fetch('my-list.txt',{cache:'no-store'}); if(!r.ok) throw 0; add=parseList(await r.text()); cards.push(...add); try{ localStorage.setItem(LIST_KEY,today()); }catch(err){} }
+      let priced=0; try{ const r=await fetch('my-prices.json',{cache:'no-store'}); if(r.ok) priced=applyPrices(await r.json()); }catch(err){}
+      save(); tab='cards'; render();
+      toast((add.length?add.length+' cards added. ':'')+(priced?priced+' cards got eBay prices':'No new prices to add'));
+      if(add.length) runLookups(add.filter(needsLookup));
+    }catch(err){ toast('Could not load the list. Try again with signal'); }
     return;
   }
   if(t.id==='import'){ const add=parseList($('#list').value); if(!add.length) return toast('Paste at least one card'); cards.push(...add); save(); tab='cards'; render(); runLookups(add.filter(needsLookup)); }
@@ -292,4 +310,4 @@ function net(){ const n=$('#net'); n.textContent=navigator.onLine?'Online':'No s
 addEventListener('online',net); addEventListener('offline',net);
 if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(()=>{});
 render(); net();
-if(typeof module!=='undefined') module.exports={parseList,avgSolds,soldsUsed,value,needsLookup,xAmt,xLabel};
+if(typeof module!=='undefined') module.exports={applyPrices,parseList,avgSolds,soldsUsed,value,needsLookup,xAmt,xLabel};
