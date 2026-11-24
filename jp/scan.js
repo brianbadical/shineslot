@@ -48,7 +48,7 @@ function dealHtml(it) {
   return '<div class="pair"><figure><img src="' + it.thumb + '" alt="Your photo"><figcaption>In the case</figcaption></figure>' +
     '<figure><img src="' + esc(img(it.image, 'high')) + '" alt=""><figcaption>' + esc(it.isEn ? 'English version' : 'Japanese card') + '</figcaption></figure></div>' +
     '<h2>' + esc(it.name) + (it.jpName ? ' <small>' + esc(it.jpName) + '</small>' : '') + '</h2>' +
-    '<div class="verdict ' + lv[0] + ' big-verdict"><b>' + lv[1] + '</b>' + (d.ratio != null ? ': ' + Math.round(d.ratio * 100) + '% of what it\'s worth' : '') + '</div>' +
+    '<div class="verdict ' + lv[0] + ' big-verdict"><b>' + lv[1] + '</b>' + (d.ratio != null ? ': ' + Math.round(d.ratio * 100) + (lv === LEVEL_EN[d.level] ? '% of the English price' : '% of what it\'s worth') : '') + '</div>' +
     '<div class="totals">' +
     '<div class="tot"><span>Tag price</span><b>' + L.yen(it.yen) + '</b><span>' + (d.tagUsd ? 'about ' + L.money(d.tagUsd) : '') + '</span></div>' +
     '<div class="tot"><span>Worth</span><b>' + (d.ref ? L.money(d.ref.usd) : '—') + '</b><span>' + esc(d.ref ? d.ref.label : 'check eBay sold') + '</span></div></div>' +
