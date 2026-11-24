@@ -131,14 +131,14 @@ function resultHtml(r) {
   const verdict = r.pick < 0
     ? '<div class="verdict maybe">Trainer card: tap the English card below with <b>the same picture</b>.</div>'
     : e
-    ? (r.sure ? '<div class="verdict ok">Same picture in English: <b>' + esc(e.setName) + ' #' + esc(e.localId) + '</b></div>'
+    ? (r.picked ? '<div class="verdict ok">You picked: <b>' + esc(e.setName) + ' #' + esc(e.localId) + '</b></div>' : r.sure ? '<div class="verdict ok">Same picture in English: <b>' + esc(e.setName) + ' #' + esc(e.localId) + '</b></div>'
       : '<div class="verdict maybe">Best match: <b>' + esc(e.setName) + ' #' + esc(e.localId) + '</b>. Check the picture is the same' + (r.matches.length > 1 ? ', or tap another below' : '') + '.</div>')
     : '<div class="verdict no">No English card with this picture was found. It may be a <b>Japan-only</b> print, so use the Japanese price.</div>';
   const jpUsd = jp.eur ? '<span>about ' + L.money(jp.eur * EUR_USD) + '</span>' : '';
   const jq = L.jpQuery(r.enName, jp);
   return '<div class="pair"><figure><img src="' + esc(img(jp.image, 'high')) + '" alt="Japanese card"><figcaption>Japanese</figcaption></figure>' +
     (e ? '<figure><img src="' + esc(img(e.image, 'high')) + '" alt="English card"><figcaption>English</figcaption></figure>' : '<figure class="none"><div>' + (r.pick < 0 ? 'Pick it below' : 'No English print found') + '</div></figure>') + '</div>' +
-    '<h2>' + esc(r.enName || jp.name) + ' <small>' + esc(jp.name) + '</small></h2>' + verdict +
+    '<h2>' + esc(r.enName || jp.name) + (r.enName ? ' <small>' + esc(jp.name) + '</small>' : '') + '</h2>' + verdict +
     '<div class="totals">' +
     priceRow('English price (TCGplayer)', e && e.usd ? L.money(e.usd.usd) : '—', e && e.usd ? esc(e.usd.kind.replace(/-/g, ' ')) : (e ? 'no US price yet' : r.pick < 0 ? 'pick the card below' : 'no English card')) +
     '<div class="tot"><span>Japanese price (Europe)</span><b>' + (jp.eur ? L.money(jp.eur, 'EUR') : '—') + '</b>' + (jpUsd || '<span>no price yet</span>') + '</div></div>' +
@@ -160,7 +160,7 @@ function resultHtml(r) {
 
 function namesHtml(n) {
   if (!n.cards.length) return '<div class="empty">No Japanese ' + esc(n.name) + ' cards found.</div>';
-  return '<h3>Japanese ' + esc(n.name) + ' cards (' + n.cards.length + ')</h3><p class="hint">Newest first. Tap the one you have.</p><div class="picks">' +
+  return '<h3>Japanese ' + esc(n.name) + ' cards (' + n.cards.length + ')</h3><p class="hint">Find the set code that matches your card, then tap it.</p><div class="picks">' +
     n.cards.map(c => '<div data-jp="' + esc(c.id) + '"><img loading="lazy" src="' + esc(img(c.image)) + '" alt=""><span>' + esc(c.id.replace(/-(?=[^-]*$)/, ' ')) + '</span></div>').join('') + '</div>';
 }
 
@@ -188,7 +188,7 @@ function wireForm() {
 
 function wireOut() {
   document.querySelectorAll('[data-pick]').forEach(el => el.onclick = () => {
-    current.pick = +el.dataset.pick; current.sure = false;
+    current.pick = +el.dataset.pick; current.sure = false; current.picked = true;
     if (!current.jp.dexId) current.enName = current.matches[current.pick].name;
     store(HIST_KEY, hist); render(); window.scrollTo(0, 0);
   });
