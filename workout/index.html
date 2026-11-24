@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Workout</title>
+<link rel="manifest" href="manifest.json"><link rel="icon" href="icon.svg"><link rel="apple-touch-icon" href="icon-180.png">
+<meta name="theme-color" content="#12151b"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Workout">
+<style>
+:root{--bg:#12151b;--card:#1d212b;--line:#313645;--text:#f3f4f6;--dim:#a3a8b5;--acc:#ff7a2f;--green:#4ade80;--red:#f87171}
+*{box-sizing:border-box}html,body{margin:0;background:var(--bg);color:var(--text);font:17px/1.4 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+header{position:sticky;top:0;z-index:5;background:var(--bg);padding:calc(10px + env(safe-area-inset-top)) 16px 0;border-bottom:1px solid var(--line)}
+h1{font-size:20px;margin:0 0 6px;display:flex;align-items:center;gap:8px}h1 img{width:28px;height:28px;border-radius:7px}
+h2{margin:4px 0 10px;font-size:22px}h3{margin:0;font-size:18px}
+nav{display:flex}nav button{flex:1;background:none;border:0;color:var(--dim);font:inherit;font-weight:700;padding:10px 4px;border-bottom:3px solid transparent}
+nav button.on{color:var(--acc);border-color:var(--acc)}
+main{padding:16px;max-width:640px;margin:0 auto;padding-bottom:130px}
+.dim{color:var(--dim);font-size:15px}.hint{color:var(--dim);font-size:15px;margin:6px 0 12px}
+.card{background:var(--card);border-radius:14px;padding:14px;margin-bottom:12px}
+.totals{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.tot{background:var(--card);border-radius:12px;padding:10px 12px}.tot b{display:block;font-size:26px}.tot span{color:var(--dim);font-size:14px}
+ul.plain{list-style:none;padding:0;margin:0 0 6px}ul.plain li{padding:7px 0;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:8px}
+button{font:inherit;cursor:pointer}
+.big{display:block;width:100%;font-weight:800;font-size:18px;padding:15px;border-radius:12px;border:0;background:var(--acc);color:#1a0d04;margin:10px 0;text-align:center}
+.ghost{background:var(--card);color:var(--text);border:1px solid var(--line);border-radius:12px;padding:13px;font-weight:700}
+.big.ghost{background:var(--card);color:var(--text)}.danger{color:var(--red)!important}.big.go{background:var(--green);color:#06210f}
+.sure{outline:2px solid var(--red)}
+.days{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px}
+.choice{display:block;width:100%;text-align:left;background:var(--card);border:1px solid var(--line);color:var(--text);border-radius:14px;padding:14px;margin-bottom:10px}
+.choice b{display:block;font-size:18px}.choice span{display:block;margin-top:3px}
+.whead{display:flex;justify-content:space-between;align-items:baseline}.whead #clock{font-size:18px;font-variant-numeric:tabular-nums}
+.bar{height:8px;background:var(--line);border-radius:9px;overflow:hidden;margin-bottom:14px}.bar i{display:block;height:100%;background:var(--green);transition:width .3s}
+.exhead{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.tip{color:var(--acc);font-size:14px;margin:4px 0 8px}
+.sh,.set{display:grid;grid-template-columns:34px 1fr 1fr 56px;gap:8px;align-items:center}
+.set.nw,.sets:has(.nw) .sh{grid-template-columns:34px 1fr 56px}
+.sh{color:var(--dim);font-size:13px;font-weight:700;text-transform:uppercase;padding:0 0 4px}
+.set{padding:5px 0}.set .n{font-weight:800;text-align:center;color:var(--dim)}
+.set input{width:100%;font:inherit;font-size:20px;font-weight:700;text-align:center;padding:10px 4px;border-radius:10px;border:1px solid var(--line);background:#0e1015;color:var(--text)}
+.tick{height:48px;border-radius:12px;border:2px solid var(--line);background:#0e1015;color:#06210f;font-size:24px;font-weight:900}
+.set.done .tick{background:var(--green);border-color:var(--green)}.set.done input{border-color:#2c5a3c;color:var(--green)}
+.exfoot{display:flex;gap:16px;margin-top:6px}
+.link{background:none;border:0;color:var(--acc);font-weight:700;padding:10px 0}
+.hist{cursor:pointer}.hl{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1px solid var(--line);font-size:15px}.hl span:last-child{color:var(--dim);text-align:right}
+.small{padding:9px 12px;margin-top:10px;font-size:15px}
+.pex{display:flex;justify-content:space-between;gap:8px;padding:11px 0;border-bottom:1px solid var(--line);cursor:pointer}
+.dayname{font:inherit;font-weight:800;font-size:18px;background:none;border:0;border-bottom:1px dashed var(--line);color:var(--text);padding:4px 0;width:100%}
+.seg2,.seg4{display:grid;grid-template-columns:1fr 1fr;gap:6px}.seg4{grid-template-columns:repeat(5,1fr)}
+.seg2 button,.seg4 button{padding:12px 4px;border-radius:10px;border:1px solid var(--line);background:#0e1015;color:var(--dim);font-weight:700;font-size:15px}
+.seg2 button.on,.seg4 button.on{background:var(--acc);border-color:var(--acc);color:#1a0d04}
+.filebtn{display:block}
+label{display:block;font-weight:700;margin:14px 0 6px}
+.sheet input:not([type]),.sheet input[inputmode]{width:100%;font:inherit;padding:12px;border-radius:10px;border:1px solid var(--line);background:#0e1015;color:var(--text)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:8px}.two .ghost{margin-top:8px}
+.sheet{position:fixed;inset:0;background:#000b;z-index:20;display:none;align-items:flex-end;justify-content:center}.sheet.on{display:flex}
+.sheet .in{background:var(--bg);width:100%;max-width:640px;max-height:92vh;overflow:auto;border-radius:18px 18px 0 0;padding:16px 16px calc(16px + env(safe-area-inset-bottom));border-top:1px solid var(--line)}
+.rest{position:fixed;left:0;right:0;bottom:0;z-index:15;background:#262b38;border-top:1px solid var(--line);padding:10px 16px calc(10px + env(safe-area-inset-bottom));display:none}
+.rest.on{display:block}.rest .row{display:flex;align-items:center;gap:10px;max-width:640px;margin:0 auto}
+.rest b{font-size:30px;font-variant-numeric:tabular-nums;flex:1}.rest .lbl{color:var(--dim);font-size:13px;display:block;font-weight:600}
+.rest button{padding:12px 14px;border-radius:10px;border:0;background:var(--line);color:var(--text);font-weight:800}
+.rbar{height:4px;background:var(--line);border-radius:4px;max-width:640px;margin:8px auto 0;overflow:hidden}.rbar i{display:block;height:100%;background:var(--acc);width:0}
+.toast{position:fixed;left:50%;bottom:120px;transform:translateX(-50%);background:#2e3445;padding:12px 18px;border-radius:12px;z-index:30;display:none;font-weight:700;max-width:90vw;text-align:center}
+.empty{text-align:center;color:var(--dim);padding:40px 10px;line-height:1.6}
+</style></head><body>
+<header><h1><img src="icon.svg" alt="">Workout</h1>
+<nav><button data-tab="today" class="on">Today</button><button data-tab="history">History</button><button data-tab="plan">Plan</button></nav></header>
+<main id="main"></main>
+<div class="rest" id="rest"><div class="row"><b><span class="lbl">Rest</span><span id="restT">0:00</span></b><button id="restPlus">+30s</button><button id="restSkip">Skip</button></div><div class="rbar"><i id="restBar"></i></div></div>
+<div class="sheet" id="sheet"><div class="in" id="sheetIn"></div></div>
+<div class="toast" id="toast"></div>
+<script src="logic.js?v=1"></script>
+<script src="app.js?v=1"></script>
+</body></html>
