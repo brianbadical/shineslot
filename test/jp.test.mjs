@@ -63,3 +63,13 @@ test('deal check: shop yen price against US value', () => {
   const order = L.caseOrder([{ deal: { ratio: 1.4 } }, { deal: { ratio: null } }, { deal: { ratio: 0.5 } }]).map(x => x.deal.ratio);
   assert.deepEqual(order, [0.5, 1.4, null]);
 });
+
+test('old set names and the narrow-down box', () => {
+  assert.equal(L.cardLabel('PMCG6-035'), 'Gym Challenge 035');
+  assert.equal(L.cardLabel('SV2a-173'), 'SV2a 173');
+  assert.equal(L.cardLabel('SV-P-001'), 'SV-P 001');
+  const cards = [{ id: 'PMCG6-035', name: 'カツラのファイヤー' }, { id: 'SV2a-146', name: 'ファイヤー' }];
+  assert.equal(L.filterCards(cards, 'gym').length, 1);
+  assert.equal(L.filterCards(cards, 'カツラ')[0].id, 'PMCG6-035');
+  assert.equal(L.filterCards(cards, '').length, 2);
+});

@@ -14,6 +14,10 @@ function store(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch
 let hist = load(HIST_KEY, []);
 
 function toast(t) { const el = $('#toast'); el.textContent = t; el.style.display = 'block'; clearTimeout(toast.t); toast.t = setTimeout(() => el.style.display = 'none', 2600); }
+// One picture tile. Many old Japanese cards have no picture in the data, so show their Japanese name instead.
+function tile(attr, c, label) {
+  return '<div ' + attr + '>' + (c.image ? '<img loading="lazy" src="' + esc(img(c.image)) + '" alt="">' : '<div class="noimg">' + esc(c.name || '') + '<small>no picture</small></div>') + '<span>' + esc(label) + '</span></div>';
+}
 function img(u, size) { return u ? u + '/' + (size || 'low') + '.webp' : 'icon.svg'; }
 
 const memo = {};
@@ -162,7 +166,7 @@ function resultHtml(r) {
 function namesHtml(n) {
   if (!n.cards.length) return '<div class="empty">No Japanese ' + esc(n.name) + ' cards found.</div>';
   return '<h3>Japanese ' + esc(n.name) + ' cards (' + n.cards.length + ')</h3><p class="hint">Find the set code that matches your card, then tap it.</p><div class="picks">' +
-    n.cards.map(c => '<div data-jp="' + esc(c.id) + '"><img loading="lazy" src="' + esc(img(c.image)) + '" alt=""><span>' + esc(c.id.replace(/-(?=[^-]*$)/, ' ')) + '</span></div>').join('') + '</div>';
+    n.cards.map(c => tile('data-jp="' + esc(c.id) + '"', c, L.cardLabel(c.id))).join('') + '</div>';
 }
 
 function busy(on, text) { const o = $('#out'); if (on && o) o.innerHTML = '<div class="empty"><div class="spin"></div>' + esc(text || 'Looking it up…') + '</div>'; }

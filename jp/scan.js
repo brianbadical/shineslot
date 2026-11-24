@@ -27,13 +27,13 @@ function detailsHtml() {
     '<button class="big" type="submit">Find this card</button>' +
     '<button class="big ghost" type="button" id="redo">Box a different card</button></form><div id="out">';
   if (scan.cands) {
-    h += scan.cands.length ? '<h3>Tap the card with the same picture</h3><div class="picks">' +
-      scan.cands.map(c => '<div data-sjp="' + esc(c.id) + '"><img loading="lazy" src="' + esc(img(c.image)) + '" alt=""><span>' + esc(c.id.replace(/-(?=[^-]*$)/, ' ')) + '</span></div>').join('') + '</div>' : '';
+    h += scan.cands.length ? '<h3>Tap the card with the same picture (' + scan.cands.length + ')</h3>' + (scan.cands.length > 12 ? '<input id="flt" class="flt" placeholder="Narrow down: set, number or name" value="' + esc(scan.filter || '') + '">' : '') + '<div class="picks" id="sgrid">' +
+      L.filterCards(scan.cands, scan.filter).map(c => tile('data-sjp="' + esc(c.id) + '"', c, L.cardLabel(c.id))).join('') + '</div>' : '';
     h += '<button class="big ghost" id="showen">' + (scan.cands.length ? 'Not here? Pick the English version' : 'No Japanese cards found. Pick the English version') + '</button>';
   }
   if (scan.enCands) {
     h += scan.enCands.length ? '<h3>English cards</h3><p class="hint">Tap the one with the same picture. Its English price is used.</p><div class="picks">' +
-      scan.enCands.map(c => '<div data-sen="' + esc(c.id) + '"><img loading="lazy" src="' + esc(img(c.image)) + '" alt=""><span>' + esc(c.name) + '</span></div>').join('') + '</div>'
+      scan.enCands.map(c => tile('data-sen="' + esc(c.id) + '"', c, c.name)).join('') + '</div>'
       : '<div class="verdict no">No English cards called "' + esc(scan.poke) + '" either. Check the spelling.</div>';
   }
   return h + '</div>';
@@ -48,7 +48,8 @@ function dealHtml(it) {
     '<div class="verdict ' + lv[0] + ' big-verdict"><b>' + lv[1] + '</b>' + (d.ratio != null ? ': ' + Math.round(d.ratio * 100) + '% of what it\'s worth' : '') + '</div>' +
     '<div class="totals">' +
     '<div class="tot"><span>Tag price</span><b>' + L.yen(it.yen) + '</b><span>' + (d.tagUsd ? 'about ' + L.money(d.tagUsd) : '') + '</span></div>' +
-    '<div class="tot"><span>Worth in the US</span><b>' + (d.ref ? L.money(d.ref.usd) : '—') + '</b><span>' + esc(d.ref ? d.ref.label : 'check eBay sold') + '</span></div></div>' +
+    '<div class="tot"><span>Worth</span><b>' + (d.ref ? L.money(d.ref.usd) : '—') + '</b><span>' + esc(d.ref ? d.ref.label : 'check eBay sold') + '</span></div></div>' +
+    (it.refs || []).filter(r => r && d.ref && r !== d.ref && r.label !== d.ref.label).map(r => '<p class="hint">' + esc(r.label) + ': ' + L.money(r.usd) + '</p>').join('') +
     (it.isEn || (d.ref && /English/.test(d.ref.label)) ? '<p class="hint">This compares to the English card. Japanese copies often sell for a different price, so check eBay sold before you buy.</p>' : '') +
     '<a class="big link" target="_blank" rel="noopener" href="' + esc(L.soldLink(it.query)) + '">eBay sold: ' + esc(it.isEn ? 'Japanese version' : 'this card') + '</a>' +
     '<button class="big" id="next">Next card</button>';
@@ -91,7 +92,7 @@ function wireCanvas() {
     const b = scan.box, im = scan.photo;
     if (!b || b.w < im.naturalWidth / 40 || b.h < im.naturalHeight / 40) { scan.box = null; drawPhoto(); return toast('Drag a box around one card'); }
     scan.crop = cropTo(b, 900); scan.thumb = cropTo(b, 220);
-    scan.yen = ''; scan.poke = ''; scan.cands = null; scan.enCands = null;
+    scan.yen = ''; scan.poke = ''; scan.cands = null; scan.enCands = null; scan.filter = '';
     render(); window.scrollTo(0, 0);
   };
 }
@@ -129,6 +130,11 @@ async function finish(kind, id) {
   scan.item = it; render(); window.scrollTo(0, 0);
 }
 
+function wirePicks() {
+  document.querySelectorAll('[data-sjp]').forEach(el => el.onclick = () => { scan.yen = $('#yen').value; finish('jp', el.dataset.sjp).catch(e => toast(e.message)); });
+  document.querySelectorAll('[data-sen]').forEach(el => el.onclick = () => { scan.yen = $('#yen').value; finish('en', el.dataset.sen).catch(e => toast(e.message)); });
+}
+
 function wireScan() {
   const rate = $('#rate'); rate.onchange = () => {
     const v = Number(rate.value); if (!(v > 1)) return toast('Type how many yen make $1, like 150');
@@ -150,14 +156,18 @@ function wireScan() {
     catch (e) { scan.cands = []; }
     render(); const out = $('#out'); if (out) out.scrollIntoView({ behavior: 'smooth' });
   };
+  const flt = $('#flt'); if (flt) flt.oninput = () => {
+    scan.filter = flt.value;
+    $('#sgrid').innerHTML = L.filterCards(scan.cands, scan.filter).map(c => tile('data-sjp="' + esc(c.id) + '"', c, L.cardLabel(c.id))).join('');
+    wirePicks();
+  };
+  wirePicks();
   const showen = $('#showen'); if (showen) showen.onclick = async () => {
     scan.yen = $('#yen').value;
     showen.textContent = 'Looking…';
     try { scan.enCands = ((await get('en/cards?name=' + encodeURIComponent(scan.poke))) || []).slice(-60).reverse(); } catch (e) { scan.enCands = []; }
     render(); const h = document.querySelectorAll('#out h3'); if (h.length) h[h.length - 1].scrollIntoView({ behavior: 'smooth' });
   };
-  document.querySelectorAll('[data-sjp]').forEach(el => el.onclick = () => { scan.yen = $('#yen').value; finish('jp', el.dataset.sjp).catch(e => toast(e.message)); });
-  document.querySelectorAll('[data-sen]').forEach(el => el.onclick = () => { scan.yen = $('#yen').value; finish('en', el.dataset.sen).catch(e => toast(e.message)); });
   const nx = $('#next'); if (nx) nx.onclick = () => { scan.item = null; scan.crop = null; scan.box = null; scan.cands = null; scan.enCands = null; render(); window.scrollTo(0, 0); };
   document.querySelectorAll('[data-cdel]').forEach(el => el.onclick = ev => {
     ev.stopPropagation();

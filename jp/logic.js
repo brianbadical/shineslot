@@ -105,6 +105,21 @@
     return items.slice().sort((a, b) => (a.deal && a.deal.ratio != null ? a.deal.ratio : 99) - (b.deal && b.deal.ratio != null ? b.deal.ratio : 99));
   }
 
-  const api = { findSetId, cleanNumber, findLocalId, seriesPrefix, rankMatches, usdMarket, eurTrend, money, soldLink, pcLink, jpQuery, enQuery, englishName, dealCheck, yen, caseOrder };
+  // English names for the old Japanese sets (their codes aren't printed on the cards)
+  const OLD_SETS = { PMCG1: 'Base Set', PMCG2: 'Jungle', PMCG3: 'Fossil', PMCG4: 'Team Rocket', PMCG5: 'Gym Heroes', PMCG6: 'Gym Challenge',
+    neo1: 'Neo Genesis', neo2: 'Neo Discovery', neo3: 'Neo Revelation', neo4: 'Neo Destiny', VS1: 'VS', web1: 'Web', E1: 'e-Card 1', E2: 'e-Card 2', E3: 'e-Card 3', E4: 'e-Card 4', E5: 'e-Card 5' };
+  // "PMCG6-035" -> "Gym Challenge 035", "SV2a-173" -> "SV2a 173"
+  function cardLabel(id) {
+    const i = String(id).lastIndexOf('-'), set = String(id).slice(0, i), num = String(id).slice(i + 1);
+    return (OLD_SETS[set] || set) + ' ' + num;
+  }
+  // Keep the tiles whose set, number or name has what was typed
+  function filterCards(cards, q) {
+    const w = String(q || '').trim().toLowerCase();
+    if (!w) return cards;
+    return cards.filter(c => (c.id + ' ' + cardLabel(c.id) + ' ' + (c.name || '')).toLowerCase().includes(w));
+  }
+
+  const api = { findSetId, cleanNumber, findLocalId, seriesPrefix, rankMatches, usdMarket, eurTrend, money, soldLink, pcLink, jpQuery, enQuery, englishName, dealCheck, yen, caseOrder, cardLabel, filterCards };
   if (typeof module !== 'undefined' && module.exports) module.exports = api; else root.JPLogic = api;
 })(this);
