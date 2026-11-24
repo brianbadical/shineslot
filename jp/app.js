@@ -51,7 +51,7 @@ async function convert(jpId, set) {
     id: c.id, setId: c.set.id, setName: c.set.name, serie: set && set.serie && set.serie.id,
     localId: c.localId, official: c.set.cardCount && c.set.cardCount.official, name: c.name,
     rarity: c.rarity && c.rarity !== 'None' ? c.rarity : '', illustrator: c.illustrator || '',
-    dexId: (c.dexId || [])[0] || null, category: c.category, image: c.image,
+    dexId: (c.dexId || [])[0] || null, category: c.category, trainerType: c.trainerType || '', image: c.image,
     eur: L.eurTrend(c.pricing),
   };
   // English cards with the same Pokémon (or same card type) by the same artist
@@ -60,8 +60,10 @@ async function convert(jpId, set) {
     const q = jp.dexId ? 'dexId=eq:' + jp.dexId : 'category=eq:' + encodeURIComponent(jp.category || 'Trainer');
     list = (await get('en/cards?' + q + '&illustrator=eq:' + encodeURIComponent(jp.illustrator))) || [];
   }
-  const top = L.rankMatches(jp, list).slice(0, 8);
-  const full = (await Promise.all(top.map(x => get('en/cards/' + encodeURIComponent(x.id)).catch(() => null)))).filter(Boolean);
+  const top = L.rankMatches(jp, list).slice(0, jp.dexId ? 8 : 18);
+  let full = (await Promise.all(top.map(x => get('en/cards/' + encodeURIComponent(x.id)).catch(() => null)))).filter(Boolean);
+  // Trainer cards: keep the same kind (Supporter, Item, Stadium...) when we can tell
+  if (!jp.dexId && jp.trainerType) { const same = full.filter(e => e.trainerType === jp.trainerType); if (same.length) full = same; }
   const matches = L.rankMatches(jp, full).map(e => ({
     id: e.id, name: e.name, localId: e.localId, rarity: e.rarity, image: e.image,
     setName: e.set && e.set.name, official: e.set && e.set.cardCount && e.set.cardCount.official,
@@ -73,7 +75,9 @@ async function convert(jpId, set) {
     if (!base) { const any = await get('en/cards?dexId=eq:' + jp.dexId + '&pagination:itemsPerPage=1').catch(() => null); base = any && any[0] && any[0].name; }
     enName = L.englishName(base, jp.name);
   } else if (matches[0]) enName = matches[0].name;
-  const res = { at: new Date().toISOString(), jp, enName, matches, pick: 0, sure: !!jp.dexId && matches.length === 1 };
+  // Trainer and energy names can't be translated here, so for those you tap the same picture yourself.
+  if (!jp.dexId) enName = '';
+  const res = { at: new Date().toISOString(), jp, enName, matches, pick: jp.dexId || !matches.length ? 0 : -1, sure: !!jp.dexId && matches.length === 1 };
   hist = [res].concat(hist.filter(h => h.jp.id !== jp.id)).slice(0, 60);
   store(HIST_KEY, hist);
   return res;
@@ -96,7 +100,7 @@ function render() {
   if (tab === 'history') {
     m.innerHTML = hist.length ? '<p class="hint">Your last ' + hist.length + ' look-ups. They open with no signal.</p>' + hist.map((h, i) => {
       const e = h.matches[h.pick];
-      return '<div class="row" data-h="' + i + '"><img src="' + esc(img(h.jp.image)) + '" alt=""><div class="info"><div class="nm">' + esc(h.enName || h.jp.name) + '</div><div class="sub">' + esc(h.jp.setId + ' ' + h.jp.localId) + (e ? ' → ' + esc(e.setName + ' ' + e.localId) : ' → Japan only?') + '</div></div><div class="val"><b>' + (e && e.usd ? L.money(e.usd.usd) : '') + '</b><span class="sub">' + (h.jp.eur ? 'JP ' + L.money(h.jp.eur, 'EUR') : '') + '</span></div></div>';
+      return '<div class="row" data-h="' + i + '"><img src="' + esc(img(h.jp.image)) + '" alt=""><div class="info"><div class="nm">' + esc(h.enName || h.jp.name) + '</div><div class="sub">' + esc(h.jp.setId + ' ' + h.jp.localId) + (e ? ' → ' + esc(e.setName + ' ' + e.localId) : h.pick < 0 ? ' → not picked yet' : ' → Japan only?') + '</div></div><div class="val"><b>' + (e && e.usd ? L.money(e.usd.usd) : '') + '</b><span class="sub">' + (h.jp.eur ? 'JP ' + L.money(h.jp.eur, 'EUR') : '') + '</span></div></div>';
     }).join('') + '<button class="big ghost" id="clr">Clear the list</button>' : '<div class="empty">Cards you look up show here.</div>';
     m.querySelectorAll('[data-h]').forEach(el => el.onclick = () => { current = hist[+el.dataset.h]; tab = 'find'; render(); });
     const clr = $('#clr'); if (clr) clr.onclick = () => { if (clr.dataset.sure) { hist = []; store(HIST_KEY, hist); render(); } else { clr.dataset.sure = 1; clr.textContent = 'Tap again to clear'; } };
@@ -124,17 +128,19 @@ function priceRow(label, main, sub) { return '<div class="tot"><span>' + label +
 
 function resultHtml(r) {
   const jp = r.jp, e = r.matches[r.pick];
-  const verdict = e
+  const verdict = r.pick < 0
+    ? '<div class="verdict maybe">Trainer card: tap the English card below with <b>the same picture</b>.</div>'
+    : e
     ? (r.sure ? '<div class="verdict ok">Same picture in English: <b>' + esc(e.setName) + ' #' + esc(e.localId) + '</b></div>'
       : '<div class="verdict maybe">Best match: <b>' + esc(e.setName) + ' #' + esc(e.localId) + '</b>. Check the picture is the same' + (r.matches.length > 1 ? ', or tap another below' : '') + '.</div>')
     : '<div class="verdict no">No English card with this picture was found. It may be a <b>Japan-only</b> print, so use the Japanese price.</div>';
   const jpUsd = jp.eur ? '<span>about ' + L.money(jp.eur * EUR_USD) + '</span>' : '';
   const jq = L.jpQuery(r.enName, jp);
   return '<div class="pair"><figure><img src="' + esc(img(jp.image, 'high')) + '" alt="Japanese card"><figcaption>Japanese</figcaption></figure>' +
-    (e ? '<figure><img src="' + esc(img(e.image, 'high')) + '" alt="English card"><figcaption>English</figcaption></figure>' : '<figure class="none"><div>No English print found</div></figure>') + '</div>' +
+    (e ? '<figure><img src="' + esc(img(e.image, 'high')) + '" alt="English card"><figcaption>English</figcaption></figure>' : '<figure class="none"><div>' + (r.pick < 0 ? 'Pick it below' : 'No English print found') + '</div></figure>') + '</div>' +
     '<h2>' + esc(r.enName || jp.name) + ' <small>' + esc(jp.name) + '</small></h2>' + verdict +
     '<div class="totals">' +
-    priceRow('English price (TCGplayer)', e && e.usd ? L.money(e.usd.usd) : '—', e && e.usd ? esc(e.usd.kind.replace(/-/g, ' ')) : (e ? 'no US price yet' : 'no English card')) +
+    priceRow('English price (TCGplayer)', e && e.usd ? L.money(e.usd.usd) : '—', e && e.usd ? esc(e.usd.kind.replace(/-/g, ' ')) : (e ? 'no US price yet' : r.pick < 0 ? 'pick the card below' : 'no English card')) +
     '<div class="tot"><span>Japanese price (Europe)</span><b>' + (jp.eur ? L.money(jp.eur, 'EUR') : '—') + '</b>' + (jpUsd || '<span>no price yet</span>') + '</div></div>' +
     '<p class="hint">For what Japanese cards sell for in the US, check eBay sold below.</p>' +
     '<a class="big link" target="_blank" rel="noopener" href="' + esc(L.soldLink(jq)) + '">eBay sold: this Japanese card</a>' +
@@ -148,7 +154,7 @@ function resultHtml(r) {
     (jp.illustrator ? '<tr><td>Artist</td><td>' + esc(jp.illustrator) + '</td></tr>' : '') +
     (e ? '<tr><td>English set</td><td>' + esc(e.setName) + ' #' + esc(e.localId + (e.official ? '/' + e.official : '')) + '</td></tr>' : '') +
     '</table>' +
-    (r.matches.length > 1 ? '<h3>Other English cards by the same artist</h3><p class="hint">Tap the one with the same picture.</p><div class="picks">' +
+    (r.matches.length > 1 || r.pick < 0 ? '<h3>' + (r.pick < 0 ? 'English cards by the same artist' : 'Other English cards by the same artist') + '</h3><p class="hint">Tap the one with the same picture.</p><div class="picks">' +
       r.matches.map((x, i) => '<div data-pick="' + i + '" class="' + (i === r.pick ? 'on' : '') + '"><img loading="lazy" src="' + esc(img(x.image)) + '" alt=""><span>' + esc(x.setName + ' ' + x.localId) + '</span></div>').join('') + '</div>' : '');
 }
 
@@ -183,6 +189,7 @@ function wireForm() {
 function wireOut() {
   document.querySelectorAll('[data-pick]').forEach(el => el.onclick = () => {
     current.pick = +el.dataset.pick; current.sure = false;
+    if (!current.jp.dexId) current.enName = current.matches[current.pick].name;
     store(HIST_KEY, hist); render(); window.scrollTo(0, 0);
   });
   document.querySelectorAll('[data-jp]').forEach(el => el.onclick = async () => {
