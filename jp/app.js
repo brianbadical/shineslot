@@ -167,6 +167,9 @@ function namesHtml(n) {
 function busy(on, text) { const o = $('#out'); if (on && o) o.innerHTML = '<div class="empty"><div class="spin"></div>' + esc(text || 'Looking it up…') + '</div>'; }
 function fail(e) { const o = $('#out'); if (o) o.innerHTML = '<div class="verdict no">' + esc(navigator.onLine ? e.message : 'No signal. Cards you looked up before are in History.') + '</div>'; }
 
+// Bring the pictures and prices into view on a phone after a look-up
+function showResult() { const p = $('.pair'); if (p) p.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+
 function wireForm() {
   getSets().then(sets => { const dl = $('#setlist'); if (dl) dl.innerHTML = sets.map(s => '<option value="' + esc(s.id) + '">' + esc(s.name) + '</option>').join(''); }).catch(() => { });
   $('#f').onsubmit = async ev => {
@@ -175,7 +178,7 @@ function wireForm() {
     if (!code.trim() || !num.trim()) return toast('Type the set code and the number');
     document.activeElement && document.activeElement.blur();
     busy(true); current = null; nameHits = null;
-    try { current = await byCode(code, num); render(); } catch (e) { fail(e); }
+    try { current = await byCode(code, num); render(); showResult(); } catch (e) { fail(e); }
   };
   $('#nf').onsubmit = async ev => {
     ev.preventDefault();
