@@ -51,3 +51,15 @@ test('search words and links', () => {
   assert.match(L.soldLink(q), /LH_Sold=1/);
   assert.match(L.soldLink(q), /Pikachu%20173%2F165/);
 });
+
+test('deal check: shop yen price against US value', () => {
+  const d = L.dealCheck('8,980', 150, [null, { usd: 95, label: 'English' }]);
+  assert.equal(d.level, 'good'); assert.equal(Math.round(d.tagUsd * 100) / 100, 59.87); assert.equal(d.ref.label, 'English');
+  assert.equal(L.dealCheck(14000, 150, [{ usd: 95 }]).level, 'fair');
+  assert.equal(L.dealCheck(49980, 150, [{ usd: 120 }]).level, 'high');
+  assert.equal(L.dealCheck(5000, 150, []).level, 'none');
+  assert.equal(L.dealCheck('', 150, [{ usd: 10 }]).level, 'none');
+  assert.equal(L.yen('49980'), '¥49,980');
+  const order = L.caseOrder([{ deal: { ratio: 1.4 } }, { deal: { ratio: null } }, { deal: { ratio: 0.5 } }]).map(x => x.deal.ratio);
+  assert.deepEqual(order, [0.5, 1.4, null]);
+});

@@ -89,6 +89,22 @@
     return (mega ? 'Mega ' : '') + base + (m ? ' ' + m[1] : '');
   }
 
-  const api = { findSetId, cleanNumber, findLocalId, seriesPrefix, rankMatches, usdMarket, eurTrend, money, soldLink, pcLink, jpQuery, enQuery, englishName };
+  // Is the shop's ¥ price a good deal? refs: [{usd, label}] in order of trust; the first with a price is used.
+  function dealCheck(yen, yenPerUsd, refs) {
+    const y = Number(String(yen == null ? '' : yen).replace(/[^0-9.]/g, ''));
+    const rate = Number(yenPerUsd) || 150;
+    const tagUsd = y > 0 ? y / rate : null;
+    const ref = (refs || []).find(r => r && r.usd > 0) || null;
+    if (!tagUsd || !ref) return { tagUsd, ref, ratio: null, level: 'none' };
+    const ratio = tagUsd / ref.usd;
+    return { tagUsd, ref, ratio, level: ratio <= 0.8 ? 'good' : ratio <= 1.1 ? 'fair' : 'high' };
+  }
+  function yen(v) { const n = Number(String(v == null ? '' : v).replace(/[^0-9.]/g, '')); return n ? '¥' + Math.round(n).toLocaleString('en-US') : '—'; }
+  // Best deals first; cards with no price at the end.
+  function caseOrder(items) {
+    return items.slice().sort((a, b) => (a.deal && a.deal.ratio != null ? a.deal.ratio : 99) - (b.deal && b.deal.ratio != null ? b.deal.ratio : 99));
+  }
+
+  const api = { findSetId, cleanNumber, findLocalId, seriesPrefix, rankMatches, usdMarket, eurTrend, money, soldLink, pcLink, jpQuery, enQuery, englishName, dealCheck, yen, caseOrder };
   if (typeof module !== 'undefined' && module.exports) module.exports = api; else root.JPLogic = api;
 })(this);

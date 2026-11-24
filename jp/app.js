@@ -7,7 +7,7 @@ const EUR_USD = 1.15; // rough euro to dollar rate for the "about $" line; the e
 const HIST_KEY = 'jp-hist', SETS_KEY = 'jp-sets';
 const $ = s => document.querySelector(s);
 const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-let tab = 'find', current = null, nameHits = null;
+let tab = 'scan', current = null, nameHits = null;
 
 function load(k, d) { try { const v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; } catch (e) { return d; } }
 function store(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { } }
@@ -97,6 +97,7 @@ async function byName(name) {
 function render() {
   document.querySelectorAll('nav button').forEach(b => b.classList.toggle('on', b.dataset.tab === tab));
   const m = $('#main');
+  if (tab === 'scan') { m.innerHTML = scanHtml(); wireScan(); return; }
   if (tab === 'history') {
     m.innerHTML = hist.length ? '<p class="hint">Your last ' + hist.length + ' look-ups. They open with no signal.</p>' + hist.map((h, i) => {
       const e = h.matches[h.pick];
@@ -205,4 +206,4 @@ document.querySelectorAll('nav button').forEach(b => b.onclick = () => { tab = b
 function net() { const n = $('#net'); n.textContent = navigator.onLine ? 'Online' : 'No signal'; n.classList.toggle('off', !navigator.onLine); }
 addEventListener('online', net); addEventListener('offline', net); net();
 if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => { });
-render();
+addEventListener('DOMContentLoaded', render); // after scan.js has loaded
