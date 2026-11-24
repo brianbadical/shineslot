@@ -40,8 +40,11 @@ function detailsHtml() {
 }
 
 const LEVEL = { good: ['ok', 'Good deal'], fair: ['maybe', 'Fair price'], high: ['no', 'Pricey'], none: ['maybe', 'No US price to compare'] };
+// Compared only to the English card: say so, because Japanese copies often sell for less
+const LEVEL_EN = { good: ['ok', 'Cheap vs English'], fair: ['maybe', 'About the English price'], high: ['no', 'Above the English price'], none: LEVEL.none };
+const levelOf = it => (it.deal.ref && /English/.test(it.deal.ref.label) ? LEVEL_EN : LEVEL)[it.deal.level];
 function dealHtml(it) {
-  const d = it.deal, lv = LEVEL[d.level];
+  const d = it.deal, lv = levelOf(it);
   return '<div class="pair"><figure><img src="' + it.thumb + '" alt="Your photo"><figcaption>In the case</figcaption></figure>' +
     '<figure><img src="' + esc(img(it.image, 'high')) + '" alt=""><figcaption>' + esc(it.isEn ? 'English version' : 'Japanese card') + '</figcaption></figure></div>' +
     '<h2>' + esc(it.name) + (it.jpName ? ' <small>' + esc(it.jpName) + '</small>' : '') + '</h2>' +
@@ -58,7 +61,7 @@ function dealHtml(it) {
 function caseHtml() {
   if (!caseList.length) return '';
   return '<h3>This case (' + caseList.length + ')</h3><p class="hint">Best deals first.</p>' + L.caseOrder(caseList).map(it => {
-    const lv = LEVEL[it.deal.level];
+    const lv = levelOf(it);
     return '<div class="row" data-ci="' + esc(it.at) + '"><img src="' + it.thumb + '" alt=""><div class="info"><div class="nm">' + esc(it.name) + '</div>' +
       '<div class="sub">' + L.yen(it.yen) + ' (' + (it.deal.tagUsd ? L.money(it.deal.tagUsd) : '—') + ') vs ' + (it.deal.ref ? L.money(it.deal.ref.usd) : '—') + '</div></div>' +
       '<div class="val"><span class="tag ' + lv[0] + '">' + lv[1] + '</span><button class="xdel" data-cdel="' + esc(it.at) + '">✕</button></div></div>';

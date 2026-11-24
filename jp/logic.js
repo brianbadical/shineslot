@@ -50,7 +50,8 @@
   function usdMarket(pricing) {
     const t = pricing && pricing.tcgplayer;
     if (!t) return null;
-    const order = ['holofoil', 'normal', 'reverse-holofoil', 'reverseHolofoil', '1st-edition-holofoil', '1stEditionHolofoil', 'unlimited-holofoil', 'unlimitedHolofoil'];
+    // Unlimited before 1st edition: shop copies are rarely 1st edition, and its price is much higher
+    const order = ['holofoil', 'normal', 'unlimited-holofoil', 'unlimitedHolofoil', 'unlimited', 'reverse-holofoil', 'reverseHolofoil', '1st-edition-holofoil', '1stEditionHolofoil', '1st-edition', '1stEdition'];
     const keys = order.filter(k => t[k]).concat(Object.keys(t).filter(k => t[k] && typeof t[k] === 'object' && !order.includes(k)));
     for (const k of keys) { const v = t[k].marketPrice || t[k].midPrice || t[k].lowPrice; if (v) return { usd: v, kind: k, productId: t[k].productId }; }
     return null;
@@ -106,8 +107,8 @@
   }
 
   // English names for the old Japanese sets (their codes aren't printed on the cards)
-  const OLD_SETS = { PMCG1: 'Base Set', PMCG2: 'Jungle', PMCG3: 'Fossil', PMCG4: 'Team Rocket', PMCG5: 'Gym Heroes', PMCG6: 'Gym Challenge',
-    neo1: 'Neo Genesis', neo2: 'Neo Discovery', neo3: 'Neo Revelation', neo4: 'Neo Destiny', VS1: 'VS', web1: 'Web', E1: 'e-Card 1', E2: 'e-Card 2', E3: 'e-Card 3', E4: 'e-Card 4', E5: 'e-Card 5' };
+  const OLD_SETS = { PMCG1: 'Expansion Pack', PMCG2: 'Jungle', PMCG3: 'Mystery of the Fossils', PMCG4: 'Rocket Gang', PMCG5: "Leaders' Stadium", PMCG6: 'Challenge from the Darkness',
+    neo1: 'Neo 1', neo2: 'Neo 2', neo3: 'Neo 3', neo4: 'Neo 4', VS1: 'VS', web1: 'Web', E1: 'e-Card 1', E2: 'e-Card 2', E3: 'e-Card 3', E4: 'e-Card 4', E5: 'e-Card 5' };
   // "PMCG6-035" -> "Gym Challenge 035", "SV2a-173" -> "SV2a 173"
   function cardLabel(id) {
     const i = String(id).lastIndexOf('-'), set = String(id).slice(0, i), num = String(id).slice(i + 1);

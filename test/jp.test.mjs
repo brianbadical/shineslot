@@ -65,11 +65,12 @@ test('deal check: shop yen price against US value', () => {
 });
 
 test('old set names and the narrow-down box', () => {
-  assert.equal(L.cardLabel('PMCG6-035'), 'Gym Challenge 035');
+  assert.equal(L.cardLabel('PMCG6-035'), 'Challenge from the Darkness 035');
   assert.equal(L.cardLabel('SV2a-173'), 'SV2a 173');
   assert.equal(L.cardLabel('SV-P-001'), 'SV-P 001');
   const cards = [{ id: 'PMCG6-035', name: 'カツラのファイヤー' }, { id: 'SV2a-146', name: 'ファイヤー' }];
-  assert.equal(L.filterCards(cards, 'gym').length, 1);
+  assert.equal(L.filterCards(cards, 'darkness').length, 1);
+  assert.equal(L.usdMarket({ tcgplayer: { '1st-edition-holofoil': { marketPrice: 243 }, 'unlimited-holofoil': { marketPrice: 136 } } }).usd, 136);
   assert.equal(L.filterCards(cards, 'カツラ')[0].id, 'PMCG6-035');
   assert.equal(L.filterCards(cards, '').length, 2);
 });
