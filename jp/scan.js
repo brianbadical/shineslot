@@ -21,7 +21,7 @@ function scanHtml() {
 function detailsHtml() {
   let h = '<div class="crop"><img src="' + scan.crop + '" alt="The card you boxed"></div>' +
     '<form id="df" class="quick" autocomplete="off">' +
-    '<div class="two"><div><label for="yen">Price on the tag (¥)</label><input id="yen" inputmode="numeric" placeholder="8980" value="' + esc(scan.yen) + '"></div>' +
+    '<div class="stack"><div><label for="yen">Price on the tag (¥)</label><input id="yen" inputmode="numeric" placeholder="8980" value="' + esc(scan.yen) + '"></div>' +
     '<div><label for="poke">Which Pokémon?</label><input id="poke" placeholder="Moltres" value="' + esc(scan.poke) + '"></div></div>' +
     '<p class="hint">Type it in English. Trainer cards: type the English card name.</p>' +
     '<button class="big" type="submit">Find this card</button>' +

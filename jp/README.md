@@ -1,5 +1,17 @@
 # Japanese Card Converter
 
+## Scan a case (main tab)
+Take a photo of a shop's case, drag a box around one card and its price tag, type the ¥ price and the
+Pokémon (in English), and tap the matching Japanese card. The app compares the tag price (yen ÷ your
+yen-per-dollar rate) to the Japanese card's Cardmarket price, or to the English card's TCGplayer price
+(unlimited, not 1st edition) when there is no Japanese price, and says Good deal (80% or less), Fair or
+Pricey. "This case" lists every card checked, best deals first. Old cards often have no picture in the
+data, so their tile shows the Japanese name (match it to the name on the card).
+Free text reading (Tesseract) was tried on a sample photo and was too unreliable on glare and small tags, so
+you type the price and Pokémon. A paid photo-reading service could fill them in later, only with Brian's yes.
+
+## Look up
+
 Phone web app at `shineslot/jp/` (beside Card Show Pricer). Type the set code and number from the
 bottom left of a Japanese Pokémon card (like `SV2a` and `173`) and it shows:
 
