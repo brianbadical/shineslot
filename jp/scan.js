@@ -6,6 +6,10 @@ const scan = { photo: null, box: null, crop: null, thumb: null, yen: '', poke: '
 let caseList = load(CASE_KEY, []);
 let yenRate = load(RATE_KEY, 150);
 
+// Only a Japanese card's own price counts for the verdict. English prices can be 5x higher
+// (Dark Typhlosion: about $41 Japanese vs $211 English), so they are shown as info only.
+function jpRefs(it) { return (it.refs || []).filter(r => r && !/English/.test(r.label)); }
+
 function scanHtml() {
   let h = '<div class="quick rate"><label for="rate">Yen for $1</label><input id="rate" inputmode="decimal" value="' + esc(yenRate) + '"><span class="hint">Check today\'s rate and change it if needed.</span></div>';
   if (scan.item) h += dealHtml(scan.item);
@@ -39,7 +43,7 @@ function detailsHtml() {
   return h + '</div>';
 }
 
-const LEVEL = { good: ['ok', 'Good deal'], fair: ['maybe', 'Fair price'], high: ['no', 'Pricey'], none: ['maybe', 'No US price to compare'] };
+const LEVEL = { good: ['ok', 'Good deal'], fair: ['maybe', 'Fair price'], high: ['no', 'Pricey'], none: ['maybe', 'Check the Japanese price'] };
 // Compared only to the English card: say so, because Japanese copies often sell for less
 const LEVEL_EN = { good: ['ok', 'Cheap vs English'], fair: ['maybe', 'About the English price'], high: ['no', 'Above the English price'], none: LEVEL.none };
 const levelOf = it => (it.deal.ref && /English/.test(it.deal.ref.label) ? LEVEL_EN : LEVEL)[it.deal.level];
@@ -52,9 +56,10 @@ function dealHtml(it) {
     '<div class="totals">' +
     '<div class="tot"><span>Tag price</span><b>' + L.yen(it.yen) + '</b><span>' + (d.tagUsd ? 'about ' + L.money(d.tagUsd) : '') + '</span></div>' +
     '<div class="tot"><span>Worth</span><b>' + (d.ref ? L.money(d.ref.usd) : '—') + '</b><span>' + esc(d.ref ? d.ref.label : 'check eBay sold') + '</span></div></div>' +
-    (it.refs || []).filter(r => r && d.ref && r !== d.ref && r.label !== d.ref.label).map(r => '<p class="hint">' + esc(r.label) + ': ' + L.money(r.usd) + '</p>').join('') +
-    (it.isEn || (d.ref && /English/.test(d.ref.label)) ? '<p class="hint">This compares to the English card. Japanese copies often sell for a different price, so check eBay sold before you buy.</p>' : '') +
-    '<a class="big link" target="_blank" rel="noopener" href="' + esc(L.soldLink(it.query)) + '">eBay sold: ' + esc(it.isEn ? 'Japanese version' : 'this card') + '</a>' +
+    (it.refs || []).filter(r => r && (!d.ref || r.label !== d.ref.label)).map(r => '<p class="hint">' + esc(r.label) + ': ' + L.money(r.usd) + '</p>').join('') +
+    (d.ref ? '' : '<p class="hint">No Japanese price in the free data. Old Japanese cards often sell far below the English one, so check PriceCharting for the Japanese price.</p>') +
+    '<a class="big link" target="_blank" rel="noopener" href="' + esc(L.pcLink(it.query)) + '">PriceCharting: Japanese price</a>' +
+    '<a class="big link ghost" target="_blank" rel="noopener" href="' + esc(L.soldLink(it.query)) + '">eBay sold: ' + esc(it.isEn ? 'Japanese version' : 'this card') + '</a>' +
     '<button class="big" id="next">Next card</button>';
 }
 
@@ -128,7 +133,7 @@ async function finish(kind, id) {
     it = { name: e.name, image: e.image, isEn: true, query: e.name + ' japanese', refs: [u ? { usd: u.usd, label: 'English card, TCGplayer' } : null] };
   }
   it.at = new Date().toISOString(); it.yen = scan.yen; it.thumb = scan.thumb; it.box = scan.box; it.photoId = scan.photoId;
-  it.deal = L.dealCheck(it.yen, yenRate, it.refs);
+  it.deal = L.dealCheck(it.yen, yenRate, jpRefs(it));
   caseList = [it].concat(caseList).slice(0, 80); store(CASE_KEY, caseList);
   scan.item = it; render(); window.scrollTo(0, 0);
 }
@@ -142,7 +147,7 @@ function wireScan() {
   const rate = $('#rate'); rate.onchange = () => {
     const v = Number(rate.value); if (!(v > 1)) return toast('Type how many yen make $1, like 150');
     yenRate = v; store(RATE_KEY, v);
-    caseList.forEach(it => it.deal = L.dealCheck(it.yen, yenRate, it.refs)); store(CASE_KEY, caseList); render();
+    caseList.forEach(it => it.deal = L.dealCheck(it.yen, yenRate, jpRefs(it))); store(CASE_KEY, caseList); render();
   };
   const f = $('#file'); if (f) f.onchange = () => f.files[0] && openPhoto(f.files[0]);
   const np = $('#newphoto'); if (np) np.onclick = () => { scan.photo = null; scan.box = null; render(); };
