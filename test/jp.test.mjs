@@ -74,3 +74,17 @@ test('old set names and the narrow-down box', () => {
   assert.equal(L.filterCards(cards, 'カツラ')[0].id, 'PMCG6-035');
   assert.equal(L.filterCards(cards, '').length, 2);
 });
+
+test('auto scan reply is read and ranked', () => {
+  const text = 'I found these.\n```json\n{"cards":[{"name":"Typhlosion","tag_yen":"¥4,980","usd":38,"count":2},{"name":"Pikachu","tag_yen":3000,"usd":null,"sure":false},{"name":"Lugia","tag_yen":3000,"usd":40}],"unreadable":3}\n```';
+  const r = L.parseScan(text);
+  assert.equal(r.cards.length, 3);
+  assert.equal(r.unreadable, 3);
+  assert.equal(r.cards[0].tag_yen, 4980);
+  assert.equal(r.cards[1].sure, false);
+  const ranked = L.rankScan(r.cards, 150);
+  assert.equal(ranked[0].card.name, 'Lugia');
+  assert.equal(ranked[0].deal.level, 'good');
+  assert.equal(ranked[2].deal.level, 'none');
+  assert.equal(L.parseScan('no json here'), null);
+});

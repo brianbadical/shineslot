@@ -14,11 +14,11 @@ function scanHtml() {
   let h = '<div class="quick rate"><label for="rate">Yen for $1</label><input id="rate" inputmode="decimal" value="' + esc(yenRate) + '"><span class="hint">Check today\'s rate and change it if needed.</span></div>';
   if (scan.item) h += dealHtml(scan.item);
   else if (scan.crop) h += detailsHtml();
-  else if (scan.photo) h += '<p class="hint"><b>Drag a box</b> around one card and its price tag.</p><div class="shot"><canvas id="cv"></canvas></div>' +
+  else if (scan.photo) h += autoBlock() + '<p class="hint">Or <b>drag a box</b> around one card and its price tag.</p><div class="shot"><canvas id="cv"></canvas></div>' +
     '<button class="big ghost" id="newphoto">Use a different photo</button>';
   else h += '<label class="big photo">Take or choose a photo<input id="file" type="file" accept="image/*" hidden></label>' +
-    '<p class="hint">Get close enough that the ¥ price tags are sharp. One shelf at a time works best.</p>';
-  h += caseHtml();
+    '<p class="hint">Get close enough that the ¥ price tags are sharp. One shelf at a time works best.</p>' + (auto.run || auto.err ? autoBlock() : '');
+  h += keyHtml() + caseHtml() + pastRunsHtml();
   return h;
 }
 
@@ -144,6 +144,7 @@ function wirePicks() {
 }
 
 function wireScan() {
+  wireAuto();
   const rate = $('#rate'); rate.onchange = () => {
     const v = Number(rate.value); if (!(v > 1)) return toast('Type how many yen make $1, like 150');
     yenRate = v; store(RATE_KEY, v);
