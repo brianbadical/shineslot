@@ -9,7 +9,9 @@ const MODELS = {
 };
 const PRICE_SITES = ['pricecharting.com', 'ebay.com', 'getcollectr.com'];
 const SEARCH_USD = 0.01; // web search is $10 per 1,000 searches
+const PIN_KEY = 'jp-pin';
 let autoRuns = load(AUTO_KEY, []);
+let pinOk = false; // unlocked until the app is closed
 const auto = { busy: false, run: null, err: '', step: '' };
 
 const AUTO_SYSTEM = 'You help a US card reseller spot deals in Japanese Pokémon card shop display cases. ' +
@@ -26,6 +28,17 @@ const AUTO_PROMPT = rate => 'This is a photo of a Japanese card shop display cas
   '{"cards":[{"name":"","set":"","number":"","tag_yen":0,"condition":"","where":"","count":1,"usd":null,"source":"","url":"","sure":true,"note":""}],"unreadable":0}\n' +
   '"unreadable" is how many tags you could see but not read.';
 
+// The PIN is saved only on this phone, as a hash
+async function pinHash(pin) {
+  const b = await crypto.subtle.digest('SHA-256', new TextEncoder().encode('jp-card-pin:' + pin));
+  return Array.from(new Uint8Array(b)).map(x => x.toString(16).padStart(2, '0')).join('');
+}
+function pinSet() { return !!load(PIN_KEY, ''); }
+function locked() { return pinSet() && !pinOk; }
+function pinForm(why) {
+  return '<div class="quick"><label>' + why + '</label><input class="pinin" type="password" inputmode="numeric" autocomplete="off" maxlength="8" placeholder="PIN">' +
+    '<button class="big unlock" type="button">Unlock</button></div>';
+}
 function autoKey() { return load(KEY_KEY, ''); }
 function autoModel() { const m = load(MODEL_KEY, 'claude-opus-5-5'); return MODELS[m] ? m : 'claude-opus-5-5'; }
 
@@ -39,6 +52,7 @@ function photoData(maxSide) {
 }
 
 async function autoScan() {
+  if (locked()) return render();
   const key = autoKey(), model = autoModel();
   if (!key) { auto.err = 'Add your Claude key first (below).'; return render(); }
   auto.busy = true; auto.err = ''; auto.run = null; auto.step = 'Reading the case…'; render();
@@ -113,11 +127,13 @@ function autoHtml(run) {
 
 function keyHtml() {
   const has = !!autoKey(), m = autoModel();
-  return '<details class="quick"' + (has ? '' : ' open') + '><summary>' + (has ? 'Claude key saved' : 'Set up auto scan (Claude key)') + '</summary>' +
-    '<p class="hint">Auto scan uses your own Claude account. Make a key at <a href="https://platform.claude.com/" target="_blank" rel="noopener">platform.claude.com</a> (API keys) and add a few dollars of credit. ' +
+  if (locked()) return '<details class="quick"><summary>Claude key saved, locked</summary>' + pinForm('Type your PIN to change the key') + '</details>';
+  return '<details class="quick"' + (has && pinSet() ? '' : ' open') + '><summary>' + (has ? 'Claude key saved' : 'Set up auto scan (Claude key)') + '</summary>' +
+    '<p class="hint">Auto scan uses your own Claude account. Make a key at <a href="https://platform.claude.com/" target="_blank" rel="noopener">platform.claude.com</a> (API keys). ' +
     'The key is saved only on this phone. Each scan shows what it cost, usually well under $1.</p>' +
     '<label for="ckey">Claude key</label><input id="ckey" type="password" autocomplete="off" placeholder="' + (has ? 'Saved. Paste a new one to change it' : 'sk-ant-…') + '">' +
     '<label for="cmodel">Reading</label><select id="cmodel">' + Object.keys(MODELS).map(k => '<option value="' + k + '"' + (k === m ? ' selected' : '') + '>' + MODELS[k].label + '</option>').join('') + '</select>' +
+    '<label for="cpin">' + (pinSet() ? 'New PIN (leave empty to keep it)' : 'PIN to lock auto scan (4 to 8 numbers)') + '</label><input id="cpin" type="password" inputmode="numeric" autocomplete="off" maxlength="8">' +
     '<button class="big ghost" type="button" id="savekey">Save</button>' + (has ? '<button class="big ghost" type="button" id="delkey">Remove the key from this phone</button>' : '') + '</details>';
 }
 
@@ -125,19 +141,27 @@ function autoBlock() {
   if (auto.busy) return '<div class="quick empty"><div class="spin"></div>' + esc(auto.step) + '</div>';
   let h = '';
   if (auto.err) h += '<div class="verdict no">' + esc(auto.err) + '</div>';
-  if (scan.photo) h += '<button class="big" id="autoscan">Find every card and price it</button>';
+  if (scan.photo) h += locked() ? pinForm('Type your PIN to use auto scan') : '<button class="big" id="autoscan">Find every card and price it</button>';
   if (auto.run) h += autoHtml(auto.run);
   return h;
 }
 
 function wireAuto() {
   const a = $('#autoscan'); if (a) a.onclick = () => autoScan();
-  const sk = $('#savekey'); if (sk) sk.onclick = () => {
-    const v = $('#ckey').value.trim();
+  const sk = $('#savekey'); if (sk) sk.onclick = async () => {
+    const v = $('#ckey').value.trim(), pin = $('#cpin').value.trim();
+    if (pin && !/^\d{4,8}$/.test(pin)) return toast('The PIN must be 4 to 8 numbers');
     if (v) store(KEY_KEY, v);
     store(MODEL_KEY, $('#cmodel').value);
-    auto.err = ''; toast(v ? 'Key saved on this phone' : 'Saved'); render();
+    if (pin) { store(PIN_KEY, await pinHash(pin)); pinOk = true; }
+    auto.err = ''; toast(pin ? 'Saved. Auto scan now needs your PIN' : v ? 'Key saved on this phone' : 'Saved'); render();
   };
+  document.querySelectorAll('.unlock').forEach(b => b.onclick = async () => {
+    const inp = b.parentNode.querySelector('.pinin');
+    if (await pinHash(inp.value.trim()) === load(PIN_KEY, '')) { pinOk = true; render(); }
+    else { inp.value = ''; toast('Wrong PIN'); }
+  });
+  document.querySelectorAll('.pinin').forEach(i => i.onkeydown = e => { if (e.key === 'Enter') i.parentNode.querySelector('.unlock').click(); });
   const dk = $('#delkey'); if (dk) dk.onclick = () => { try { localStorage.removeItem(KEY_KEY); } catch (e) { } toast('Key removed'); render(); };
   document.querySelectorAll('[data-run]').forEach(el => el.onclick = () => { auto.run = autoRuns[+el.dataset.run]; render(); window.scrollTo(0, 0); });
 }
