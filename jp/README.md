@@ -26,3 +26,12 @@ so the app shows the artist's English trainer cards and you tap the one with the
 No English card found means it is probably a Japan-only print.
 
 No sign-in, no paid service, nothing stored off the phone. Tests: `node --test test/jp.test.mjs`.
+
+## Auto scan (Claude)
+
+On the Scan a case tab, after you pick a photo, **Find every card and price it** sends the photo to Claude.
+Claude reads every card and ¥ tag, then looks up the Japanese card's US price on PriceCharting, eBay sold and Collectr,
+and the app lists the cards with "Look closer" at the top (tag is 80% of the Japanese price or less).
+
+It uses your own Claude API key (make one at platform.claude.com and add credit). The key is saved only on the phone.
+Each scan shows what it cost. The drag-a-box tool still works without a key.

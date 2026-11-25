@@ -121,6 +121,25 @@
     return cards.filter(c => (c.id + ' ' + cardLabel(c.id) + ' ' + (c.name || '')).toLowerCase().includes(w));
   }
 
-  const api = { findSetId, cleanNumber, findLocalId, seriesPrefix, rankMatches, usdMarket, eurTrend, money, soldLink, pcLink, jpQuery, enQuery, englishName, dealCheck, yen, caseOrder, cardLabel, filterCards };
+  // Claude's auto-scan reply -> {cards, unreadable}. Reads the last ```json block. null when it can't.
+  function parseScan(text) {
+    const blocks = String(text || '').match(/```(?:json)?\s*([\s\S]*?)```/g);
+    const raw = blocks ? blocks[blocks.length - 1].replace(/^```(?:json)?\s*/, '').replace(/```$/, '') : String(text || '');
+    let o; try { o = JSON.parse(raw.trim()); } catch (e) { return null; }
+    if (!o || !Array.isArray(o.cards)) return null;
+    const num = v => { const n = Number(String(v == null ? '' : v).replace(/[^0-9.]/g, '')); return n > 0 ? n : null; };
+    const cards = o.cards.filter(c => c && typeof c === 'object').map(c => ({
+      name: String(c.name || ''), set: String(c.set || ''), number: String(c.number || ''), tag_yen: num(c.tag_yen),
+      condition: String(c.condition || ''), where: String(c.where || ''), count: Math.max(1, Math.round(num(c.count) || 1)),
+      usd: num(c.usd), source: String(c.source || ''), url: String(c.url || ''), sure: c.sure !== false, note: String(c.note || ''),
+    }));
+    return { cards, unreadable: Math.max(0, Math.round(Number(o.unreadable) || 0)) };
+  }
+  // Deal check for each auto-scan card, best deals first, no price last
+  function rankScan(cards, rate) {
+    return caseOrder((cards || []).map(card => ({ card, deal: dealCheck(card.tag_yen, rate, card.usd ? [{ usd: card.usd, label: 'Japanese card' }] : []) })));
+  }
+
+  const api = { findSetId, cleanNumber, findLocalId, seriesPrefix, rankMatches, usdMarket, eurTrend, money, soldLink, pcLink, jpQuery, enQuery, englishName, dealCheck, yen, caseOrder, cardLabel, filterCards, parseScan, rankScan };
   if (typeof module !== 'undefined' && module.exports) module.exports = api; else root.JPLogic = api;
 })(this);

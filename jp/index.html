@@ -17,7 +17,7 @@ main{padding:16px;max-width:720px;margin:0 auto;padding-bottom:60px}
 summary{font-weight:600;color:var(--blue);cursor:pointer;padding:4px 0}details form{margin-top:10px}
 .two{display:grid;grid-template-columns:1.2fr 1fr;gap:8px}
 label{display:block;font-weight:600;margin:0 0 6px}
-input{width:100%;font:inherit;font-size:20px;padding:12px;border-radius:10px;border:1px solid var(--line);background:#0f1116;color:var(--text)}
+input,select{width:100%;font:inherit;font-size:20px;padding:12px;border-radius:10px;border:1px solid var(--line);background:#0f1116;color:var(--text)}
 .big{display:block;width:100%;text-align:center;text-decoration:none;font:inherit;font-weight:700;font-size:18px;padding:14px;border-radius:12px;border:0;background:var(--gold);color:#14161c;margin:8px 0}
 .big.ghost{background:var(--card);color:var(--text);border:1px solid var(--line)}
 .hint{color:var(--dim);font-size:14px;margin:6px 0}
@@ -39,6 +39,7 @@ h2{font-size:22px;margin:14px 0 8px}h2 small{font-size:15px;color:var(--dim);fon
 .row .info{flex:1;min-width:0}.row .nm{font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .row .sub{color:var(--dim);font-size:14px}.row .val{text-align:right;flex:none}.row .val b{font-size:19px;display:block}
 .empty{text-align:center;color:var(--dim);padding:30px 10px}
+.spin{width:34px;height:34px;margin:0 auto 12px;border:4px solid var(--line);border-top-color:var(--gold);border-radius:50%;animation:sp 1s linear infinite}@keyframes sp{to{transform:rotate(360deg)}}
 .spin{width:34px;height:34px;border:4px solid var(--line);border-top-color:var(--gold);border-radius:50%;margin:0 auto 10px;animation:s 0.8s linear infinite}@keyframes s{to{transform:rotate(360deg)}}
 .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#2b3245;padding:12px 18px;border-radius:12px;z-index:30;display:none;font-weight:600}
 .shot{touch-action:none}.shot canvas{display:block;max-width:100%;border-radius:10px;touch-action:none;cursor:crosshair}
@@ -46,6 +47,7 @@ h2{font-size:22px;margin:14px 0 8px}h2 small{font-size:15px;color:var(--dim);fon
 label.photo{cursor:pointer;margin:12px 0}
 .rate{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:8px 12px}.rate label{margin:0}.rate input{width:90px;font-size:17px;padding:8px}.rate .hint{flex-basis:100%;margin:0}
 .big-verdict{font-size:19px}
+.arow{display:flex;gap:12px;background:var(--card);border-radius:14px;padding:10px;margin-bottom:10px;align-items:center}.arow .info{flex:1;min-width:0}.arow .nm{font-weight:700}.arow .sub{color:var(--dim);font-size:14px}.arow .sub.warn{color:var(--gold)}.arow .val{text-align:right;flex:none}.arow .val b{font-size:19px;display:block}.arow a{color:var(--gold)}
 .tag{display:inline-block;font-size:12px;font-weight:700;padding:3px 8px;border-radius:99px;white-space:nowrap}.tag.ok{background:#1d3b2a;color:var(--green)}.tag.maybe{background:#3a3214;color:var(--gold)}.tag.no{background:#3b1d1d;color:var(--red)}
 .xdel{display:block;margin:6px 0 0 auto;background:none;border:1px solid var(--line);color:var(--dim);border-radius:8px;padding:6px 9px;font:inherit;font-size:13px}.xdel.sure{color:var(--red);border-color:var(--red)}
 .noimg{aspect-ratio:600/825;border-radius:6px;background:#2a2e39;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:15px;font-weight:700;padding:6px;color:var(--text)}.noimg small{font-size:11px;color:var(--dim);font-weight:500;margin-top:4px}
@@ -61,4 +63,5 @@ label.photo{cursor:pointer;margin:12px 0}
 <script src="logic.js"></script>
 <script src="app.js"></script>
 <script src="scan.js"></script>
+<script src="auto.js"></script>
 </body></html>
